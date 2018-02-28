@@ -4,7 +4,7 @@
   "description": "Chuck Norris doesn't use discord, discord repeats what Chuck Norris says",
   "main": "bot.js",
   "scripts": {
-    "worker": "node bot.js"
+    "start": "node bot.js"
   },
   "author": "FatAussieFatBoy",
   "license": "ISC",
