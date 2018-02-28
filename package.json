@@ -1,0 +1,16 @@
+{
+  "name": "chucknorris",
+  "version": "1.0.0",
+  "description": "Chuck Norris doesn't use discord, discord repeats what Chuck Norris says",
+  "main": "bot.js",
+  "scripts": {
+    "worker": "node bot.js"
+  },
+  "author": "FatAussieFatBoy",
+  "license": "ISC",
+  "dependencies": {
+    "apiai": "^4.0.3",
+    "discord.js": "^11.3.0",
+    "request": "^2.83.0"
+  }
+}
