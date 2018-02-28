@@ -10,11 +10,8 @@ const token = process.env.TOKEN
 
 //ready event
 client.on('ready', () => {
-	//set bot activity & log the bot's client
-	var guilds = '0'
-	if (client.guilds.length > 0) guilds = client.guilds.length
-	
-	client.user.setActivity(`${guilds} servers!`, {type: 'LISTENING'})
+	//set bot activity & log the bot's client	
+	client.user.setActivity(`${client.guilds.length} servers!`, {type: 'LISTENING'})
 	console.log(`Logged in as ${client.user.username}!`)
 })
 
