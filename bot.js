@@ -4,9 +4,9 @@ const request = require('request')
 const client = new discord.Client({disableEveryone: true})
 
 const apiai = require('apiai')
-const app = apiai('fb42cec56b644dec97a96448209f1ec8')
+const app = apiai(process.env.APIAI_TOKEN)
 
-const token = 'NDE4MzI2NjMyNTU4ODg2OTEy.DXf8mg.9jpXt43rYp2YkbTN9UVwAZHsPAA'
+const token = process.env.TOKEN
 
 //ready event
 client.on('ready', () => {
