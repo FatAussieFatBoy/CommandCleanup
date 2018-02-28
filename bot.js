@@ -11,6 +11,7 @@ const token = process.env.TOKEN
 //ready event
 client.on('ready', () => {
 	//set bot activity & log the bot's client
+	client.user.setActivity(`in ${client.guilds.length} servers!`, {type: 'LISTENING'})
 	console.log(`Logged in as ${client.user.username}!`)
 })
 
