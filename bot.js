@@ -25,6 +25,7 @@ client.on('message', message => {
 	if (message.author.bot) return
 	if (!message.mentions) return
 	if (message.type === 'dm') return
+	if (!message.content.startsWith(client.user)) return
 
 	if (message.mentions.members.find('id', client.user.id)) {
 		var quote = message.content.replace(/[^a-zA-Z'?,\s]/g, '')
