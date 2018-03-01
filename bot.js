@@ -18,6 +18,7 @@ client.on('ready', () => {
 		client.user.setActivity(`${client.guilds.size} servers!`, {type: 'LISTENING'})
 	}, 1800000)	
 	console.log(`Logged in as ${client.user.username}!`)
+	console.log(`Connected to ${client.guilds.size} servers`)
 })
 
 //message event
