@@ -3,7 +3,7 @@ const DBL = require('dblapi.js')
 const request = require('request')
 
 const client = new discord.Client({disableEveryone: true})
-const dbl = new DBL(process.env.DBL_TOKEN)
+//const dbl = new DBL(process.env.DBL_TOKEN)
 
 const apiai = require('apiai')
 const app = apiai(process.env.APIAI_TOKEN)
@@ -13,7 +13,7 @@ const token = process.env.TOKEN
 //ready event
 client.on('ready', () => {
 	//set bot activity, post guilds.size to DBL & log the bot's client
-	dbl.postStats(client.guilds.size)
+	//dbl.postStats(client.guilds.size) //setInterval
 	client.user.setActivity(`${client.guilds.size} servers!`, {type: 'LISTENING'})
 	
 	console.log(`Logged in as ${client.user.username}!`)
@@ -63,17 +63,13 @@ client.on('message', message => {
 
 //Client join Guild Event
 client.on('guildCreate', guild => {
-	dbl.postStats(client.guilds.size)
 	client.user.setActivity(`${client.guilds.size} servers!`, {type: 'LISTENING'})
-	
 	console.log(`Chuck Norris was added to, ${guild.name} | ${guild.id} | Large? ${guild.large}`)
 })
 
 //Client leave Guild Event
 client.on('guildDelete', guild => {
-	dbl.postStats(client.guilds.size)
 	client.user.setActivity(`${client.guilds.size} servers!`, {type: 'LISTENING'})
-	
 	console.log(`Chuck Norris was removed from, ${guild.name} | ${guild.id} | Large? ${guild.large}`)
 })
 
