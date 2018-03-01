@@ -26,7 +26,7 @@ client.on('message', message => {
 	if (!message.mentions) return
 
 	if (message.mentions.members.find('id', client.user.id)) {
-		var quote = message.content.replace(client.user.id, '')
+		var quote = message.content.replace(/[^a-zA-Z0-9]/g, '')
 		var task = app.textRequest(quote, {
 			sessionId: 'chuck'
 		})
