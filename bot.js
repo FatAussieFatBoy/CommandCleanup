@@ -57,4 +57,9 @@ client.on('message', message => {
 	}
 })
 
+//Client join Guild Event
+client.on('guildCreate', guild => {
+	console.log(`${guild.name} | ${guild.id} | Large? ${guild.large})
+})
+
 client.login(token)
