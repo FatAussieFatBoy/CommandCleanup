@@ -65,7 +65,15 @@ client.on('guildCreate', guild => {
 	dbl.postStats(client.guilds.size)
 	client.user.setActivity(`${client.guilds.size} servers!`, {type: 'LISTENING'})
 	
-	console.log(`${guild.name} | ${guild.id} | Large? ${guild.large}`)
+	console.log(`Chuck Norris was added to, ${guild.name} | ${guild.id} | Large? ${guild.large}`)
+})
+
+//Client leave Guild Event
+client.on('guildDelete', guild => {
+	dbl.postStats(client.guilds.size)
+	client.user.setActivity(`${client.guilds.size} servers!`, {type: 'LISTENING'})
+	
+	console.log(`Chuck Norris was removed from, ${guild.name} | ${guild.id} | Large? ${guild.large}`)
 })
 
 client.login(token)
