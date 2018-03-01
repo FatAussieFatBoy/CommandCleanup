@@ -1,7 +1,9 @@
 const discord = require('discord.js')
+const DBL = require('dblapi.js')
 const request = require('request')
 
 const client = new discord.Client({disableEveryone: true})
+const dbl = new DBL(process.env.DBL_TOKEN)
 
 const apiai = require('apiai')
 const app = apiai(process.env.APIAI_TOKEN)
@@ -10,9 +12,11 @@ const token = process.env.TOKEN
 
 //ready event
 client.on('ready', () => {
-	//set bot activity & log the bot's client
-		
-	client.user.setActivity(`${client.guilds.array().length} servers!`, {type: 'LISTENING'})
+	//set bot activity interval, post guilds.size to DBL & log the bot's client
+	setInterval(() => {
+		dbl.postStats(client.guilds.size)
+		client.user.setActivity(`${client.guilds.size} servers!`, {type: 'LISTENING'})
+	}, 1800000)	
 	console.log(`Logged in as ${client.user.username}!`)
 })
 
