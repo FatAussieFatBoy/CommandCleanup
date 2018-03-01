@@ -12,11 +12,10 @@ const token = process.env.TOKEN
 
 //ready event
 client.on('ready', () => {
-	//set bot activity interval, post guilds.size to DBL & log the bot's client
-	setInterval(() => {
-		dbl.postStats(client.guilds.size)
-		client.user.setActivity(`${client.guilds.size} servers!`, {type: 'LISTENING'})
-	}, 1800000)	
+	//set bot activity, post guilds.size to DBL & log the bot's client
+	dbl.postStats(client.guilds.size)
+	client.user.setActivity(`${client.guilds.size} servers!`, {type: 'LISTENING'})
+	
 	console.log(`Logged in as ${client.user.username}!`)
 	console.log(`Connected to ${client.guilds.size} servers`)
 })
@@ -63,6 +62,9 @@ client.on('message', message => {
 
 //Client join Guild Event
 client.on('guildCreate', guild => {
+	dbl.postStats(client.guilds.size)
+	client.user.setActivity(`${client.guilds.size} servers!`, {type: 'LISTENING'})
+	
 	console.log(`${guild.name} | ${guild.id} | Large? ${guild.large}`)
 })
 
