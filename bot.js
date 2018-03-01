@@ -24,6 +24,7 @@ client.on('ready', () => {
 client.on('message', message => {
 	if (message.author.bot) return
 	if (!message.mentions) return
+	if (message.type === 'dm') return
 
 	if (message.mentions.members.find('id', client.user.id)) {
 		var quote = message.content.replace(/[^a-zA-Z'?,\s]/g, '')
@@ -44,6 +45,8 @@ client.on('message', message => {
 					
 					if (response.result.action === 'getjoke') return message.reply(json.value)
 					message.reply(response.result.fulfillment.speech)
+					
+					console.log(`${quote} | ${response.result.fulfillment.speech}`)
 				}
 			})
 		})
@@ -59,7 +62,7 @@ client.on('message', message => {
 
 //Client join Guild Event
 client.on('guildCreate', guild => {
-	console.log(`${guild.name} | ${guild.id} | Large? ${guild.large})
+	console.log(`${guild.name} | ${guild.id} | Large? ${guild.large}`)
 })
 
 client.login(token)
