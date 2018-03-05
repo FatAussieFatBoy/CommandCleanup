@@ -35,7 +35,7 @@ client.on('message', message => {
 				msgs.forEach((msg, index) => {
 					const words = msg.content.split(/\s+/g)
 					if (symbols.test(words[0])) {
-						msg.delete(0).then(() => deleted_messages++)
+						msg.delete(0).then(() => deleted_messages++).catch(err => console.log(err.stack))
 					}
 				})
 			}).catch(err => console.log(err.stack))
@@ -43,7 +43,7 @@ client.on('message', message => {
 
 		default:
 			if (symbols.test(args[0])) {
-				message.delete(2 * 1000).then(() => deleted_messages++)
+				message.delete(2 * 1000).then(() => deleted_messages++).catch(err => console.log(err.stack))
 			}
 	}
 })
