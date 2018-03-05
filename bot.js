@@ -1,23 +1,22 @@
 const discord = require('discord.js')
-const DBL = require('dblapi.js')
 const request = require('request')
 
 const client = new discord.Client({disableEveryone: true})
-//const dbl = new DBL(process.env.DBL_TOKEN)
-
-const apiai = require('apiai')
-const app = apiai(process.env.APIAI_TOKEN)
-
 const token = process.env.TOKEN
+
+var deleted_messages = 0
 
 //ready event
 client.on('ready', () => {
-	//set bot activity, post guilds.size to DBL & log the bot's client
-	//dbl.postStats(client.guilds.size) //setInterval
+	//set clients activity to show server count
 	client.user.setActivity(`${client.guilds.size} servers!`, {type: 'LISTENING'})
 	
 	console.log(`Logged in as ${client.user.username}!`)
 	console.log(`Connected to ${client.guilds.size} servers`)
+	
+	client.setInterval(() => {
+		console.log(`${deleted_messages} messages deleted this session...`)
+	}, 600 * 1000)
 })
 
 //message event
@@ -25,52 +24,40 @@ client.on('message', message => {
 	if (message.author.bot) return
 	if (!message.mentions) return
 	if (message.type === 'dm') return
-	if (!message.content.startsWith(client.user)) return
 
-	if (message.mentions.members.find('id', client.user.id)) {
-		var quote = message.content.replace(/[^a-zA-Z'?,\s]/g, '')
-		var task = app.textRequest(quote, {
-			sessionId: 'chuck'
-		})
-		
-		task.on('response', (response) => {
+	const args = message.content.split(/\s+/g)
+	const symbols = new RegExp(/^[-!$%^&*()_+|~=`{}\[\]:";'<>?,.\/]/)
 
-			var options = {
-				method: 'GET',
-				url: 'https://api.chucknorris.io/jokes/random'
+	switch(args[0]) {
+		case '.cleanupcommands':
+			message.channel.fetchMessages({ limit: 100 })
+			.then(msgs => {
+				msgs.forEach((msg, index) => {
+					const words = msg.content.split(/\s+/g)
+					if (symbols.test(words[0])) {
+						msg.delete(0).then(() => deleted_messages++)
+					}
+				})
+			}).catch(err => console.log(err.stack))
+			break
+
+		default:
+			if (symbols.test(args[0])) {
+				message.delete(2 * 1000).then(() => deleted_messages++)
 			}
-		
-			request(options, (error, res, body) => {
-				if(!error) {
-					var json = JSON.parse(body)
-					
-					if (response.result.action === 'getjoke') return message.reply(json.value)
-					message.reply(response.result.fulfillment.speech)
-					
-					console.log(`${quote} | ${response.result.fulfillment.speech}`)
-				}
-			})
-		})
-		
-		task.on('error', (err) => {
-			message.reply('Oops! There was an error...')
-			console.log(err)
-		})
-
-		task.end()
 	}
 })
 
 //Client join Guild Event
 client.on('guildCreate', guild => {
 	client.user.setActivity(`${client.guilds.size} servers!`, {type: 'LISTENING'})
-	console.log(`Chuck Norris was added to, ${guild.name} | ${guild.id} | Large? ${guild.large}`)
+	console.log(`CommandCleanup was added to, ${guild.name} | ${guild.id} | Large? ${guild.large}`)
 })
 
 //Client leave Guild Event
 client.on('guildDelete', guild => {
 	client.user.setActivity(`${client.guilds.size} servers!`, {type: 'LISTENING'})
-	console.log(`Chuck Norris was removed from, ${guild.name} | ${guild.id} | Large? ${guild.large}`)
+	console.log(`CommandCleanup removed from, ${guild.name} | ${guild.id} | Large? ${guild.large}`)
 })
 
 client.login(token)
