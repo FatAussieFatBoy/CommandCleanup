@@ -26,7 +26,7 @@ client.on('message', message => {
 	if (message.type === 'dm') return
 
 	const args = message.content.split(/\s+/g)
-	const symbols = new RegExp(/^[-!$%^&*()_+|~=`{}\[\]:";'?,.\/]/)
+	const symbols = new RegExp(/^[-!$%^&*()_+|~={}\[\]:";'?,.\/]/)
 
 	switch(args[0]) {
 		case '.cleanupcommands':
