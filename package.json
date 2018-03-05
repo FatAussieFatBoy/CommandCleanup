@@ -1,15 +1,14 @@
 {
-  "name": "chucknorris",
+  "name": "commandcleanup",
   "version": "1.0.0",
-  "description": "Chuck Norris doesn't use discord, discord repeats what Chuck Norris says",
+  "description": "CommandCleanup does as it sounds, it cleans up all messages that begin with the most common command symbols.",
   "main": "bot.js",
   "scripts": {
-    "start": "node bot.js"
+    "worker": "node bot.js"
   },
   "author": "FatAussieFatBoy",
   "license": "ISC",
   "dependencies": {
-    "apiai": "^4.0.3",
     "dblapi.js": "^1.1.0",
     "discord.js": "^11.3.0",
     "request": "^2.83.0"
