@@ -30,7 +30,7 @@ client.on('message', message => {
 	const symbols = new RegExp(/^[-!$%^&()_+|~={}\[\]:";'?,.\/]/)
 	
 	switch(args[0]) {
-		case 'cleanup':
+		case `${prefix}cleanup`:
 			if (message.member.hasPermission('MANAGE_MESSAGES', false, true, true)) {
 				if(args.length > 1) {
 					switch(args[1]) {
