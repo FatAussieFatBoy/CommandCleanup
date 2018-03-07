@@ -31,7 +31,7 @@ client.on('message', message => {
 	
 	switch(args[0]) {
 		case 'cleanup':
-			if (message.member.hasPermission('MANAGE_MESSAGES', false, true, true))
+			if (message.member.hasPermission('MANAGE_MESSAGES', false, true, true)) {
 				if(args.length > 1) {
 					switch(args[1]) {
 						case 'commands': //all messages that begin with the most common symbols used in commands
