@@ -75,6 +75,7 @@ client.on('message', message => {
 					message.reply(`Command Usage: *\`${prefix}cleanup (commands/@mention/bots/all)\`* | \`(required)\` \`<optional>\``).then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
 				}
 			}
+			message.delete(0)
 			break
 	}
 })
