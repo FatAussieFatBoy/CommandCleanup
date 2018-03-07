@@ -61,12 +61,18 @@ client.on('message', message => {
 						break
 						
 					default: //see if message has mentions, if not give command usage.
-						if (message.mentions.users.array().length > 0) {
-							let mentioned = message.mentions.users.array()
-							mentioned.forEach((user, index) => {
+						if (message.mentions.array().length > 0) {
+							let mentioned = message.mentions
+							mentioned.forEach((mention, index) => {
 								message.channel.fetchMessages({ limit: 100 })
 									.then(messages => {
-									let msgs = messages.filter(msg => msg.author.id === user.id)
+									if(mention.type === 'user') {
+										let msgs = messages.filter(msg => msg.author.id === mention.id)
+									}
+									
+									if(mention.type === 'role') {
+										let msgs = messages.filter(msg => msg.member.roles.exists('id', mention.id))
+									}
 									message.channel.bulkDelete(msgs).catch(err => console.log(err.stack))
 									deleted_messages += parseInt(msgs.size)
 								}).catch(err => console.log(err.stack))
