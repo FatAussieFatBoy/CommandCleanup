@@ -17,7 +17,7 @@ client.on('ready', () => {
 	
 	client.setInterval(() => {
 		console.log(`${deleted_messages} messages deleted this session...`)
-	}, 60 * 1000)
+	}, 1800 * 1000)
 })
 
 //message event
