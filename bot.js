@@ -55,7 +55,7 @@ client.on('message', message => {
 					case 'all': //all past 100 messages
 						message.channel.fetchMessages({ limit: 100 })
 						.then(messages => {
-							let msgs = message.filer(msg => msg.createdAt < new Date(Date.now - 12096e5))
+							let msgs = messages.filer(msg => msg.createdAt < new Date(Date.now - 12096e5))
 							message.channel.bulkDelete(msgs).catch(err => console.log(err.stack))
 							deleted_messages += parseInt(messages.size)
 						}).catch(err => console.log(err.stack))
