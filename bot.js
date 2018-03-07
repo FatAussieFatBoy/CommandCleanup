@@ -37,7 +37,7 @@ client.on('message', message => {
 					case 'commands': //all messages that begin with the most common symbols used in commands
 						message.channel.fetchMessages({ limit: 100 })
 						.then(messages => {
-							let msgs = messages.filter(msg => symbols.test(msg.content) && msg.createdAt > new Date(Date.now - 12096e5))
+							let msgs = messages.filter(msg => symbols.test(msg.content) && msg.createdAt < new Date(Date.now - 12096e5))
 							message.channel.bulkDelete(msgs).catch(err => message.reply(err))
 							deleted_messages += parseInt(msgs.size)
 						}).catch(err => console.log(err.stack))
@@ -46,7 +46,7 @@ client.on('message', message => {
 					case 'bots': //all messages that are posted by bots
 						message.channel.fetchMessages({ limit: 100 })
 						.then(messages => {
-							let msgs = messages.filter(msg => msg.author.bot && msg.createdAt > new Date(Date.now - 12096e5))
+							let msgs = messages.filter(msg => msg.author.bot && msg.createdAt < new Date(Date.now - 12096e5))
 							message.channel.bulkDelete(msgs).catch(err => console.log(err.stack))
 							deleted_messages += parseInt(msgs.size)
 						}).catch(err => console.log(err.stack))
@@ -55,7 +55,7 @@ client.on('message', message => {
 					case 'all': //all past 100 messages
 						message.channel.fetchMessages({ limit: 100 })
 						.then(messages => {
-							let msgs = message.filer(msg => msg.createdAt > new Date(Date.now - 12096e5))
+							let msgs = message.filer(msg => msg.createdAt < new Date(Date.now - 12096e5))
 							message.channel.bulkDelete(msgs).catch(err => console.log(err.stack))
 							deleted_messages += parseInt(messages.size)
 						}).catch(err => console.log(err.stack))
@@ -94,9 +94,9 @@ client.on('message', message => {
 			} else {
 				message.reply(`You have insufficient permissions to use this command`).then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))	
 			}
+			message.delete(0).catch(err => console.log(err.stack))
 			break
 	}
-	message.delete(0).catch(err => console.log(err.stack))
 })
 
 //Client join Guild Event
