@@ -22,7 +22,7 @@ client.on('ready', () => {
 
 //message event
 client.on('message', message => {
-	if (message.author.bot) return message.reply(`Bots cannot use commands on this bot`).then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
+	if (message.author.bot) return
 	if (!message.content.startsWith(prefix)) return	message.reply(`Incorrect prefix`).then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
 	if (message.type === 'dm') return message.reply(`You cannot use this command in dm's`).then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
 
@@ -35,7 +35,6 @@ client.on('message', message => {
 			if (message.member.hasPermission('MANAGE_MESSAGES', false, true, true)) {
 				switch(args[0]) {
 					case 'commands': //all messages that begin with the most common symbols used in commands
-						message.reply(`Removing Commands...`)
 						message.channel.fetchMessages({ limit: 100 })
 						.then(messages => {
 							let msgs = messages.filter(msg => symbols.test(msg.content))
@@ -44,7 +43,6 @@ client.on('message', message => {
 						break
 			
 					case 'bots': //all messages that are posted by bots
-						message.reply(`Removing Bot Messages...`)
 						message.channel.fetchMessages({ limit: 100 })
 						.then(messages => {
 							let msgs = messages.filter(msg => msg.author.bot)
@@ -53,7 +51,6 @@ client.on('message', message => {
 						break
 						
 					case 'all': //all past 100 messages
-						message.reply(`Removing All Messages...`)
 						message.channel.fetchMessages({ limit: 100 })
 						.then(messages => {
 							message.channel.bulkDelete(messages)
@@ -63,7 +60,6 @@ client.on('message', message => {
 					case user: //mentioned user(s)
 						let mentioned = message.mentions.users.array()
 						mentioned.forEach((user, index) => {
-							message.reply(`Removing Messages for member ${user.username}...`)
 							message.channel.fetchMessages({ limit: 100 })
 								.then(messages => {
 								let msgs = messages.filter(msg => msg.author.id === user.id)
