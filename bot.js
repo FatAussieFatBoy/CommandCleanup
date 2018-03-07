@@ -39,7 +39,8 @@ client.on('message', message => {
 						.then(messages => {
 							let msgs = messages.filter(msg => symbols.test(msg.content) && msg.createdAt > new Date(Date.now() - 1.21e+9) && msg.createdAt < message.createAt)
 							
-							if(msgs.size === 0) return message.reply(`You can only delete messages that are less than 14 days old...`).then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
+							if(msgs.size === 0) return message.reply(`We could not find any messages. ***NOTE:*** The bot cannot delete any messages posted more than 14 days ago...`)
+								.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
 							message.channel.bulkDelete(msgs).catch(err => console.log(err.stack))
 							deleted_messages += parseInt(msgs.size)
 						}).catch(err => console.log(err.stack))
@@ -50,7 +51,8 @@ client.on('message', message => {
 						.then(messages => {
 							let msgs = messages.filter(msg => msg.author.bot && msg.createdAt > new Date(Date.now() - 1.21e+9) && msg.createdAt < message.createAt)
 							
-							if(msgs.size === 0) return message.reply(`You can only delete messages that are less than 14 days old...`).then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
+							if(msgs.size === 0) return message.reply(`We could not find any messages. ***NOTE:*** The bot cannot delete any messages posted more than 14 days ago...`)
+								.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
 							message.channel.bulkDelete(msgs).catch(err => console.log(err.stack))
 							deleted_messages += parseInt(msgs.size)
 						}).catch(err => console.log(err.stack))
@@ -61,7 +63,8 @@ client.on('message', message => {
 						.then(messages => {
 							let msgs = messages.filter(msg => msg.createdAt > new Date(Date.now() - 1.21e+9) && msg.createdAt < message.createAt)
 							
-							if(msgs.size === 0) return message.reply(`You can only delete messages that are less than 14 days old...`).then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
+							if(msgs.size === 0) return message.reply(`We could not find any messages. ***NOTE:*** The bot cannot delete any messages posted more than 14 days ago...`)
+								.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
 							message.channel.bulkDelete(msgs).catch(err => console.log(err.stack))
 							deleted_messages += parseInt(messages.size)
 						}).catch(err => console.log(err.stack))
@@ -78,7 +81,8 @@ client.on('message', message => {
 										.then(messages => {
 											let msgs = messages.filter(msg => msg.author.id === user.id && msg.createdAt > new Date(Date.now() - 1.21e+9) && msg.createdAt < message.createAt)
 											
-											if(msgs.size === 0) return message.reply(`You can only delete messages that are less than 14 days old...`).then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
+											if(msgs.size === 0) return message.reply(`We could not find any messages. ***NOTE:*** The bot cannot delete any messages posted more than 14 days ago...`)
+												.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
 											message.channel.bulkDelete(msgs).catch(err => console.log(err.stack))
 											deleted_messages += parseInt(msgs.size)
 									}).catch(err => console.log(err.stack))
@@ -91,7 +95,8 @@ client.on('message', message => {
 										.then(messages => {
 											let msgs = messages.filter(msg => msg.member.roles.exists('id', role.id) && msg.createdAt > new Date(Date.now() - 1.21e+9) && msg.createdAt < message.createAt)
 											
-											if(msgs.size === 0) return message.reply(`You can only delete messages that are less than 14 days old...`).then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
+											if(msgs.size === 0) return message.reply(`We could not find any messages. ***NOTE:*** The bot cannot delete any messages posted more than 14 days ago...`)
+												.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
 											message.channel.bulkDelete(msgs).catch(err => console.log(err.stack))
 											deleted_messages += parseInt(msgs.size)
 									}).catch(err => console.log(err.stack))
