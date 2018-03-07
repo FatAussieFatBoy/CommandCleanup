@@ -21,7 +21,7 @@ client.on('ready', () => {
 })
 
 //message event
-client.on('message', message => {
+client.on('message', async message => {
 	if (message.author.bot) return
 	if (!message.content.startsWith(prefix)) return
 	if (message.channel.type === 'dm') return message.author.send('This command can only be used inside of guilds')
@@ -30,7 +30,7 @@ client.on('message', message => {
 	const command = args.shift().slice(prefix.length)
 	const symbols = new RegExp(/^[-!$%^&()_+|~={}\[\]:";'?,.\/]/)
 	
-	switch(command.toLowerCase()) {
+	await switch(command.toLowerCase()) {
 		case 'cleanup':
 			if (message.member.hasPermission('MANAGE_MESSAGES', false, true, true)) {
 				switch(args[0]) {
@@ -46,7 +46,7 @@ client.on('message', message => {
 					case 'bots': //all messages that are posted by bots
 						message.channel.fetchMessages({ limit: 100 })
 						.then(messages => {
-							let msgs = messages.filter(msg => msg.author.bot).catch(err => console.log(err.stack))
+							let msgs = messages.filter(msg => msg.author.bot)
 							message.channel.bulkDelete(msgs).catch(err => console.log(err.stack))
 							deleted_messages += parseInt(msgs.size)
 						}).catch(err => console.log(err.stack))
@@ -69,7 +69,7 @@ client.on('message', message => {
 								mentioned_users.forEach((user, index) => {
 									message.channel.fetchMessages({ limit: 100 })
 										.then(messages => {
-											let msgs = messages.filter(msg => msg.author.id === user.id).catch(err => console.log(err.stack))
+											let msgs = messages.filter(msg => msg.author.id === user.id)
 											message.channel.bulkDelete(msgs).catch(err => console.log(err.stack))
 											deleted_messages += parseInt(msgs.size)
 									}).catch(err => console.log(err.stack))
@@ -80,7 +80,7 @@ client.on('message', message => {
 								mentioned_roles.forEach((role, index) => {
 									message.channel.fetchMessages({ limit: 100 })
 										.then(messages => {
-											let msgs = messages.filter(msg => msg.member.roles.exists('id', role.id)).catch(err => console.log(err.stack))
+											let msgs = messages.filter(msg => msg.member.roles.exists('id', role.id))
 											message.channel.bulkDelete(msgs).catch(err => console.log(err.stack))
 											deleted_messages += parseInt(msgs.size)
 									}).catch(err => console.log(err.stack))
@@ -93,9 +93,9 @@ client.on('message', message => {
 			} else {
 				message.reply(`You have insufficient permissions to use this command`).then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))	
 			}
-			message.delete(0)
 			break
 	}
+	await message.delete(0).catch(err => console.log(err.stack))
 })
 
 //Client join Guild Event
