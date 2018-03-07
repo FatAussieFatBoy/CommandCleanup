@@ -57,20 +57,20 @@ client.on('message', message => {
 						}).catch(err => console.log(err.stack))
 						break
 						
-					case client.user: //mentioned user(s)
-						let mentioned = message.mentions.users.array()
-						mentioned.forEach((user, index) => {
-							message.reply(`Cleaning up messages from ${user.username}`)
-							message.channel.fetchMessages({ limit: 100 })
-								.then(messages => {
-								let msgs = messages.filter(msg => msg.author.id === user.id)
-								message.channel.bulkDelete(msgs)
-							}).catch(err => console.log(err.stack))
-						})
-						break
-						
 					default: //reply with possible commands
-						message.reply(`Command Usage: *\`${prefix}cleanup (commands/@mention/bots/all)\`* | \`(required)\` \`<optional>\``).then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
+						if(message.mentions.users) {
+							let mentioned = message.mentions.users.array()
+							mentioned.forEach((user, index) => {
+								message.reply(`Cleaning up messages from ${user.username}`)
+								message.channel.fetchMessages({ limit: 100 })
+									.then(messages => {
+									let msgs = messages.filter(msg => msg.author.id === user.id)
+									message.channel.bulkDelete(msgs)
+								}).catch(err => console.log(err.stack))
+							})
+						} else {
+							message.reply(`Command Usage: *\`${prefix}cleanup (commands/@mention/bots/all)\`* | \`(required)\` \`<optional>\``).then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
+						}
 				}	
 			} else {
 				message.reply(`You have insufficient permissions to use this command`).then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))	
