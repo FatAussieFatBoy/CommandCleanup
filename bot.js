@@ -62,21 +62,30 @@ client.on('message', message => {
 						
 					default: //see if message has mentions, if not give command usage.
 						if (message.mentions.array().length > 0) {
-							let mentioned = message.mentions
-							mentioned.forEach((mention, index) => {
-								message.channel.fetchMessages({ limit: 100 })
-									.then(messages => {
-									if(mention.type === 'user') {
-										let msgs = messages.filter(msg => msg.author.id === mention.id)
-									}
-									
-									if(mention.type === 'role') {
-										let msgs = messages.filter(msg => msg.member.roles.exists('id', mention.id))
-									}
-									message.channel.bulkDelete(msgs).catch(err => console.log(err.stack))
-									deleted_messages += parseInt(msgs.size)
-								}).catch(err => console.log(err.stack))
-							})
+							let mentioned_users = message.mentions.users.array()
+							let mentioned_roles = message.mentions.roles.array()
+							
+							if(mentioned_users) {
+								mentioned_users.forEach((user, index) => {
+									message.channel.fetchMessages({ limit: 100 })
+										.then(messages => {
+											let msgs = messages.filter(msg => msg.author.id === user.id)
+											message.channel.bulkDelete(msgs).catch(err => console.log(err.stack))
+											deleted_messages += parseInt(msgs.size)
+									}).catch(err => console.log(err.stack))
+								})
+							}
+							
+							if(mentioned_roles) {
+								mentioned_roles.forEach((role, index) => {
+									message.channel.fetchMessages({ limit: 100 })
+										.then(messages => {
+											let msgs = messages.filter(msg => msg.member.roles.exists('id', role.id)
+											message.channel.bulkDelete(msgs).catch(err => console.log(err.stack))
+											deleted_messages += parseInt(msgs.size)
+									}).catch(err => console.log(err.stack))
+								})	
+							}
 						} else {
 							message.reply(`Command Usage: *\`${prefix}cleanup (commands/@mention/bots/all)\`* | \`(required)\` \`<optional>\``).then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
 						}
