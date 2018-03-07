@@ -73,7 +73,7 @@ client.on('message', message => {
 					case 'links': //all messages that start with http or https
 						message.channel.fetchMessages({ limit: 100 })
 						.then(messages => {
-							let msgs = messages.filter(msg => msg.startsWith('http'))
+							let msgs = messages.filter(msg => msg.content.startsWith('http'))
 							
 							if(msgs.size === 0) return message.reply(`We could not find any messages. ***NOTE:*** *The bot cannot delete any messages posted more than 14 days ago...*`)
 								.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
@@ -115,7 +115,7 @@ client.on('message', message => {
 								})	
 							}
 						} else {
-							message.reply(`Command Usage: *\`${prefix}cleanup (commands/@mention/bots/all)\`* | \`(required)\` \`<optional>\``).then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
+							message.reply(`Command Usage: *\`${prefix}cleanup (commands/bots/all/links/@user/@role)\`* | \`(required)\` \`<optional>\``).then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
 						}
 				}	
 			} else {
