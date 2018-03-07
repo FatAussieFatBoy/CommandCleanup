@@ -57,7 +57,7 @@ client.on('message', message => {
 						}).catch(err => console.log(err.stack))
 						break
 						
-					case '@': //mentioned user(s)
+					case message.mentions: //mentioned user(s)
 						let mentioned = message.mentions.users.array()
 						mentioned.forEach((user, index) => {
 							message.reply(`Cleaning up messages from ${user.username}`)
