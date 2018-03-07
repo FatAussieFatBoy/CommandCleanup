@@ -57,7 +57,7 @@ client.on('message', message => {
 						}).catch(err => console.log(err.stack))
 						break
 						
-					case discord.User: //mentioned user(s)
+					case client.user: //mentioned user(s)
 						let mentioned = message.mentions.users.array()
 						mentioned.forEach((user, index) => {
 							message.reply(`Cleaning up messages from ${user.username}`)
