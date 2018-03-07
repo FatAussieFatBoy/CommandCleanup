@@ -35,6 +35,7 @@ client.on('message', message => {
 			if (message.member.hasPermission('MANAGE_MESSAGES', false, true, true)) {
 				switch(args[0]) {
 					case 'commands': //all messages that begin with the most common symbols used in commands
+						message.edit(`Removing Commands...`)
 						message.channel.fetchMessages({ limit: 100 })
 						.then(messages => {
 							let msgs = messages.filter(msg => msg.content.startsWith(symbols))
@@ -43,6 +44,7 @@ client.on('message', message => {
 						break
 			
 					case 'bots': //all messages that are posted by bots
+						message.edit(`Removing Bot Messages...`)
 						message.channel.fetchMessages({ limit: 100 })
 						.then(messages => {
 							let msgs = messages.filter(msg => msg.author.bot)
@@ -51,6 +53,7 @@ client.on('message', message => {
 						break
 						
 					case 'all': //all past 100 messages
+						message.edit(`Removing All Messages...`)
 						message.channel.fetchMessages({ limit: 100 })
 						.then(messages => {
 							message.channel.bulkDelete(messages)
@@ -60,6 +63,7 @@ client.on('message', message => {
 					case user: //mentioned user(s)
 						let mentioned = message.mentions.users.array()
 						mentioned.forEach((user, index) => {
+							message.edit(`Removing Messages for member ${user.username}...`)
 							message.channel.fetchMessages({ limit: 100 })
 								.then(messages => {
 								let msgs = messages.filter(msg => msg.author.id === user.id)
