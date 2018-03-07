@@ -17,7 +17,7 @@ client.on('ready', () => {
 	
 	client.setInterval(() => {
 		console.log(`${deleted_messages} messages deleted this session...`)
-	}, 600 * 1000)
+	}, 1800 * 1000)
 })
 
 //message event
@@ -39,6 +39,7 @@ client.on('message', message => {
 						.then(messages => {
 							let msgs = messages.filter(msg => symbols.test(msg.content))
 							message.channel.bulkDelete(msgs)
+							deleted_messages += msgs.length
 						}).catch(err => console.log(err.stack))
 						break
 			
@@ -47,6 +48,7 @@ client.on('message', message => {
 						.then(messages => {
 							let msgs = messages.filter(msg => msg.author.bot)
 							message.channel.bulkDelete(msgs)
+							deleted_messages += msgs.length
 						}).catch(err => console.log(err.stack))
 						break
 						
@@ -54,6 +56,7 @@ client.on('message', message => {
 						message.channel.fetchMessages({ limit: 100 })
 						.then(messages => {
 							message.channel.bulkDelete(messages)
+							deleted_messages += messages.length
 						}).catch(err => console.log(err.stack))
 						break
 						
@@ -65,6 +68,7 @@ client.on('message', message => {
 									.then(messages => {
 									let msgs = messages.filter(msg => msg.author.id === user.id)
 									message.channel.bulkDelete(msgs)
+									deleted_messages += msgs.length
 								}).catch(err => console.log(err.stack))
 							})
 						} else {
