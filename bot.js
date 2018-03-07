@@ -58,7 +58,8 @@ client.on('message', message => {
 						break
 						
 					default: //see if message has mentions, if not give command usage.
-						if(message.mentions.users) {
+						if (message.mentions.users.array().length > 0) {
+							console.log(message.mentions.users)
 							let mentioned = message.mentions.users.array()
 							mentioned.forEach((user, index) => {
 								message.channel.fetchMessages({ limit: 100 })
