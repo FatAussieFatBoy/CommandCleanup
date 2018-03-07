@@ -80,7 +80,7 @@ client.on('message', message => {
 								mentioned_roles.forEach((role, index) => {
 									message.channel.fetchMessages({ limit: 100 })
 										.then(messages => {
-											let msgs = messages.filter(msg => msg.member.roles.exists('id', role.id)
+											let msgs = messages.filter(msg => msg.member.roles.exists('id', role.id))
 											message.channel.bulkDelete(msgs).catch(err => console.log(err.stack))
 											deleted_messages += parseInt(msgs.size)
 									}).catch(err => console.log(err.stack))
