@@ -57,11 +57,10 @@ client.on('message', message => {
 						}).catch(err => console.log(err.stack))
 						break
 						
-					default: //reply with possible commands
+					default: //see if message has mentions, if not give command usage.
 						if(message.mentions.users) {
 							let mentioned = message.mentions.users.array()
 							mentioned.forEach((user, index) => {
-								message.reply(`Cleaning up messages from ${user.username}`)
 								message.channel.fetchMessages({ limit: 100 })
 									.then(messages => {
 									let msgs = messages.filter(msg => msg.author.id === user.id)
