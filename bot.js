@@ -57,9 +57,10 @@ client.on('message', message => {
 						}).catch(err => console.log(err.stack))
 						break
 						
-					case user: //mentioned user(s)
+					case '@': //mentioned user(s)
 						let mentioned = message.mentions.users.array()
 						mentioned.forEach((user, index) => {
+							message.reply(`Cleaning up messages from ${user.username}`)
 							message.channel.fetchMessages({ limit: 100 })
 								.then(messages => {
 								let msgs = messages.filter(msg => msg.author.id === user.id)
