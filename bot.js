@@ -39,7 +39,7 @@ client.on('message', message => {
 						.then(messages => {
 							let msgs = messages.filter(msg => symbols.test(msg.content))
 							message.channel.bulkDelete(msgs).catch(err => console.log(err.stack))
-							deleted_messages += parseInt(msgs.length)
+							deleted_messages += parseInt(msgs.size)
 						}).catch(err => console.log(err.stack))
 						break
 			
@@ -48,7 +48,7 @@ client.on('message', message => {
 						.then(messages => {
 							let msgs = messages.filter(msg => msg.author.bot)
 							message.channel.bulkDelete(msgs).catch(err => console.log(err.stack))
-							deleted_messages += parseInt(msgs.length)
+							deleted_messages += parseInt(msgs.size)
 						}).catch(err => console.log(err.stack))
 						break
 						
@@ -56,7 +56,7 @@ client.on('message', message => {
 						message.channel.fetchMessages({ limit: 100 })
 						.then(messages => {
 							message.channel.bulkDelete(messages).catch(err => console.log(err.stack))
-							deleted_messages += parseInt(messages.length)
+							deleted_messages += parseInt(messages.size)
 						}).catch(err => console.log(err.stack))
 						break
 						
@@ -68,7 +68,7 @@ client.on('message', message => {
 									.then(messages => {
 									let msgs = messages.filter(msg => msg.author.id === user.id)
 									message.channel.bulkDelete(msgs).catch(err => console.log(err.stack))
-									deleted_messages += parseInt(msgs.length)
+									deleted_messages += parseInt(msgs.size)
 								}).catch(err => console.log(err.stack))
 							})
 						} else {
