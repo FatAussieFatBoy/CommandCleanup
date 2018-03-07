@@ -21,7 +21,7 @@ client.on('ready', () => {
 })
 
 //message event
-client.on('message', async message => {
+client.on('message', message => {
 	if (message.author.bot) return
 	if (!message.content.startsWith(prefix)) return
 	if (message.channel.type === 'dm') return message.author.send('This command can only be used inside of guilds')
@@ -30,7 +30,7 @@ client.on('message', async message => {
 	const command = args.shift().slice(prefix.length)
 	const symbols = new RegExp(/^[-!$%^&()_+|~={}\[\]:";'?,.\/]/)
 	
-	await switch(command.toLowerCase()) {
+	switch(command.toLowerCase()) {
 		case 'cleanup':
 			if (message.member.hasPermission('MANAGE_MESSAGES', false, true, true)) {
 				switch(args[0]) {
@@ -95,7 +95,7 @@ client.on('message', async message => {
 			}
 			break
 	}
-	await message.delete(0).catch(err => console.log(err.stack))
+	message.delete(0).catch(err => console.log(err.stack))
 })
 
 //Client join Guild Event
