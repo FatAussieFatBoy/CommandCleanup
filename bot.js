@@ -23,8 +23,8 @@ client.on('ready', () => {
 //message event
 client.on('message', message => {
 	if (message.author.bot) return
-	if (!message.content.startsWith(prefix)) return	message.reply(`Incorrect prefix`).then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
-	if (message.type === 'dm') return message.reply(`You cannot use this command in dm's`).then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
+	if (!message.content.startsWith(prefix)) return
+	if (message.type === 'dm') return
 
 	const args = message.content.split(/\s+/g)
 	const command = args.shift().slice(prefix.length)
