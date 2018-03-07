@@ -38,7 +38,7 @@ client.on('message', message => {
 						message.channel.fetchMessages({ limit: 100 })
 						.then(messages => {
 							let msgs = messages.filter(msg => symbols.test(msg.content))
-							message.channel.bulkDelete(msgs).catch(err => console.log(err.stack))
+							message.channel.bulkDelete(msgs).catch(err => message.reply(err))
 							deleted_messages += parseInt(msgs.size)
 						}).catch(err => console.log(err.stack))
 						break
@@ -46,8 +46,8 @@ client.on('message', message => {
 					case 'bots': //all messages that are posted by bots
 						message.channel.fetchMessages({ limit: 100 })
 						.then(messages => {
-							let msgs = messages.filter(msg => msg.author.bot)
-							message.channel.bulkDelete(msgs).catch(err => message.reply(err))
+							let msgs = messages.filter(msg => msg.author.bot).catch(err => console.log(err.stack))
+							message.channel.bulkDelete(msgs).catch(err => console.log(err.stack))
 							deleted_messages += parseInt(msgs.size)
 						}).catch(err => console.log(err.stack))
 						break
@@ -55,7 +55,7 @@ client.on('message', message => {
 					case 'all': //all past 100 messages
 						message.channel.fetchMessages({ limit: 100 })
 						.then(messages => {
-							message.channel.bulkDelete(messages).catch(err => message.reply(err))
+							message.channel.bulkDelete(messages).catch(err => console.log(err.stack))
 							deleted_messages += parseInt(messages.size)
 						}).catch(err => console.log(err.stack))
 						break
@@ -69,8 +69,8 @@ client.on('message', message => {
 								mentioned_users.forEach((user, index) => {
 									message.channel.fetchMessages({ limit: 100 })
 										.then(messages => {
-											let msgs = messages.filter(msg => msg.author.id === user.id)
-											message.channel.bulkDelete(msgs).catch(err => message.reply(err))
+											let msgs = messages.filter(msg => msg.author.id === user.id).catch(err => console.log(err.stack))
+											message.channel.bulkDelete(msgs).catch(err => console.log(err.stack))
 											deleted_messages += parseInt(msgs.size)
 									}).catch(err => console.log(err.stack))
 								})
@@ -80,8 +80,8 @@ client.on('message', message => {
 								mentioned_roles.forEach((role, index) => {
 									message.channel.fetchMessages({ limit: 100 })
 										.then(messages => {
-											let msgs = messages.filter(msg => msg.member.roles.exists('id', role.id))
-											message.channel.bulkDelete(msgs).catch(err => message.reply(err))
+											let msgs = messages.filter(msg => msg.member.roles.exists('id', role.id)).catch(err => console.log(err.stack))
+											message.channel.bulkDelete(msgs).catch(err => console.log(err.stack))
 											deleted_messages += parseInt(msgs.size)
 									}).catch(err => console.log(err.stack))
 								})	
