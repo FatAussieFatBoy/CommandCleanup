@@ -24,7 +24,7 @@ client.on('ready', () => {
 client.on('message', message => {
 	if (message.author.bot) return
 	if (!message.content.startsWith(prefix)) return
-	if (message.type === 'dm') return
+	if (message.channel.type === 'dm') return message.author.send('This command can only be used inside of guilds')
 
 	const args = message.content.split(/\s+/g)
 	const command = args.shift().slice(prefix.length)
@@ -57,7 +57,7 @@ client.on('message', message => {
 						}).catch(err => console.log(err.stack))
 						break
 						
-					case discord.MessageMentions: //mentioned user(s)
+					case `${args[0].startsWith('@')}`: //mentioned user(s)
 						let mentioned = message.mentions.users.array()
 						mentioned.forEach((user, index) => {
 							message.reply(`Cleaning up messages from ${user.username}`)
