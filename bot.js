@@ -10,7 +10,7 @@ var deleted_messages = 0
 //ready event
 client.on('ready', () => {
 	//set clients activity to show server count
-	client.user.setActivity(`${client.guilds.size} servers!`, {type: 'LISTENING'})
+	client.user.setActivity(`${client.guilds.size} servers! .cleanup`, {type: 'LISTENING'})
 	
 	console.log(`Logged in as ${client.user.username}!`)
 	console.log(`Connected to ${client.guilds.size} servers`)
