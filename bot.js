@@ -61,7 +61,7 @@ client.on('message', message => {
 						break
 						
 					default: //see if message has mentions, if not give command usage.
-						if (message.mentions.size > 0) {
+						if (message.mentions) {
 							let mentioned_users = message.mentions.users.array()
 							let mentioned_roles = message.mentions.roles.array()
 							
