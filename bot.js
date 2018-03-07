@@ -57,7 +57,7 @@ client.on('message', message => {
 						}).catch(err => console.log(err.stack))
 						break
 						
-					case args[0].startsWith('<@'): //mentioned user(s)
+					case discord.GuildMember: //mentioned user(s)
 						let mentioned = message.mentions.users.array()
 						mentioned.forEach((user, index) => {
 							message.reply(`Cleaning up messages from ${user.username}`)
