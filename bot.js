@@ -22,15 +22,15 @@ client.on('ready', () => {
 
 //message event
 client.on('message', message => {
-	if (message.author.bot) return
-	if (!message.content.startsWith(prefix)) return
-	if (message.type === 'dm') return
+	if (message.author.bot) return message.reply(`Bots cannot use commands on this bot`).then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
+	if (!message.content.startsWith(prefix)) return	message.reply(`Incorrect prefix`).then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
+	if (message.type === 'dm') return message.reply(`You cannot use this command in dm's`).then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
 
 	const args = message.content.split(/\s+/g)
 	const command = args.shift().slice(prefix.length)
 	const symbols = new RegExp(/^[-!$%^&()_+|~={}\[\]:";'?,.\/]/)
 	
-	switch(command) {
+	switch(command.toLowerCase()) {
 		case 'cleanup':
 			if (message.member.hasPermission('MANAGE_MESSAGES', false, true, true)) {
 				switch(args[0]) {
