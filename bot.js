@@ -39,7 +39,7 @@ client.on('message', message => {
 						.then(messages => {
 							let msgs = messages.filter(msg => symbols.test(msg.content) && msg.createdAt > new Date(Date.now() - 1.21e+9) && msg != message)
 							
-							if(msgs.size === 0) return message.reply(`We could not find any messages. ***NOTE:*** The bot cannot delete any messages posted more than 14 days ago...`)
+							if(msgs.size === 0) return message.reply(`We could not find any messages. ***NOTE:*** *The bot cannot delete any messages posted more than 14 days ago...*`)
 								.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
 							message.channel.bulkDelete(msgs).catch(err => console.log(err.stack))
 							deleted_messages += parseInt(msgs.size)
@@ -51,7 +51,7 @@ client.on('message', message => {
 						.then(messages => {
 							let msgs = messages.filter(msg => msg.author.bot && msg.createdAt > new Date(Date.now() - 1.21e+9) && msg != message)
 							
-							if(msgs.size === 0) return message.reply(`We could not find any messages. ***NOTE:*** The bot cannot delete any messages posted more than 14 days ago...`)
+							if(msgs.size === 0) return message.reply(`We could not find any messages. ***NOTE:*** *The bot cannot delete any messages posted more than 14 days ago...*`)
 								.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
 							message.channel.bulkDelete(msgs).catch(err => console.log(err.stack))
 							deleted_messages += parseInt(msgs.size)
@@ -63,7 +63,7 @@ client.on('message', message => {
 						.then(messages => {
 							let msgs = messages.filter(msg => msg.createdAt > new Date(Date.now() - 1.21e+9) && msg != message)
 							
-							if(msgs.size === 0) return message.reply(`We could not find any messages. ***NOTE:*** The bot cannot delete any messages posted more than 14 days ago...`)
+							if(msgs.size === 0) return message.reply(`We could not find any messages. ***NOTE:*** *The bot cannot delete any messages posted more than 14 days ago...*`)
 								.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
 							message.channel.bulkDelete(msgs).catch(err => console.log(err.stack))
 							deleted_messages += parseInt(messages.size)
@@ -81,7 +81,7 @@ client.on('message', message => {
 										.then(messages => {
 											let msgs = messages.filter(msg => msg.author.id === user.id && msg.createdAt > new Date(Date.now() - 1.21e+9) && msg != message)
 											
-											if(msgs.size === 0) return message.reply(`We could not find any messages. ***NOTE:*** The bot cannot delete any messages posted more than 14 days ago...`)
+											if(msgs.size === 0) return message.reply(`We could not find any messages. ***NOTE:*** *The bot cannot delete any messages posted more than 14 days ago...*`)
 												.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
 											message.channel.bulkDelete(msgs).catch(err => console.log(err.stack))
 											deleted_messages += parseInt(msgs.size)
@@ -95,7 +95,7 @@ client.on('message', message => {
 										.then(messages => {
 											let msgs = messages.filter(msg => msg.member.roles.exists('id', role.id) && msg.createdAt > new Date(Date.now() - 1.21e+9) && msg != message)
 											
-											if(msgs.size === 0) return message.reply(`We could not find any messages. ***NOTE:*** The bot cannot delete any messages posted more than 14 days ago...`)
+											if(msgs.size === 0) return message.reply(`We could not find any messages. ***NOTE:*** *The bot cannot delete any messages posted more than 14 days ago...*`)
 												.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
 											message.channel.bulkDelete(msgs).catch(err => console.log(err.stack))
 											deleted_messages += parseInt(msgs.size)
