@@ -1,7 +1,10 @@
 const discord = require('discord.js')
+const DBL = require('dblapi.js')
 const request = require('request')
 
 const client = new discord.Client({disableEveryone: true})
+const dbl = new DBL(process.env.DBL_TOKEN)
+
 const token = process.env.TOKEN
 const prefix = process.env.PREFIX
 
@@ -10,13 +13,14 @@ var deleted_messages = 0
 //ready event
 client.on('ready', () => {
 	//set clients activity to show server count
-	client.user.setActivity(`${client.guilds.size} servers! .cleanup`, {type: 'LISTENING'})
+	client.user.setActivity(`${client.guilds.size} servers! | Command: .cleanup`, {type: 'LISTENING'})
 	
 	console.log(`Logged in as ${client.user.username}!`)
 	console.log(`Connected to ${client.guilds.size} servers`)
 	
 	client.setInterval(() => {
-		console.log(`${deleted_messages} messages deleted this session...`)
+		dbl.postStats(client.guilds.size)
+		console.log(`${deleted_messages} messages deleted this session... so far!`)
 	}, 1800 * 1000)
 })
 
@@ -128,13 +132,13 @@ client.on('message', message => {
 
 //Client join Guild Event
 client.on('guildCreate', guild => {
-	client.user.setActivity(`${client.guilds.size} servers!`, {type: 'LISTENING'})
+	client.user.setActivity(`${client.guilds.size} servers! | Command: .cleanup`, {type: 'LISTENING'})
 	console.log(`CommandCleanup was added to, ${guild.name} | ${guild.id} | Large? ${guild.large}`)
 })
 
 //Client leave Guild Event
 client.on('guildDelete', guild => {
-	client.user.setActivity(`${client.guilds.size} servers!`, {type: 'LISTENING'})
+	client.user.setActivity(`${client.guilds.size} servers! | Command: .cleanup`, {type: 'LISTENING'})
 	console.log(`CommandCleanup removed from, ${guild.name} | ${guild.id} | Large? ${guild.large}`)
 })
 
