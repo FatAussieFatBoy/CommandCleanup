@@ -11,27 +11,14 @@ const prefix = process.env.PREFIX
 //ready event
 client.on('ready', () => {
 	//set clients activity to show server count
+	client.user.setActivity(`.cleanup`, {type: 'LISTENING'})
 	
 	console.log(`Logged in as ${client.user.username}!`)
 	console.log(`Connected to ${client.guilds.size} servers`)
-
-	var i = 0
-	
-	client.setInterval(() => {
-		if(i = 0) {
-			i++
-			client.user.setActivity(`${client.guilds.size} servers!`, {type: 'LISTENING'})
-			return
-		}
-
-		if(i = 1) {
-			i--
-			client.user.setActivity(`.cleanup`, {type: 'LISTENING'})
-		}
-	}, 10 * 1000)
 	
 	client.setInterval(() => {
 		dbl.postStats(client.guilds.size)
+		console.log(`Listening to ${client.guilds.size} servers!`)
 	}, 1800 * 1000)
 })
 
