@@ -8,8 +8,6 @@ const dbl = new DBL(process.env.DBL_TOKEN)
 const token = process.env.TOKEN
 const prefix = process.env.PREFIX
 
-var deleted_messages = 0
-
 //ready event
 client.on('ready', () => {
 	//set clients activity to show server count
@@ -20,7 +18,6 @@ client.on('ready', () => {
 	
 	client.setInterval(() => {
 		dbl.postStats(client.guilds.size)
-		console.log(`${deleted_messages} messages deleted this session... so far!`)
 	}, 1800 * 1000)
 })
 
@@ -46,7 +43,6 @@ client.on('message', message => {
 							if(msgs.size === 0) return message.reply(`We could not find any messages. ***NOTE:*** *The bot cannot delete any messages posted more than 14 days ago...*`)
 								.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
 							message.channel.bulkDelete(msgs).catch(err => console.log(err.stack))
-							deleted_messages += parseInt(msgs.size)
 						}).catch(err => console.log(err.stack))
 						break
 			
@@ -58,7 +54,6 @@ client.on('message', message => {
 							if(msgs.size === 0) return message.reply(`We could not find any messages. ***NOTE:*** *The bot cannot delete any messages posted more than 14 days ago...*`)
 								.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
 							message.channel.bulkDelete(msgs).catch(err => console.log(err.stack))
-							deleted_messages += parseInt(msgs.size)
 						}).catch(err => console.log(err.stack))
 						break
 						
@@ -70,7 +65,6 @@ client.on('message', message => {
 							if(msgs.size === 0) return message.reply(`We could not find any messages. ***NOTE:*** *The bot cannot delete any messages posted more than 14 days ago...*`)
 								.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
 							message.channel.bulkDelete(msgs).catch(err => console.log(err.stack))
-							deleted_messages += parseInt(messages.size)
 						}).catch(err => console.log(err.stack))
 						break
 						
@@ -82,7 +76,6 @@ client.on('message', message => {
 							if(msgs.size === 0) return message.reply(`We could not find any messages. ***NOTE:*** *The bot cannot delete any messages posted more than 14 days ago...*`)
 								.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
 							message.channel.bulkDelete(msgs).catch(err => console.log(err.stack))
-							deleted_messages += parseInt(messages.size)
 						}).catch(err => console.log(err.stack))
 						break
 						
@@ -100,7 +93,6 @@ client.on('message', message => {
 											if(msgs.size === 0) return message.reply(`We could not find any messages. ***NOTE:*** *The bot cannot delete any messages posted more than 14 days ago...*`)
 												.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
 											message.channel.bulkDelete(msgs).catch(err => console.log(err.stack))
-											deleted_messages += parseInt(msgs.size)
 									}).catch(err => console.log(err.stack))
 								})
 							}
@@ -114,7 +106,6 @@ client.on('message', message => {
 											if(msgs.size === 0) return message.reply(`We could not find any messages. ***NOTE:*** *The bot cannot delete any messages posted more than 14 days ago...*`)
 												.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
 											message.channel.bulkDelete(msgs).catch(err => console.log(err.stack))
-											deleted_messages += parseInt(msgs.size)
 									}).catch(err => console.log(err.stack))
 								})	
 							}
@@ -127,6 +118,13 @@ client.on('message', message => {
 			}
 			message.delete(0).catch(err => console.log(err.stack))
 			break
+			
+		case 'guilds':
+			console.log(`Servers that use CommandCleanup...`)
+			client.guilds.array().forEach((guild, index) => {
+				console.log(`${guild.name} | ${guild.id} | Large? ${guild.large}`)
+			})
+			console.log(``)
 	}
 })
 
