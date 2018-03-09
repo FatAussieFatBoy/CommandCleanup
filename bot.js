@@ -34,7 +34,7 @@ client.on('message', message => {
 	
 	switch(command.toLowerCase()) {
 		case 'cleanup':
-			if(args.length > 1) {
+			if(args.length > 0) {
 				if (message.member.hasPermission('MANAGE_MESSAGES', false, true, true)) {
 					var num
 					if(args[0].match(/^\d+$/g)) {
