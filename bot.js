@@ -122,7 +122,7 @@ client.on('message', message => {
 		case 'guilds':
 			console.log(`Servers that use CommandCleanup...`)
 			client.guilds.array().forEach((guild, index) => {
-				console.log(`${guild.name} | ${guild.id} | Large? ${guild.large}`)
+				console.log(`${guild.name} | ${guild.id} | Large? ${guild.memberCount}`)
 			})
 			console.log(``)
 	}
@@ -131,13 +131,13 @@ client.on('message', message => {
 //Client join Guild Event
 client.on('guildCreate', guild => {
 	client.user.setActivity(`${client.guilds.size} servers! | Command: .cleanup`, {type: 'LISTENING'})
-	console.log(`CommandCleanup was added to, ${guild.name} | ${guild.id} | Large? ${guild.large}`)
+	console.log(`CommandCleanup was added to, ${guild.name} | ${guild.id} | Large? ${guild.memberCount}`)
 })
 
 //Client leave Guild Event
 client.on('guildDelete', guild => {
 	client.user.setActivity(`${client.guilds.size} servers! | Command: .cleanup`, {type: 'LISTENING'})
-	console.log(`CommandCleanup removed from, ${guild.name} | ${guild.id} | Large? ${guild.large}`)
+	console.log(`CommandCleanup removed from, ${guild.name} | ${guild.id}`)
 })
 
 client.login(token)
