@@ -34,109 +34,114 @@ client.on('message', message => {
 	
 	switch(command.toLowerCase()) {
 		case 'cleanup':
-			if (message.member.hasPermission('MANAGE_MESSAGES', false, true, true)) {
-				var num
-				if(args[0].match(/^\d+$/g)) {
-					num = parseInt(args[0])
-					args.shift()
+			if(args.length > 1) {
+				if (message.member.hasPermission('MANAGE_MESSAGES', false, true, true)) {
+					var num
+					if(args[0].match(/^\d+$/g)) {
+						num = parseInt(args[0])
+						args.shift()
+					} else {
+						num = 100
+					}
+					switch(args[0]) {
+						case 'commands': //all messages that begin with the most common symbols used in commands
+							message.channel.fetchMessages({ limit: 100 })
+							.then(messages => {
+								let msgs = messages.filter(msg => symbols.test(msg.content) && msg.createdAt > new Date(Date.now() - 1.21e+9) && msg.id != message.id)
+								
+								if(msgs.size === 0) return message.reply(`We could not find any messages. ***NOTE:*** *The bot cannot delete any messages posted more than 14 days ago...*`)
+									.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
+								message.channel.bulkDelete(msgs.first(num)).catch(err => console.log(err.stack))
+							}).catch(err => console.log(err.stack))
+							break
+				
+						case 'bots': //all messages that are posted by bots
+							message.channel.fetchMessages({ limit: 100 })
+							.then(messages => {
+								let msgs = messages.filter(msg => msg.author.bot && msg.createdAt > new Date(Date.now() - 1.21e+9) && msg.id != message.id)
+								
+								if(msgs.size === 0) return message.reply(`We could not find any messages. ***NOTE:*** *The bot cannot delete any messages posted more than 14 days ago...*`)
+									.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
+								message.channel.bulkDelete(msgs.first(num)).catch(err => console.log(err.stack))
+							}).catch(err => console.log(err.stack))
+							break
+							
+						case 'all': //all past 100 messages
+							message.channel.fetchMessages({ limit: 100 })
+							.then(messages => {
+								let msgs = messages.filter(msg => msg.createdAt > new Date(Date.now() - 1.21e+9) && msg.id != message.id)
+								
+								if(msgs.size === 0) return message.reply(`We could not find any messages. ***NOTE:*** *The bot cannot delete any messages posted more than 14 days ago...*`)
+									.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
+								message.channel.bulkDelete(msgs.first(num)).catch(err => console.log(err.stack))
+							}).catch(err => console.log(err.stack))
+							break
+							
+						case 'links': //all messages that start with http or https
+							message.channel.fetchMessages({ limit: 100 })
+							.then(messages => {
+								let msgs = messages.filter(msg => msg.content.includes('http://') || msg.content.includes('https://') && msg.id != message.id)
+								
+								if(msgs.size === 0) return message.reply(`We could not find any messages. ***NOTE:*** *The bot cannot delete any messages posted more than 14 days ago...*`)
+									.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
+								message.channel.bulkDelete(msgs.first(num)).catch(err => console.log(err.stack))
+							}).catch(err => console.log(err.stack))
+							break
+							
+						case 'attachments': //all messages with attachments (images, embeds)
+							message.channel.fetchMessages({ limit: 100 })
+							.then(messages => {
+								let msgs = messages.filter(msg => msg.attachments.size > 0 && msg.id != message.id)
+	
+								if(msgs.size === 0) return message.reply(`We could not find any messages with attachments.\n***NOTE:*** *The bot cannot delete any messages posted more than 14 days old...*`)
+									.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
+								message.channel.bulkDelete(msgs.first(num)).catch(err => console.log(err.stack))
+							}).catch(err => console.log(err.stack))
+							break
+							
+						default: //see if message has mentions, if not give command usage.
+							if (message.mentions) {
+								let mentioned_users = message.mentions.users.array()
+								let mentioned_roles = message.mentions.roles.array()
+								
+								if(mentioned_users) {
+									mentioned_users.forEach((user, index) => {
+										message.channel.fetchMessages({ limit: 100 })
+											.then(messages => {
+												let msgs = messages.filter(msg => msg.author.id === user.id && msg.createdAt > new Date(Date.now() - 1.21e+9) && msg.id != message.id)
+												
+												if(msgs.size === 0) return message.reply(`We could not find any messages. ***NOTE:*** *The bot cannot delete any messages posted more than 14 days ago...*`)
+													.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
+												message.channel.bulkDelete(msgs.first(num)).catch(err => console.log(err.stack))
+										}).catch(err => console.log(err.stack))
+									})
+								}
+								
+								if(mentioned_roles) {
+									mentioned_roles.forEach((role, index) => {
+										message.channel.fetchMessages({ limit: 100 })
+											.then(messages => {
+												let msgs = messages.filter(msg => msg.member.roles.exists('id', role.id) && msg.createdAt > new Date(Date.now() - 1.21e+9) && msg.id != message.id)
+												
+												if(msgs.size === 0) return message.reply(`We could not find any messages. ***NOTE:*** *The bot cannot delete any messages posted more than 14 days ago...*`)
+													.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
+												message.channel.bulkDelete(msgs.first(num)).catch(err => console.log(err.stack))
+										}).catch(err => console.log(err.stack))
+									})	
+								}
+							} else {
+								message.author.send(`Command Usage: *\`${prefix}cleanup <number of messages> (commands/bots/all/links/attachments/@user/@role)\`* | \`(required)\` \`<optional>\``).catch(err => console.log(err.stack))
+							}
+					}	
 				} else {
-					num = 100
+					message.author.send(`You have insufficient permissions to use this command`).catch(err => console.log(err.stack))	
 				}
-				switch(args[0]) {
-					case 'commands': //all messages that begin with the most common symbols used in commands
-						message.channel.fetchMessages({ limit: 100 })
-						.then(messages => {
-							let msgs = messages.filter(msg => symbols.test(msg.content) && msg.createdAt > new Date(Date.now() - 1.21e+9) && msg.id != message.id)
-							
-							if(msgs.size === 0) return message.reply(`We could not find any messages. ***NOTE:*** *The bot cannot delete any messages posted more than 14 days ago...*`)
-								.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
-							message.channel.bulkDelete(msgs.first(num)).catch(err => console.log(err.stack))
-						}).catch(err => console.log(err.stack))
-						break
-			
-					case 'bots': //all messages that are posted by bots
-						message.channel.fetchMessages({ limit: 100 })
-						.then(messages => {
-							let msgs = messages.filter(msg => msg.author.bot && msg.createdAt > new Date(Date.now() - 1.21e+9) && msg.id != message.id)
-							
-							if(msgs.size === 0) return message.reply(`We could not find any messages. ***NOTE:*** *The bot cannot delete any messages posted more than 14 days ago...*`)
-								.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
-							message.channel.bulkDelete(msgs.first(num)).catch(err => console.log(err.stack))
-						}).catch(err => console.log(err.stack))
-						break
-						
-					case 'all': //all past 100 messages
-						message.channel.fetchMessages({ limit: 100 })
-						.then(messages => {
-							let msgs = messages.filter(msg => msg.createdAt > new Date(Date.now() - 1.21e+9) && msg.id != message.id)
-							
-							if(msgs.size === 0) return message.reply(`We could not find any messages. ***NOTE:*** *The bot cannot delete any messages posted more than 14 days ago...*`)
-								.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
-							message.channel.bulkDelete(msgs.first(num)).catch(err => console.log(err.stack))
-						}).catch(err => console.log(err.stack))
-						break
-						
-					case 'links': //all messages that start with http or https
-						message.channel.fetchMessages({ limit: 100 })
-						.then(messages => {
-							let msgs = messages.filter(msg => msg.content.includes('http://') || msg.content.includes('https://') && msg.id != message.id)
-							
-							if(msgs.size === 0) return message.reply(`We could not find any messages. ***NOTE:*** *The bot cannot delete any messages posted more than 14 days ago...*`)
-								.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
-							message.channel.bulkDelete(msgs.first(num)).catch(err => console.log(err.stack))
-						}).catch(err => console.log(err.stack))
-						break
-						
-					case 'attachments': //all messages with attachments (images, embeds)
-						message.channel.fetchMessages({ limit: 100 })
-						.then(messages => {
-							let msgs = messages.filter(msg => msg.attachments.size > 0 && msg.id != message.id)
-
-							if(msgs.size === 0) return message.reply(`We could not find any messages with attachments.\n***NOTE:*** *The bot cannot delete any messages posted more than 14 days old...*`)
-								.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
-							message.channel.bulkDelete(msgs.first(num)).catch(err => console.log(err.stack))
-						}).catch(err => console.log(err.stack))
-						break
-						
-					default: //see if message has mentions, if not give command usage.
-						if (message.mentions) {
-							let mentioned_users = message.mentions.users.array()
-							let mentioned_roles = message.mentions.roles.array()
-							
-							if(mentioned_users) {
-								mentioned_users.forEach((user, index) => {
-									message.channel.fetchMessages({ limit: 100 })
-										.then(messages => {
-											let msgs = messages.filter(msg => msg.author.id === user.id && msg.createdAt > new Date(Date.now() - 1.21e+9) && msg.id != message.id)
-											
-											if(msgs.size === 0) return message.reply(`We could not find any messages. ***NOTE:*** *The bot cannot delete any messages posted more than 14 days ago...*`)
-												.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
-											message.channel.bulkDelete(msgs.first(num)).catch(err => console.log(err.stack))
-									}).catch(err => console.log(err.stack))
-								})
-							}
-							
-							if(mentioned_roles) {
-								mentioned_roles.forEach((role, index) => {
-									message.channel.fetchMessages({ limit: 100 })
-										.then(messages => {
-											let msgs = messages.filter(msg => msg.member.roles.exists('id', role.id) && msg.createdAt > new Date(Date.now() - 1.21e+9) && msg.id != message.id)
-											
-											if(msgs.size === 0) return message.reply(`We could not find any messages. ***NOTE:*** *The bot cannot delete any messages posted more than 14 days ago...*`)
-												.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
-											message.channel.bulkDelete(msgs.first(num)).catch(err => console.log(err.stack))
-									}).catch(err => console.log(err.stack))
-								})	
-							}
-						} else {
-							message.author.send(`Command Usage: *\`${prefix}cleanup <number of messages> (commands/bots/all/links/attachments/@user/@role)\`* | \`(required)\` \`<optional>\``).catch(err => console.log(err.stack))
-						}
-				}	
+				message.delete(0).catch(err => console.log(err.stack))
+				break
 			} else {
-				message.author.send(`You have insufficient permissions to use this command`).catch(err => console.log(err.stack))	
+				message.author.send(`Command Usage: *\`${prefix}cleanup <number of messages> (commands/bots/all/links/attachments/@user/@role)\`* | \`(required)\` \`<optional>\``).catch(err => console.log(err.stack))	
 			}
-			message.delete(0).catch(err => console.log(err.stack))
-			break
+		break
 	}
 })
 
