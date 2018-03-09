@@ -15,8 +15,9 @@ client.on('ready', () => {
 	console.log(`Logged in as ${client.user.username}!`)
 	console.log(`Connected to ${client.guilds.size} servers`)
 
+	var i = 0
+	
 	client.setInterval(() => {
-		var i = 0
 		if(i = 0) {
 			i++
 			client.user.setActivity(`${client.guilds.size} servers!`, {type: 'LISTENING'})
