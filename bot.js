@@ -119,12 +119,12 @@ client.on('message', message => {
 			message.delete(0).catch(err => console.log(err.stack))
 			break
 			
-		case 'guilds':
+		/*case 'guilds':
 			console.log(`Servers that use CommandCleanup...`)
 			client.guilds.array().forEach((guild, index) => {
 				console.log(`Name:${guild.name} | ID:${guild.id} | Members:${guild.memberCount}`)
 			})
-			console.log(``)
+			console.log(``)*/
 	}
 })
 
