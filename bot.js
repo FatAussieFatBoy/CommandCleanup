@@ -11,10 +11,23 @@ const prefix = process.env.PREFIX
 //ready event
 client.on('ready', () => {
 	//set clients activity to show server count
-	client.user.setActivity(`${client.guilds.size} servers! | Command: .cleanup`, {type: 'LISTENING'})
 	
 	console.log(`Logged in as ${client.user.username}!`)
 	console.log(`Connected to ${client.guilds.size} servers`)
+
+	client.setInterval(() => {
+		var i = 0
+		if(i = 0) {
+			i++
+			client.user.setActivity(`${client.guilds.size} servers!`, {type: 'LISTENING'})
+			return
+		}
+
+		if(i = 1) {
+			i--
+			client.user.setActivity(`.cleanup`, {type: 'LISTENING'})
+		}
+	}, 10 * 1000)
 	
 	client.setInterval(() => {
 		dbl.postStats(client.guilds.size)
@@ -34,6 +47,13 @@ client.on('message', message => {
 	switch(command.toLowerCase()) {
 		case 'cleanup':
 			if (message.member.hasPermission('MANAGE_MESSAGES', false, true, true)) {
+				var num
+				if(args[0].match(/^\d+$/g)) {
+					num = parseInt(args[0])
+					args.shift()
+				} else {
+					num = 100
+				}
 				switch(args[0]) {
 					case 'commands': //all messages that begin with the most common symbols used in commands
 						message.channel.fetchMessages({ limit: 100 })
@@ -42,7 +62,7 @@ client.on('message', message => {
 							
 							if(msgs.size === 0) return message.reply(`We could not find any messages. ***NOTE:*** *The bot cannot delete any messages posted more than 14 days ago...*`)
 								.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
-							message.channel.bulkDelete(msgs).catch(err => console.log(err.stack))
+							message.channel.bulkDelete(msgs.first(num)).catch(err => console.log(err.stack))
 						}).catch(err => console.log(err.stack))
 						break
 			
@@ -53,7 +73,7 @@ client.on('message', message => {
 							
 							if(msgs.size === 0) return message.reply(`We could not find any messages. ***NOTE:*** *The bot cannot delete any messages posted more than 14 days ago...*`)
 								.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
-							message.channel.bulkDelete(msgs).catch(err => console.log(err.stack))
+							message.channel.bulkDelete(msgs.first(num)).catch(err => console.log(err.stack))
 						}).catch(err => console.log(err.stack))
 						break
 						
@@ -64,7 +84,7 @@ client.on('message', message => {
 							
 							if(msgs.size === 0) return message.reply(`We could not find any messages. ***NOTE:*** *The bot cannot delete any messages posted more than 14 days ago...*`)
 								.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
-							message.channel.bulkDelete(msgs).catch(err => console.log(err.stack))
+							message.channel.bulkDelete(msgs.first(num)).catch(err => console.log(err.stack))
 						}).catch(err => console.log(err.stack))
 						break
 						
@@ -75,7 +95,18 @@ client.on('message', message => {
 							
 							if(msgs.size === 0) return message.reply(`We could not find any messages. ***NOTE:*** *The bot cannot delete any messages posted more than 14 days ago...*`)
 								.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
-							message.channel.bulkDelete(msgs).catch(err => console.log(err.stack))
+							message.channel.bulkDelete(msgs.first(num)).catch(err => console.log(err.stack))
+						}).catch(err => console.log(err.stack))
+						break
+						
+					case 'attachments': //all messages with attachments (images, embeds)
+						message.channel.fetchMessages({ limit: 100 })
+						.then(messages => {
+							let msgs = messages.filter(msg => msg.attachments.size > 0 && msg.id != message.id)
+
+							if(msgs.size === 0) return message.reply(`We could not find any messages with attachments.\n***NOTE:*** *The bot cannot delete any messages posted more than 14 days old...*`)
+								.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
+							message.channel.bulkDelete(msgs.first(num)).catch(err => console.log(err.stack))
 						}).catch(err => console.log(err.stack))
 						break
 						
@@ -92,7 +123,7 @@ client.on('message', message => {
 											
 											if(msgs.size === 0) return message.reply(`We could not find any messages. ***NOTE:*** *The bot cannot delete any messages posted more than 14 days ago...*`)
 												.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
-											message.channel.bulkDelete(msgs).catch(err => console.log(err.stack))
+											message.channel.bulkDelete(msgs.first(num)).catch(err => console.log(err.stack))
 									}).catch(err => console.log(err.stack))
 								})
 							}
@@ -105,38 +136,29 @@ client.on('message', message => {
 											
 											if(msgs.size === 0) return message.reply(`We could not find any messages. ***NOTE:*** *The bot cannot delete any messages posted more than 14 days ago...*`)
 												.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
-											message.channel.bulkDelete(msgs).catch(err => console.log(err.stack))
+											message.channel.bulkDelete(msgs.first(num)).catch(err => console.log(err.stack))
 									}).catch(err => console.log(err.stack))
 								})	
 							}
 						} else {
-							message.reply(`Command Usage: *\`${prefix}cleanup (commands/bots/all/links/@user/@role)\`* | \`(required)\` \`<optional>\``).then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
+							message.author.send(`Command Usage: *\`${prefix}cleanup <number of messages> (commands/bots/all/links/attachments/@user/@role)\`* | \`(required)\` \`<optional>\``).catch(err => console.log(err.stack))
 						}
 				}	
 			} else {
-				message.reply(`You have insufficient permissions to use this command`).then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))	
+				message.author.send(`You have insufficient permissions to use this command`).catch(err => console.log(err.stack))	
 			}
 			message.delete(0).catch(err => console.log(err.stack))
 			break
-			
-		/*case 'guilds':
-			console.log(`Servers that use CommandCleanup...`)
-			client.guilds.array().forEach((guild, index) => {
-				console.log(`Name:${guild.name} | ID:${guild.id} | Members:${guild.memberCount}`)
-			})
-			console.log(``)*/
 	}
 })
 
 //Client join Guild Event
 client.on('guildCreate', guild => {
-	client.user.setActivity(`${client.guilds.size} servers! | Command: .cleanup`, {type: 'LISTENING'})
 	console.log(`CommandCleanup was added to, Name:${guild.name} | ID:${guild.id} | Members:${guild.memberCount}`)
 })
 
 //Client leave Guild Event
 client.on('guildDelete', guild => {
-	client.user.setActivity(`${client.guilds.size} servers! | Command: .cleanup`, {type: 'LISTENING'})
 	console.log(`CommandCleanup removed from, Name:${guild.name} | ID:${guild.id}`)
 })
 
