@@ -38,67 +38,67 @@ client.on('message', message => {
 				if (message.member.hasPermission('MANAGE_MESSAGES', false, true, true)) {
 					var num
 					if(args[0].match(/^\d+$/g)) {
-						if(parseInt(args[0]) <= 100) {
+						if(parseInt(args[0]) <= 1000) {
 							num = parseInt(args[0])
 							args.shift()
 						} else {
-							message.author.send(`\`${args[0]}\` is too large, the bot can only delete a maximum of \`100\` messages at a time.`)
+							message.author.send(`\`${args[0]}\` is too large, the bot can only delete a maximum of \`1000\` messages at a time.`)
 								.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
 						}
 					} else {
-						num = 100
+						num = 1000
 					}
 					switch(args[0]) {
 						case 'commands': //all messages that begin with the most common symbols used in commands
-							message.channel.fetchMessages({ limit: 100 })
+							message.channel.fetchMessages({ limit: 1000 })
 							.then(messages => {
 								let msgs = messages.filter(msg => symbols.test(msg.content.substr(0, 2)) && msg.createdAt > new Date(Date.now() - 1.21e+9) && msg.id != message.id)
 								
-								if(msgs.size === 0) return message.reply(`We could not find any messages. ***NOTE:*** *The bot cannot delete any messages posted more than 14 days ago...*`)
+								if(msgs.size === 0) return message.author.send(`We could not find any command messages inside channel \`${message.channel.name}\`. ***NOTE:*** *The bot cannot delete any messages posted more than 14 days ago...*`)
 									.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
 								message.channel.bulkDelete(msgs.first(num)).catch(err => console.log(err.stack))
 							}).catch(err => console.log(err.stack))
 							break
 				
 						case 'bots': //all messages that are posted by bots
-							message.channel.fetchMessages({ limit: 100 })
+							message.channel.fetchMessages({ limit: 1000 })
 							.then(messages => {
 								let msgs = messages.filter(msg => msg.author.bot && msg.createdAt > new Date(Date.now() - 1.21e+9) && msg.id != message.id)
 								
-								if(msgs.size === 0) return message.reply(`We could not find any messages. ***NOTE:*** *The bot cannot delete any messages posted more than 14 days ago...*`)
+								if(msgs.size === 0) return message.author.send(`We could not find any command messages inside channel \`${message.channel.name}\`. ***NOTE:*** *The bot cannot delete any messages posted more than 14 days ago...*`)
 									.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
 								message.channel.bulkDelete(msgs.first(num)).catch(err => console.log(err.stack))
 							}).catch(err => console.log(err.stack))
 							break
 							
 						case 'all': //all past 100 messages
-							message.channel.fetchMessages({ limit: 100 })
+							message.channel.fetchMessages({ limit: 1000 })
 							.then(messages => {
 								let msgs = messages.filter(msg => msg.createdAt > new Date(Date.now() - 1.21e+9) && msg.id != message.id)
 								
-								if(msgs.size === 0) return message.reply(`We could not find any messages. ***NOTE:*** *The bot cannot delete any messages posted more than 14 days ago...*`)
+								if(msgs.size === 0) return message.author.send(`We could not find any command messages inside channel \`${message.channel.name}\`. ***NOTE:*** *The bot cannot delete any messages posted more than 14 days ago...*`)
 									.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
 								message.channel.bulkDelete(msgs.first(num)).catch(err => console.log(err.stack))
 							}).catch(err => console.log(err.stack))
 							break
 							
 						case 'links': //all messages that start with http or https
-							message.channel.fetchMessages({ limit: 100 })
+							message.channel.fetchMessages({ limit: 1000 })
 							.then(messages => {
 								let msgs = messages.filter(msg => msg.content.includes('http://') || msg.content.includes('https://') && msg.id != message.id)
 								
-								if(msgs.size === 0) return message.reply(`We could not find any messages. ***NOTE:*** *The bot cannot delete any messages posted more than 14 days ago...*`)
+								if(msgs.size === 0) return message.author.send(`We could not find any command messages inside channel \`${message.channel.name}\`. ***NOTE:*** *The bot cannot delete any messages posted more than 14 days ago...*`)
 									.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
 								message.channel.bulkDelete(msgs.first(num)).catch(err => console.log(err.stack))
 							}).catch(err => console.log(err.stack))
 							break
 							
 						case 'attachments': //all messages with attachments (images, embeds)
-							message.channel.fetchMessages({ limit: 100 })
+							message.channel.fetchMessages({ limit: 1000 })
 							.then(messages => {
 								let msgs = messages.filter(msg => msg.attachments.size > 0 && msg.id != message.id)
 	
-								if(msgs.size === 0) return message.reply(`We could not find any messages with attachments.\n***NOTE:*** *The bot cannot delete any messages posted more than 14 days old...*`)
+								if(msgs.size === 0) return message.author.send(`We could not find any command messages inside channel \`${message.channel.name}\`. ***NOTE:*** *The bot cannot delete any messages posted more than 14 days ago...*`)
 									.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
 								message.channel.bulkDelete(msgs.first(num)).catch(err => console.log(err.stack))
 							}).catch(err => console.log(err.stack))
@@ -111,11 +111,11 @@ client.on('message', message => {
 								
 								if(mentioned_users) {
 									mentioned_users.forEach((user, index) => {
-										message.channel.fetchMessages({ limit: 100 })
+										message.channel.fetchMessages({ limit: 1000 })
 											.then(messages => {
 												let msgs = messages.filter(msg => msg.author.id === user.id && msg.createdAt > new Date(Date.now() - 1.21e+9) && msg.id != message.id)
 												
-												if(msgs.size === 0) return message.reply(`We could not find any messages. ***NOTE:*** *The bot cannot delete any messages posted more than 14 days ago...*`)
+												if(msgs.size === 0) return message.author.send(`We could not find any command messages inside channel \`${message.channel.name}\`. ***NOTE:*** *The bot cannot delete any messages posted more than 14 days ago...*`)
 													.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
 												message.channel.bulkDelete(msgs.first(num)).catch(err => console.log(err.stack))
 										}).catch(err => console.log(err.stack))
@@ -124,11 +124,11 @@ client.on('message', message => {
 								
 								if(mentioned_roles) {
 									mentioned_roles.forEach((role, index) => {
-										message.channel.fetchMessages({ limit: 100 })
+										message.channel.fetchMessages({ limit: 1000 })
 											.then(messages => {
 												let msgs = messages.filter(msg => msg.member.roles.exists('id', role.id) && msg.createdAt > new Date(Date.now() - 1.21e+9) && msg.id != message.id)
 												
-												if(msgs.size === 0) return message.reply(`We could not find any messages. ***NOTE:*** *The bot cannot delete any messages posted more than 14 days ago...*`)
+												if(msgs.size === 0) return message.author.send(`We could not find any command messages inside channel \`${message.channel.name}\`. ***NOTE:*** *The bot cannot delete any messages posted more than 14 days ago...*`)
 													.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
 												message.channel.bulkDelete(msgs.first(num)).catch(err => console.log(err.stack))
 										}).catch(err => console.log(err.stack))
