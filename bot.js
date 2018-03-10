@@ -30,7 +30,7 @@ client.on('message', message => {
 
 	const args = message.content.split(/\s+/g)
 	const command = args.shift().slice(prefix.length)
-	const symbols = new RegExp(/^[-!$%^&()_+|~={}\[\]:";'?,.\/]/)
+	const symbols = new RegExp(/[-!$%^&()_+|~={}\[\]:;?,.\/]/)
 	
 	switch(command.toLowerCase()) {
 		case 'cleanup':
@@ -38,8 +38,13 @@ client.on('message', message => {
 				if (message.member.hasPermission('MANAGE_MESSAGES', false, true, true)) {
 					var num
 					if(args[0].match(/^\d+$/g)) {
-						num = parseInt(args[0])
-						args.shift()
+						if(parseInt(args[0]) <= 100) {
+							num = parseInt(args[0])
+							args.shift()
+						} else {
+							message.author.send(`\`${args[0]}\` is too large, the bot can only delete a maximum of \`100\` messages at a time.`)
+								.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
+						}
 					} else {
 						num = 100
 					}
@@ -47,7 +52,7 @@ client.on('message', message => {
 						case 'commands': //all messages that begin with the most common symbols used in commands
 							message.channel.fetchMessages({ limit: 100 })
 							.then(messages => {
-								let msgs = messages.filter(msg => symbols.test(msg.content) && msg.createdAt > new Date(Date.now() - 1.21e+9) && msg.id != message.id)
+								let msgs = messages.filter(msg => symbols.test(msg.content.substr(0, 2)) && msg.createdAt > new Date(Date.now() - 1.21e+9) && msg.id != message.id)
 								
 								if(msgs.size === 0) return message.reply(`We could not find any messages. ***NOTE:*** *The bot cannot delete any messages posted more than 14 days ago...*`)
 									.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
