@@ -5,5 +5,10 @@ module.exports.run = (client, prefix, message, args, con, dbl) => {
 	} else {
 		message.author.send(`You have already upvoted the bot...`)
 	}
-	if (message.channel.type != 'dm') message.delete(0).catch(err => console.log(err.stack))
+	
+	if (message.channel.type != 'dm') {
+		if (!message.channel.permissionsFor(message.guild.member(client.user)).has('MANAGE_MESSAGES')) {
+			message.delete(0).catch(err => console.log(err.stack))
+		}
+	}
 }
