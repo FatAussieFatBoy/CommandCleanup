@@ -3,7 +3,8 @@ module.exports.run = (client, prefix, message, args, con, dbl) => {
 
 	const symbols = new RegExp(/[-!$%^&()_+|~={}\[\]:;?,.\/]/)
 
-	if (message.channel.type === 'dm') return message.author.send('This command can only be used inside of guilds')
+	if (message.channel.type === 'dm') return message.author.send('This command can only be used inside of guilds.')
+	if (!message.guild.member(client.user).hasPermission('MANAGE_MESSAGES')) return message.author.send(`I do not have permission to delete messages in channel \`${message.channel.name}\`...\nIf you believe this is incorrect then please ensure the channels permissions allow CommandCleanup to \`MANAGE_MESSAGES\`.`) 
 	if (args.length > 0) {
 		if (message.member.hasPermission('MANAGE_MESSAGES', false, true, true)) {
 			var num
