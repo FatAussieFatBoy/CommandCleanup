@@ -7,8 +7,10 @@ module.exports.run = (client, prefix, message, args, con, dbl) => {
 	if (message.channel.type === 'dm') return message.author.send('This command can only be used inside of guilds.')
 	if (!message.channel.permissionsFor(clientMember).has('MANAGE_MESSAGES')) {
 		message.author.send(`I do not have permission to delete messages in \`#${message.channel.name}\`...\nIf you believe this is incorrect then please ensure the channels permissions allow CommandCleanup to \`MANAGE_MESSAGES\`.`)
+			.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
 		return
 	}
+	
 	if (args.length > 0) {
 		if (message.channel.permissionsFor(message.member).has('MANAGE_MESSAGES')) {
 			var num
