@@ -5,5 +5,5 @@ module.exports.run = (client, prefix, message, args, con, dbl) => {
 	} else {
 		message.author.send(`You have already upvoted the bot...`)
 	}
-	message.delete(0).catch(err => console.log(err.stack))
+	if (message.channel.type != 'dm') message.delete(0).catch(err => console.log(err.stack))
 }
