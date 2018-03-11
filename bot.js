@@ -35,7 +35,17 @@ con.connect(err => {
 })
 
 client.on('message', async message => {
-	if (message.author.bot) return;
+	if (message.author.bot) return
+	
+	if (message.member) {
+		if (message.member.hasPermission('ADMINISTRATOR') {
+		    	if (/(?:https:?\/)?discord(?:app.com\/invite|.gg)\gi.test(message.content)) {
+			    	message.delete(0)
+			    	return
+			}
+		}
+	}
+	
 	if (!message.content.startsWith(prefix)) return
 
 	const args = message.content.split(/\s+/g)
