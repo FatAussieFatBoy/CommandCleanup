@@ -18,5 +18,10 @@ module.exports.run = async (client, prefix, message, args, con, dbl) => {
 	} else {
 		message.author.send(`This command is only available for users that have upvoted the bot, if you'd like to upvote the bot use \`${prefix}upvote\``).catch(err => console.log(err.stack))
 	}
-	if (message.channel.type != 'dm') message.delete(0).catch(err => console.log(err.stack))
+	
+	if (message.channel.type != 'dm') {
+		if (!message.channel.permissionsFor(message.guild.member(client.user)).has('MANAGE_MESSAGES')) {
+			message.delete(0).catch(err => console.log(err.stack))
+		}
+	}
 }
