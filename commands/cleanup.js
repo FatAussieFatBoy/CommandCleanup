@@ -3,8 +3,8 @@ module.exports.run = (client, prefix, message, args, con, dbl) => {
 
 	const symbols = new RegExp(/[-!$%^&()_+|~={}\[\]:;?,.\/]/)
 
+	if (message.channel.type === 'dm') return message.author.send('This command can only be used inside of guilds')
 	if (args.length > 0) {
-		if (message.channel.type === 'dm') return message.author.send('This command can only be used inside of guilds')
 		if (message.member.hasPermission('MANAGE_MESSAGES', false, true, true)) {
 			var num
 			if(args[0].match(/^\d+$/g)) {
