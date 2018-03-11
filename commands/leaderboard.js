@@ -1,7 +1,7 @@
 //Leaderboard Command
 module.exports.run = async (client, prefix, message, args, con, dbl) => {
 	if (dbl.hasVoted(`${message.author.id}`)) {
-		con.query(`SELECT * FROM guilds ORDER BY messages_deleted DESC LIMIT 10`, (err, rows) => {
+		con.query(`SELECT * FROM guilds ORDER BY messages_deleted DESC LIMIT 5`, (err, rows) => {
 			if(err) console.log(err.stack)
 			if(!rows) return console.log(`ERROR: The database has no rows`)
 
