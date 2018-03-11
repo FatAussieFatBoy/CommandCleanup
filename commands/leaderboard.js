@@ -20,7 +20,7 @@ module.exports.run = async (client, prefix, message, args, con, dbl) => {
 	}
 	
 	if (message.channel.type != 'dm') {
-		if (!message.channel.permissionsFor(message.guild.member(client.user)).has('MANAGE_MESSAGES')) {
+		if (message.channel.permissionsFor(message.guild.member(client.user)).has('MANAGE_MESSAGES')) {
 			message.delete(0).catch(err => console.log(err.stack))
 		}
 	}
