@@ -61,7 +61,7 @@ module.exports.run = (client, prefix, message, args, con, dbl) => {
 				case 'links': //all messages that start with http or https
 					message.channel.fetchMessages({ limit: 100 })
 					.then(messages => {
-						let msgs = messages.filter(msg => msg.content.startsWith('http://') || msg.content.startsWith('https://') && msg.id != message.id)
+						let msgs = messages.filter(msg => msg.content.includes('http://') || msg.content.includes('https://') && msg.id != message.id)
 						
 						if(msgs.size === 0) return message.author.send(`We could not find any messages with links inside channel \`${message.channel.name}\`.\n***NOTE:*** *The bot cannot delete any messages posted more than 14 days old...*`)
 							.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
