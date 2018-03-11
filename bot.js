@@ -37,8 +37,8 @@ con.connect(err => {
 client.on('message', async message => {
 	if (message.author.bot) return
 	
-	if (message.member) {
-		if (!message.member.hasPermission('ADMINISTRATOR', false, true, true) {
+	if (message.type != 'dm') {
+		if (!message.member.hasPermission('ADMINISTRATOR', false, true, true)) {
 		    	if (/(?:https:?\/)?discord(?:app.com\/invite|.gg)/gi.test(message.content)) {
 			    	message.delete(0)
 			    	return
