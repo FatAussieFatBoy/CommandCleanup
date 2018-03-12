@@ -81,12 +81,25 @@ module.exports.run = (client, prefix, message, args, con, dbl) => {
 					}).catch(err => console.log(err.stack))
 					break
 	
-				case 'attachments': //all messages with attachments (images, embeds)
+				case 'attachments': //all messages with attachments
 					message.channel.fetchMessages({ limit: 100 })
 					.then(messages => {
 						let msgs = messages.filter(msg => msg.attachments.size > 0 && msg.id != message.id)
 	
 						if(msgs.size === 0) return message.author.send(`We could not find any messages with attachments inside \`#${message.channel.name}\`.\n***NOTE:*** *The bot cannot delete any messages posted more than 14 days old...*`)
+							.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
+						message.channel.bulkDelete(msgs.first(num), true).catch(err => console.log(err.stack))
+							.then(deleted_msgs => UpdateDeletedMessages(message.guild, deleted_msgs.size))
+							.catch(err => console.log(err.stack))
+					}).catch(err => console.log(err.stack))
+					break
+					
+				case 'text': //all messages without attachments
+					message.channel.fetchMessages({ limit: 100 })
+					.then(messages => {
+						let msgs = messages.filter(msg => msg.attachments.size === 0 && msg.id != message.id)
+						
+						if(msgs.size === 0) return message.author.send(`We could not find any messages without attachments inside \`#${message.channel.name}\`.\n***NOTE:*** *The bot cannot delete any messages posted more than 14 days old...*`)
 							.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
 						message.channel.bulkDelete(msgs.first(num), true).catch(err => console.log(err.stack))
 							.then(deleted_msgs => UpdateDeletedMessages(message.guild, deleted_msgs.size))
