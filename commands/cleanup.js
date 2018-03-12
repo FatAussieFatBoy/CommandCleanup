@@ -13,7 +13,7 @@ module.exports.run = (client, prefix, message, args, con, dbl) => {
 	
 	if (args.length > 0) {
 		if (message.channel.permissionsFor(message.member).has('MANAGE_MESSAGES')) {
-			let num
+			let num = 100
 			if(args.length == 2) {
 				if(args[1].match(/^[0-9]+$/g)) {
 					if(parseInt(args[1]) <= 100) {
@@ -23,12 +23,9 @@ module.exports.run = (client, prefix, message, args, con, dbl) => {
 							.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
 					}
 				} else {
-					num = 100
 					message.author.send(`Command Usage: *\`${prefix}cleanup (commands/bots/all/links/attachments/@user/@role) <number of messages>\`* | \`(required)\` \`<optional>\``).catch(err => console.log(err.stack))
 					return
 				}
-			} else {
-				num = 100	
 			}
 			
 			switch(args[0]) {
