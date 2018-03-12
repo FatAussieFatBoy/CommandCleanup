@@ -13,18 +13,24 @@ module.exports.run = (client, prefix, message, args, con, dbl) => {
 	
 	if (args.length > 0) {
 		if (message.channel.permissionsFor(message.member).has('MANAGE_MESSAGES')) {
-			var num
-			if(args[0].match(/^\d+$/g)) {
-				if(parseInt(args[0]) <= 100) {
-					num = parseInt(args[0])
-					args.shift()
+			let num
+			if(args.length == 2) {
+				if(args[1].match(/^[0-9]+$/g)) {
+					if(parseInt(args[1]) <= 100) {
+						num = parseInt(args[1])
+					} else {
+						message.author.send(`\`${args[1]}\` is too large, the bot can only delete a maximum of \`100\` messages at a time.`)
+							.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
+					}
 				} else {
-					message.author.send(`\`${args[0]}\` is too large, the bot can only delete a maximum of \`100\` messages at a time.`)
-						.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
+					num = 100
+					message.author.send(`Command Usage: *\`${prefix}cleanup (commands/bots/all/links/attachments/@user/@role) <number of messages>\`* | \`(required)\` \`<optional>\``).catch(err => console.log(err.stack))
+					return
 				}
 			} else {
-				num = 100
+				num = 100	
 			}
+			
 			switch(args[0]) {
 				case 'commands': //all messages that begin with the most common symbols used in commands
 					message.channel.fetchMessages({ limit: 100 })
@@ -126,14 +132,14 @@ module.exports.run = (client, prefix, message, args, con, dbl) => {
 							})	
 						}
 					} else {
-						message.author.send(`Command Usage: *\`${prefix}cleanup <number of messages> (commands/bots/all/links/attachments/@user/@role)\`* | \`(required)\` \`<optional>\``).catch(err => console.log(err.stack))
+						message.author.send(`Command Usage: *\`${prefix}cleanup (commands/bots/all/links/attachments/@user/@role) <number of messages>\`* | \`(required)\` \`<optional>\``).catch(err => console.log(err.stack))
 					}
 			}
 		} else {
 			message.author.send(`You have insufficient permissions to use that command in \`#${message.channel.name}\``).then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))	
 		}
 	} else {
-		message.author.send(`Command Usage: *\`${prefix}cleanup <number of messages> (commands/bots/all/links/attachments/@user/@role)\`* | \`(required)\` \`<optional>\``).catch(err => console.log(err.stack))
+		message.author.send(`Command Usage: *\`${prefix}cleanup (commands/bots/all/links/attachments/@user/@role) <number of messages>\`* | \`(required)\` \`<optional>\``).catch(err => console.log(err.stack))
 	}
 	message.delete(0).catch(err => console.log(err.stack))
 
