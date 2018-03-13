@@ -64,6 +64,7 @@ client.on('message', async message => {
 
 //Client join Guild Event
 client.on('guildCreate', guild => {
+	guild.owner.send(`CommandCleanup has been added to your guild \`${guild.name}\`, if you'd like to see the features and commands for this bot please use the link provided below and also consider giving the bot an upvote...\nhttps://discordbots.org/bot/420013638468894731`)
 	console.log(`CommandCleanup was added to, Name:${guild.name} | ID:${guild.id} | Members:${guild.memberCount}`)
 })
 
