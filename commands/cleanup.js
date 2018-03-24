@@ -38,7 +38,6 @@ module.exports.run = (client, prefix, message, args, con, dbl) => {
 							.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
 						message.channel.bulkDelete(msgs.first(num), true).catch(err => console.log(err.stack))
 							.then(deleted_msgs => UpdateDeletedMessages(message.guild, deleted_msgs.size))
-							.catch(err => console.log(err.stack))
 					}).catch(err => console.log(err.stack))
 					break
 		
@@ -51,7 +50,6 @@ module.exports.run = (client, prefix, message, args, con, dbl) => {
 							.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
 						message.channel.bulkDelete(msgs.first(num), true).catch(err => console.log(err.stack))
 							.then(deleted_msgs => UpdateDeletedMessages(message.guild, deleted_msgs.size))
-							.catch(err => console.log(err.stack))
 					}).catch(err => console.log(err.stack))
 					break
 					
@@ -64,7 +62,6 @@ module.exports.run = (client, prefix, message, args, con, dbl) => {
 							.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
 						message.channel.bulkDelete(msgs.first(num), true).catch(err => console.log(err.stack))
 							.then(deleted_msgs => UpdateDeletedMessages(message.guild, deleted_msgs.size))
-							.catch(err => console.log(err.stack))
 					}).catch(err => console.log(err.stack))
 					break
 					
@@ -77,7 +74,6 @@ module.exports.run = (client, prefix, message, args, con, dbl) => {
 							.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
 						message.channel.bulkDelete(msgs.first(num), true).catch(err => console.log(err.stack))
 							.then(deleted_msgs => UpdateDeletedMessages(message.guild, deleted_msgs.size))
-							.catch(err => console.log(err.stack))
 					}).catch(err => console.log(err.stack))
 					break
 	
@@ -90,7 +86,6 @@ module.exports.run = (client, prefix, message, args, con, dbl) => {
 							.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
 						message.channel.bulkDelete(msgs.first(num), true).catch(err => console.log(err.stack))
 							.then(deleted_msgs => UpdateDeletedMessages(message.guild, deleted_msgs.size))
-							.catch(err => console.log(err.stack))
 					}).catch(err => console.log(err.stack))
 					break
 					
@@ -103,7 +98,6 @@ module.exports.run = (client, prefix, message, args, con, dbl) => {
 							.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
 						message.channel.bulkDelete(msgs.first(num), true).catch(err => console.log(err.stack))
 							.then(deleted_msgs => UpdateDeletedMessages(message.guild, deleted_msgs.size))
-							.catch(err => console.log(err.stack))
 					}).catch(err => console.log(err.stack))
 					break
 					
@@ -122,7 +116,6 @@ module.exports.run = (client, prefix, message, args, con, dbl) => {
 											.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
 										message.channel.bulkDelete(msgs.first(num), true).catch(err => console.log(err.stack))
 											.then(deleted_msgs => UpdateDeletedMessages(message.guild, deleted_msgs.size))
-											.catch(err => console.log(err.stack))
 								}).catch(err => console.log(err.stack))
 							})
 						}
@@ -137,7 +130,6 @@ module.exports.run = (client, prefix, message, args, con, dbl) => {
 											.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
 										message.channel.bulkDelete(msgs.first(num), true).catch(err => console.log(err.stack))
 											.then(deleted_msgs => UpdateDeletedMessages(message.guild, deleted_msgs.size))
-											.catch(err => console.log(err.stack))
 								}).catch(err => console.log(err.stack))
 							})	
 						}
