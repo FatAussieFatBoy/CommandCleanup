@@ -36,8 +36,6 @@ con.connect(err => {
 })
 
 client.on('message', async message => {
-	if (message.author.bot) return
-	
 	if (message.channel.type != 'dm') {
 		if (message.channel.permissionsFor(message.guild.member(client.user)).has('MANAGE_MESSAGES')) {
 			if (!message.member.hasPermission('ADMINISTRATOR', false, true, true)) {
