@@ -146,6 +146,8 @@ module.exports.run = (client, prefix, message, args, con, dbl) => {
 	message.delete(0).catch(err => console.log(err.stack))
 
 	function UpdateDeletedMessages(guild, msgCount) {
+	/*
+	
 	con.query(`SELECT * FROM guilds WHERE id = '${guild.id}'`, (err, rows) => {
 		if(err) console.log(err.stack)
 
@@ -161,6 +163,8 @@ module.exports.run = (client, prefix, message, args, con, dbl) => {
 		}
 
 		con.query(sql)
+		
+	*/
 	})
 }
 }
