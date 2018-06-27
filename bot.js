@@ -38,7 +38,8 @@ con.connect(err => {
 client.on('message', async message => {
 	if (message.channel.type != 'dm') {
 		if (message.channel.permissionsFor(message.guild.member(client.user)).has('MANAGE_MESSAGES')) {
-			if (!message.guild.member(message.author).hasPermission('ADMINISTRATOR', false, true, true)) {
+			let msgUser = message.guild.member(message.author).catch(err => console.log(err.stack))
+			if (!msgUser.hasPermission('ADMINISTRATOR', false, true, true)) {
 			    	if (/(?:https:?\/)?discord(?:app.com\/invite|.gg)/gi.test(message.content)) {
 				    	message.delete(0).catch(err => console.log(err.stack))
 				    	return
