@@ -1,5 +1,9 @@
 //Leaderboard Command
 module.exports.run = async (client, prefix, message, args, con, dbl) => {
+	message.author.send(`Leaderboard has been disabled due to an unforseen issue.`)
+	
+	/*
+	
 	con.query(`SELECT * FROM guilds ORDER BY messages_deleted DESC LIMIT 5`, (err, rows) => {
 		if(err) console.log(err.stack)
 		if(!rows) return console.log(`ERROR: The database has no rows`)
@@ -20,4 +24,6 @@ module.exports.run = async (client, prefix, message, args, con, dbl) => {
 			message.delete(0).catch(err => console.log(err.stack))
 		}
 	}
+	
+	*/
 }
