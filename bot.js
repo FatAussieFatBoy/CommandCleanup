@@ -37,12 +37,15 @@ con.connect(err => {
 
 client.on('message', async message => {
 	if (message.channel.type != 'dm') {
-		if (message.channel.permissionsFor(message.guild.member(client.user)).has('MANAGE_MESSAGES')) {
-			if (/(?:https:?\/)?discord(?:app.com\/invite|.gg)/gi.test(message.content)) {
-				let msgUser = message.guild.member(message.author)
-				if (!msgUser.hasPermission('ADMINISTRATOR', false, true, true)) {
-				    	message.delete(0).catch(err => console.log(err.stack))
-				    	return
+		if (message.guild.member(client.user)) {
+			let user = message.guild.member(client.user)
+			if (message.channel.permissionsFor(user).has('MANAGE_MESSAGES')) {
+				if (/(?:https:?\/)?discord(?:app.com\/invite|.gg)/gi.test(message.content)) {
+					let msgUser = message.guild.member(message.author)
+					if (!msgUser.hasPermission('ADMINISTRATOR', false, true, true)) {
+					    	message.delete(0).catch(err => console.log(err.stack))
+					    	return
+					}
 				}
 			}
 		}
