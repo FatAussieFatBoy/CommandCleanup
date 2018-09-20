@@ -12,7 +12,7 @@ const prefix = process.env.PREFIX
 //ready event
 client.on('ready', () => {
 	//set clients activity to show server count
-	client.user.setActivity(`Updates [Currently Down]`, {type: 'LISTENING'})
+	client.user.setActivity(`Updates [Implementing Leaderboard]`, {type: 'LISTENING'})
 	
 	console.log(`Logged in as ${client.user.username}!`)
 	console.log(`Connected to ${client.guilds.size} servers`)
