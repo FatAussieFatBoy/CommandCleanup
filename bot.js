@@ -31,8 +31,11 @@ var con = mysql.createConnection({
 })
 
 con.connect(err => {
-	if(err) console.log(err.stack)
-	console.log(`Connected to database`)
+	if(err) {
+		console.log(err.stack)
+	} else {
+		console.log(`Connected to database`)
+	}
 })
 
 client.on('message', async message => {
