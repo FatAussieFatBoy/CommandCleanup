@@ -76,6 +76,18 @@ client.on('guildCreate', guild => {
 //Client leave Guild Event
 client.on('guildDelete', guild => {
 	console.log(`CommandCleanup removed from, Name:${guild.name} | ID:${guild.id}`)
+	con.query(`SELECT * FROM guilds WHERE id = '${guild.id}'`, (err, rows) => {
+		if(err) console.log(err.stack)
+
+		let sql
+		
+		if(rows.length < 1) {
+			sql = `DELETE FROM guilds WHERE id = '${guild.id}'`
+			console.log(`Database table for guild ${guild.name} deleted`)
+		}
+
+		con.query(sql)
+	})
 })
 
 client.login(token)
