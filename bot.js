@@ -77,16 +77,17 @@ client.on('guildCreate', guild => {
 client.on('guildDelete', guild => {
 	console.log(`CommandCleanup removed from, Name:${guild.name} | ID:${guild.id}`)
 	con.query(`SELECT * FROM guilds WHERE id = '${guild.id}'`, (err, rows) => {
-		if(err) console.log(err.stack)
+		if(err) { console.log(err.stack) } else {
 
-		let sql
-		
-		if(rows.length < 1) {
-			sql = `DELETE FROM guilds WHERE id = '${guild.id}'`
-			console.log(`Database table for guild ${guild.name} deleted`)
+			let sql
+			
+			if(rows.length > 0) {
+				sql = `DELETE FROM guilds WHERE id = '${guild.id}'`
+				console.log(`Database table for guild ${guild.name} deleted`)
+				
+				con.query(sql)
+			}
 		}
-
-		con.query(sql)
 	})
 })
 
