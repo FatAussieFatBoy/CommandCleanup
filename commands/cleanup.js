@@ -156,7 +156,7 @@ module.exports.run = (client, prefix, message, args, con, dbl) => {
 			console.log(`Database table for guild ${guild.name} created`)
 		} else {
 			let messages_deleted = rows[0].messages_deleted
-			sql = `UPDATE guilds SET messages_deleted = ${messages_deleted + msgCount}, name = '${guild.name.replace('\'', '')}' WHERE id = '${guild.id}'`
+			sql = `UPDATE guilds SET messages_deleted = ${messages_deleted + msgCount}, name = '${guild.name.replace('\'', '')}', member_count = ${guild.memberCount} WHERE id = '${guild.id}'`
 			console.log(`Database table for guild ${guild.name} updated`)
 		}
 
