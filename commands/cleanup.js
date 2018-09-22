@@ -152,11 +152,11 @@ module.exports.run = (client, prefix, message, args, con, dbl) => {
 		let sql
 		
 		if(rows.length < 1) {
-			sql = `INSERT INTO guilds (name, id, member_count, messages_deleted) VALUES ('${guild.name.replace('\'', '')}', '${guild.id}', ${guild.memberCount}, ${msgCount})`
+			sql = `INSERT INTO guilds (name, id, region, icon_path, messages_deleted) VALUES ('${guild.name.replace('\'', '')}', '${guild.id}', '${guild.region}', '${guild.iconURL}', ${msgCount})`
 			console.log(`Database table for guild ${guild.name} created`)
 		} else {
 			let messages_deleted = rows[0].messages_deleted
-			sql = `UPDATE guilds SET messages_deleted = ${messages_deleted + msgCount}, name = '${guild.name.replace('\'', '')}', member_count = ${guild.memberCount} WHERE id = '${guild.id}'`
+			sql = `UPDATE guilds SET messages_deleted = ${messages_deleted + msgCount}, name = '${guild.name.replace('\'', '')}', region = '${guild.region}', icon_path = '${guild.iconURL}' WHERE id = '${guild.id}'`
 			console.log(`Database table for guild ${guild.name} updated`)
 		}
 
