@@ -12,7 +12,7 @@ const prefix = process.env.PREFIX
 //ready event
 client.on('ready', () => {
 	//set clients activity to show server count
-	client.user.setActivity(`BEING FIXED`, {type: 'LISTENING'})
+	client.user.setActivity(`.cleanup`, {type: 'LISTENING'})
 	
 	console.log(`Logged in as ${client.user.username}!`)
 	console.log(`Connected to ${client.guilds.size} servers`)
@@ -62,7 +62,7 @@ client.on('message', async message => {
 		let cmdFile = require(`./commands/${command.toLowerCase()}.js`)
 		cmdFile.run(client, prefix, message, args, con, dbl)
 	} catch (err) {
-		console.log(err.stack)
+		//console.log(err.stack) when debugging
 	}
 
 })
