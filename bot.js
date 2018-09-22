@@ -62,7 +62,7 @@ client.on('message', async message => {
 		let cmdFile = require(`./commands/${command.toLowerCase()}.js`)
 		cmdFile.run(client, prefix, message, args, con, dbl)
 	} catch (err) {
-		// Do nothing
+		console.log(err.stack)
 	}
 
 })
