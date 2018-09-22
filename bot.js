@@ -62,7 +62,7 @@ client.on('message', async message => {
 		let cmdFile = require(`./commands/${command.toLowerCase()}.js`)
 		cmdFile.run(client, prefix, message, args, con, dbl)
 	} catch (err) {
-		console.log(`cmdFile, ${command.toLowerCase()}.js does not exist`)
+		// Do nothing
 	}
 
 })
