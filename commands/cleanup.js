@@ -150,7 +150,8 @@ module.exports.run = (client, prefix, message, args, con, dbl) => {
 												console.log(err.stack);
 												message.author.send(`An error has occured: I cannot delete these messages. Either the messages are older than 14 days or the code has stumbled across a problem..`)
 													.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
-										})
+											})
+									})
 							})
 						}
 						
@@ -168,7 +169,8 @@ module.exports.run = (client, prefix, message, args, con, dbl) => {
 												console.log(err.stack);
 												message.author.send(`An error has occured: I cannot delete these messages. Either the messages are older than 14 days or the code has stumbled across a problem..`)
 													.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
-										})
+											})
+									})
 							})	
 						}
 					} else {
