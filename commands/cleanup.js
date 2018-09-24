@@ -1,5 +1,5 @@
 //Cleanup Command
-module.exports.run = (client, prefix, message, args, con, dbl) => {
+module.exports.run = (client, prefix, message, args) => {
 
 	const symbols = new RegExp(/[-!$%^&()_+|~={}\[\]:;?,.\/]/) //symbols that will be used for .cleanup commands
 	const clientMember = message.guild.member(client.user)
