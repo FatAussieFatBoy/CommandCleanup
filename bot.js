@@ -4,8 +4,8 @@ const mysql = require('mysql')
 
 const client = new discord.Client({disableEveryone: true})
 
-const token = process.env.TOKEN
-const prefix = process.env.PREFIX
+const token = 'token'
+const prefix = '.'
 
 //ready event
 client.on('ready', () => {
