@@ -1,7 +1,7 @@
 //Cleanup Command
 module.exports.run = (client, prefix, message, args, con, dbl) => {
 
-	const symbols = new RegExp(/[-!$%^&()_+|~={}\[\]:;?,.\/]/)
+	const symbols = new RegExp(/[-!$%^&()_+|~={}\[\]:;?,.\/]/) //symbols that will be used for .cleanup commands
 	const clientMember = message.guild.member(client.user)
 
 	if (message.channel.type === 'dm') return message.author.send('This command can only be used inside of guilds.')
@@ -37,7 +37,6 @@ module.exports.run = (client, prefix, message, args, con, dbl) => {
 						if(msgs.size === 0) return message.author.send(`We could not find any command messages inside \`#${message.channel.name}\`. ***NOTE:*** *The bot cannot delete any messages posted more than 14 days ago...*`)
 							.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
 						message.channel.bulkDelete(msgs.first(num), true)
-							.then(deleted_msgs => UpdateDeletedMessages(message.guild, deleted_msgs.size))
 							.catch(err => { 
 								console.log(err.stack);
 								message.channel.send(`**An error has occured:** *I cannot delete these messages. Either the messages are older than 14 days or the code has stumbled across a problem..*`)
@@ -54,7 +53,6 @@ module.exports.run = (client, prefix, message, args, con, dbl) => {
 						if(msgs.size === 0) return message.author.send(`We could not find any messages posted by bots inside \`#${message.channel.name}\`.\n***NOTE:*** *The bot cannot delete any messages posted more than 14 days old...*`)
 							.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
 						message.channel.bulkDelete(msgs.first(num), true)
-							.then(deleted_msgs => UpdateDeletedMessages(message.guild, deleted_msgs.size))
 							.catch(err => { 
 								console.log(err.stack);
 								message.channel.send(`**An error has occured:** *I cannot delete these messages. Either the messages are older than 14 days or the code has stumbled across a problem..*`)
@@ -71,7 +69,6 @@ module.exports.run = (client, prefix, message, args, con, dbl) => {
 						if(msgs.size === 0) return message.author.send(`We could not find any messages inside \`#${message.channel.name}\`.\n***NOTE:*** *The bot cannot delete any messages posted more than 14 days old...*`)
 							.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
 						message.channel.bulkDelete(msgs.first(num), true)
-							.then(deleted_msgs => UpdateDeletedMessages(message.guild, deleted_msgs.size))
 							.catch(err => { 
 								console.log(err.stack);
 								message.channel.send(`**An error has occured:** *I cannot delete these messages. Either the messages are older than 14 days or the code has stumbled across a problem..*`)
@@ -88,7 +85,6 @@ module.exports.run = (client, prefix, message, args, con, dbl) => {
 						if(msgs.size === 0) return message.author.send(`We could not find any messages with links inside \`#${message.channel.name}\`.\n***NOTE:*** *The bot cannot delete any messages posted more than 14 days old...*`)
 							.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
 						message.channel.bulkDelete(msgs.first(num), true)
-							.then(deleted_msgs => UpdateDeletedMessages(message.guild, deleted_msgs.size))
 							.catch(err => { 
 								console.log(err.stack);
 								message.channel.send(`**An error has occured:** *I cannot delete these messages. Either the messages are older than 14 days or the code has stumbled across a problem..*`)
@@ -105,7 +101,6 @@ module.exports.run = (client, prefix, message, args, con, dbl) => {
 						if(msgs.size === 0) return message.author.send(`We could not find any messages with attachments inside \`#${message.channel.name}\`.\n***NOTE:*** *The bot cannot delete any messages posted more than 14 days old...*`)
 							.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
 						message.channel.bulkDelete(msgs.first(num), true)
-							.then(deleted_msgs => UpdateDeletedMessages(message.guild, deleted_msgs.size))
 							.catch(err => { 
 								console.log(err.stack);
 								message.channel.send(`**An error has occured:** *I cannot delete these messages. Either the messages are older than 14 days or the code has stumbled across a problem..*`)
@@ -122,7 +117,6 @@ module.exports.run = (client, prefix, message, args, con, dbl) => {
 						if(msgs.size === 0) return message.author.send(`We could not find any messages containing only text inside \`#${message.channel.name}\`.\n***NOTE:*** *The bot cannot delete any messages posted more than 14 days old...*`)
 							.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
 						message.channel.bulkDelete(msgs.first(num), true)
-							.then(deleted_msgs => UpdateDeletedMessages(message.guild, deleted_msgs.size))
 							.catch(err => { 
 								console.log(err.stack);
 								message.channel.send(`**An error has occured:** *I cannot delete these messages. Either the messages are older than 14 days or the code has stumbled across a problem..*`)
@@ -145,7 +139,6 @@ module.exports.run = (client, prefix, message, args, con, dbl) => {
 										if(msgs.size === 0) return message.author.send(`We could not find any messages from that user inside \`#${message.channel.name}\`.\n***NOTE:*** *The bot cannot delete any messages posted more than 14 days old...*`)
 											.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
 										message.channel.bulkDelete(msgs.first(num), true)
-											.then(deleted_msgs => UpdateDeletedMessages(message.guild, deleted_msgs.size))
 											.catch(err => { 
 												console.log(err.stack);
 												message.channel.send(`**An error has occured:** *I cannot delete these messages. Either the messages are older than 14 days or the code has stumbled across a problem..*`)
@@ -164,7 +157,6 @@ module.exports.run = (client, prefix, message, args, con, dbl) => {
 										if(msgs.size === 0) return message.author.send(`We could not find any messages from that role inside \`#${message.channel.name}\`.\n***NOTE:*** *The bot cannot delete any messages posted more than 14 days old...*`)
 											.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
 										message.channel.bulkDelete(msgs.first(num), true)
-											.then(deleted_msgs => UpdateDeletedMessages(message.guild, deleted_msgs.size))
 											.catch(err => { 
 												console.log(err.stack);
 												message.channel.send(`**An error has occured:** *I cannot delete these messages. Either the messages are older than 14 days or the code has stumbled across a problem..*`)
@@ -184,23 +176,5 @@ module.exports.run = (client, prefix, message, args, con, dbl) => {
 		message.author.send(`Command Usage: *\`${prefix}cleanup (commands/bots/all/links/attachments/text/@user/@role) <number of messages>\`* | \`(required)\` \`<optional>\``).catch(err => console.log(err.stack))
 	}
 	message.delete(0).catch(err => console.log(err.stack))
-
-	function UpdateDeletedMessages(guild, msgCount) {
-	con.query(`SELECT * FROM guilds WHERE id = '${guild.id}'`, (err, rows) => {
-		if(err) console.log(err.stack)
-
-		let sql
-		
-		if(rows.length < 1) {
-			sql = `INSERT INTO guilds (name, id, region, icon_path, messages_deleted) VALUES ('${guild.name.replace('\'', '')}', '${guild.id}', '${guild.region}', '${guild.iconURL}', ${msgCount})`
-			console.log(`Database table for guild ${guild.name} created`)
-		} else {
-			let messages_deleted = rows[0].messages_deleted
-			sql = `UPDATE guilds SET messages_deleted = ${messages_deleted + msgCount}, name = '${guild.name.replace('\'', '')}', region = '${guild.region}', icon_path = '${guild.iconURL}' WHERE id = '${guild.id}'`
-			console.log(`Database table for guild ${guild.name} updated`)
-		}
-
-		con.query(sql)
-	})
 }
 }
