@@ -25,7 +25,7 @@ module.exports.run = async (client, prefix, message, args, con, dbl) => {
 	
 			let str = ''
 			rows.forEach((row, index) => {
-				str += `\n:Guild \`${rows[index].name}\` with a total of \`${rows[index].messages_deleted}\` messages deleted.\n`
+				str += `\nThe Guild \`${rows[index].name}\` has a total of \`${rows[index].messages_deleted}\` messages deleted.\n`
 			})
 			
 			message.author.send(`**--- Guild Details ---**\n${str}`)
