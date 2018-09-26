@@ -17,6 +17,22 @@ module.exports.run = async (client, prefix, message, args, con, dbl) => {
 	})
 	
 	if (message.channel.type != 'dm') {
+		
+		//Display Server Ranking
+		con.query(`SELECT * FROM guilds WHERE id = \`${message.guild.id}\``, (err, rows) => {
+			if(err) console.log(err.stack)
+			if(!rows) return console.log(`ERROR: The database has no rows`)
+	
+			let str = ''
+			rows.forEach((row, index) => {
+				str += `\n:${Guild \`${rows[index].name}\` with a total of \`${rows[index].messages_deleted}\` messages deleted.\n`
+			})
+			
+			message.author.send(`**--- Guild Details ---**\n${str}`)
+				.then(msg => msg.delete(30 * 1000))
+				.catch(err => console.log(err.stack))
+		})
+		
 		if (message.channel.permissionsFor(message.guild.member(client.user)).has('MANAGE_MESSAGES')) {
 			message.delete(0).catch(err => console.log(err.stack))
 		}
