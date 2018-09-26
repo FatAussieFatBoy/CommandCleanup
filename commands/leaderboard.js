@@ -19,13 +19,13 @@ module.exports.run = async (client, prefix, message, args, con, dbl) => {
 	if (message.channel.type != 'dm') {
 		
 		//Display Server Ranking
-		con.query(`SELECT * FROM guilds WHERE id = \`${message.guild.id}\``, (err, rows) => {
+		con.query(`SELECT * FROM guilds WHERE id = '${message.guild.id}'`, (err, rows) => {
 			if(err) console.log(err.stack)
 			if(!rows) return console.log(`ERROR: The database has no rows`)
 	
 			let str = ''
 			rows.forEach((row, index) => {
-				str += `\n:${Guild \`${rows[index].name}\` with a total of \`${rows[index].messages_deleted}\` messages deleted.\n`
+				str += `\n:Guild \`${rows[index].name}\` with a total of \`${rows[index].messages_deleted}\` messages deleted.\n`
 			})
 			
 			message.author.send(`**--- Guild Details ---**\n${str}`)
