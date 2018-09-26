@@ -28,7 +28,7 @@ module.exports.run = async (client, prefix, message, args, con, dbl) => {
 				str += `\nThe Guild \`${rows[index].name}\` has a total of \`${rows[index].messages_deleted}\` messages deleted.\n`
 			})
 			
-			message.author.send(`**--- Guild Details ---**\n${str}`)
+			message.author.send(`\n**--- Guild Details ---**\n${str}`)
 				.then(msg => msg.delete(30 * 1000))
 				.catch(err => console.log(err.stack))
 		})
