@@ -27,7 +27,7 @@ module.exports.run = async (client, prefix, message, args, con, dbl) => {
 			let str = `${rows.length} servers found with the id ${message.guild.id}`
 			
 			rows.forEach((row, index) => {
-				row.forEach((param, index) => {
+				row[index].forEach((param, index) => {
 					str += `${param}, `
 				})
 				//let rank_num = row[index].rank > ranks.length ? `**${row[index].rank}**` : ranks[ row[index].rank ]
