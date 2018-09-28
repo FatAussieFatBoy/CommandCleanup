@@ -26,14 +26,14 @@ module.exports.run = async (client, prefix, message, args, con, dbl) => {
 	
 			let str = ''
 			rows.forEach((row, index) => {
-				let rank_num = row[index].rank > ranks.length ? `**${row[index].rank}**` : ranks[ row[index].rank ]
-				str += `${rank_num} - Guild \`${row[index].name}\` has a total of \`${row[index].messages_deleted}\` messages deleted.\n`
-				console.log(`${str}`);
-			}).catch(err => console.log(err.stack))
+				//let rank_num = row[index].rank > ranks.length ? `**${row[index].rank}**` : ranks[ row[index].rank ]
+				str += `**${row[index].rank}** - Guild \`${row[index].name}\` has a total of \`${row[index].messages_deleted}\` messages deleted.\n`
+				
+			})
 			
-			/* message.author.send(`${str}`)
+			message.author.send(`${str}`)
 				.then(msg => msg.delete(30 * 1000))
-				.catch(err => console.log(err.stack)) */
+				.catch(err => console.log(err.stack))
 		})
 		
 		if (message.channel.permissionsFor(message.guild.member(client.user)).has('MANAGE_MESSAGES')) {
