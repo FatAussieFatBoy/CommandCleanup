@@ -27,7 +27,7 @@ module.exports.run = async (client, prefix, message, args, con, dbl) => {
 			let str = ''
 			rows.forEach((row, index) => {
 				let rank_num = (row[index].rank - 1) > ranks.length ? row[index].rank : ranks[ (row[index].rank - 1) ]
-				str += `\n${rank_num} - Guild \`${rows[index].name}\` has a total of \`${rows[index].messages_deleted}\` messages deleted and\n`
+				str += `\n${rank_num} - Guild \`${row[index].name}\` has a total of \`${row[index].messages_deleted}\` messages deleted.\n`
 			})
 			
 			message.author.send(`${str}`)
