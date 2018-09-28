@@ -11,7 +11,7 @@ const prefix = process.env.PREFIX
 
 //ready event
 client.on('ready', () => {
-	let activities = ['.cleanup', 'https://commandcleanup.com', '.invite', '.leaderboard']
+	let activities = ['.cleanup', 'https://commandcleanup.com', '.invite', '.leaderboard', `${client.guilds.size} servers!`]
 	
 	//set clients activity to show server count
 	client.user.setActivity(`${activities[0]}`, {type: 'LISTENING'})
