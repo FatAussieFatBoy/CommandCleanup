@@ -90,7 +90,7 @@ module.exports.run = (client, prefix, message, args, con, dbl) => {
 						
 						if(msgs.size === 0) return message.author.send(`We could not find any messages with links inside \`#${message.channel.name}\`.\n***NOTE:*** *The bot cannot delete any messages posted more than 14 days old...*`)
 							.then(msg => msg.delete(10 * 1000)).catch(err => console.log(err.stack))
-						message.channel.bulkDelete(msgs.first(num), true)
+						message.channel.bulkDelete(msgs.first(num))
 							.then(deleted_msgs => UpdateDeletedMessages(message.guild, deleted_msgs.size))
 							.catch(err => { 
 								console.log(err.stack);
