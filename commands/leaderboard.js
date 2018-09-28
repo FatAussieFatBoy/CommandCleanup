@@ -29,7 +29,7 @@ module.exports.run = async (client, prefix, message, args, con, dbl) => {
 			rows.forEach((row, index) => {
 				row.forEach((param, index) => {
 					str += `${param}, `
-				}
+				})
 				//let rank_num = row[index].rank > ranks.length ? `**${row[index].rank}**` : ranks[ row[index].rank ]
 				//str += `**${row[index].rank}** - Guild \`${row[index].name}\` has a total of \`${row[index].messages_deleted}\` messages deleted.\n`
 				
