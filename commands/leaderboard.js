@@ -20,11 +20,11 @@ module.exports.run = async (client, prefix, message, args, con, dbl) => {
 	if (message.channel.type != 'dm') {
 		
 		//Display Server Ranking
-		con.query("SELECT *, FIND_IN_SET( `messages_deleted`, (SELECT GROUP_CONCAT( `messages_deleted` ORDER BY `messages_deleted` DESC ) FROM `guilds` )) AS `rank` FROM `guilds` WHERE `id` = '${message.guild.id}'", (err, rows) => {
+		con.query(`SELECT *, FIND_IN_SET( \`messages_deleted\`, (SELECT GROUP_CONCAT( \`messages_deleted\` ORDER BY \`messages_deleted\` DESC ) FROM \`guilds\` )) AS \`rank\` FROM \`guilds\` WHERE \`id\` = '${message.guild.id}'`, (err, rows) => {
 			if(err) console.log(err.stack)
 			if(!rows) return console.log(`ERROR: The database has no rows`)
 	
-			let str = ''
+			let str = `${rows.length} servers found with the id ${message.guild.id}`
 			rows.forEach((row, index) => {
 				//let rank_num = row[index].rank > ranks.length ? `**${row[index].rank}**` : ranks[ row[index].rank ]
 				str += `**${row[index].rank}** - Guild \`${row[index].name}\` has a total of \`${row[index].messages_deleted}\` messages deleted.\n`
