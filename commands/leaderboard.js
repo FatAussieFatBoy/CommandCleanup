@@ -1,7 +1,7 @@
 //Leaderboard Command
 module.exports.run = async (client, prefix, message, args, con, dbl) => {
 	
-	let ranks = ['medal', 'trophy', 'second_place', 'third_place', 'medal', 'medal']
+	let ranks = [':medal:', ':trophy:', ':second_place:', ':third_place:', ':medal:', ':medal:']
 
 	con.query(`SELECT * FROM guilds ORDER BY messages_deleted DESC LIMIT 5`, (err, rows) => {
 		if(err) console.log(err.stack)
@@ -9,7 +9,7 @@ module.exports.run = async (client, prefix, message, args, con, dbl) => {
 
 		let str = ''
 		rows.forEach((row, index) => {
-			str += `\n:${ranks[index + 1]}: - Guild \`${rows[index].name}\` with a total of \`${rows[index].messages_deleted}\` messages deleted.\n`
+			str += `\n${ranks[index + 1]} - Guild \`${rows[index].name}\` with a total of \`${rows[index].messages_deleted}\` messages deleted.\n`
 		})
 		
 		message.author.send(`**--- CommandCleanup Leaderboard ---**\n${str}`)
@@ -26,8 +26,8 @@ module.exports.run = async (client, prefix, message, args, con, dbl) => {
 	
 			let str = ''
 			rows.forEach((row, index) => {
-				let rank_num = (row[index].rank - 1) > ranks.length ? row[index].rank : ranks[ (row[index].rank - 1) ]
-				str += `\n**${rank_num}**: - Guild \`${row[index].name}\` has a total of \`${row[index].messages_deleted}\` messages deleted.\n`
+				let rank_num = row[index].rank > ranks.length ? row[index].rank : ranks[ row[index].rank ]
+				str += `\n**${rank_num}** - Guild \`${row[index].name}\` has a total of \`${row[index].messages_deleted}\` messages deleted.\n`
 			})
 			
 			message.author.send(` \n${str}`)
