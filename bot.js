@@ -14,7 +14,7 @@ client.on('ready', () => {
 	let activities = ['.cleanup', 'https://commandcleanup.com', '.invite', '.leaderboard', `${client.guilds.size} servers!`]
 	
 	//set clients activity to show server count
-	client.user.setActivity(`${activities[0]}`, {type: 'LISTENING'})
+	client.user.setActivity(`${activities[Math.floor(activities.length * Math.random())]}`, {type: 'LISTENING'})
 	
 	console.log(`Logged in as ${client.user.username}!`)
 	console.log(`Connected to ${client.guilds.size} servers`)
