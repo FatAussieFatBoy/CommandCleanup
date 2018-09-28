@@ -25,11 +25,12 @@ module.exports.run = async (client, prefix, message, args, con, dbl) => {
 			if(!rows) return console.log(`ERROR: The database has no rows`)
 	
 			let str = `${rows.length} servers found with the id ${message.guild.id}`
-			rows.forEach((row, index) => {
+			
+			/* rows.forEach((row, index) => {
 				//let rank_num = row[index].rank > ranks.length ? `**${row[index].rank}**` : ranks[ row[index].rank ]
 				str += `**${row[index].rank}** - Guild \`${row[index].name}\` has a total of \`${row[index].messages_deleted}\` messages deleted.\n`
 				
-			})
+			}) */
 			
 			message.author.send(`${str}`)
 				.then(msg => msg.delete(30 * 1000))
