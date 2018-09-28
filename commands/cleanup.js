@@ -15,7 +15,7 @@ module.exports.run = (client, prefix, message, args, con, dbl) => {
 		if (message.channel.permissionsFor(message.member).has('MANAGE_MESSAGES')) {
 			let num = 100
 			let current_date = new Date()
-			let date_limit = current_date.getDate() - 14
+			let date_limit = new Date(current_date.getDate() - 14)
 			
 			if(args.length == 2) {
 				if(args[1].match(/^[0-9]+$/g)) {
