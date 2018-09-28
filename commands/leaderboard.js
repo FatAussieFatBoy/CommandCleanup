@@ -20,7 +20,7 @@ module.exports.run = async (client, prefix, message, args, con, dbl) => {
 	if (message.channel.type != 'dm') {
 		
 		//Display Server Ranking
-		con.query("SELECT *, FIND_IN_SET( `messages_deleted`, (SELECT GROUP_CONCAT( `messages_deleted` ORDER BY `messages_deleted` DESC ) FROM `guilds` )) AS `rank` FROM `guilds` WHERE `id` = ${message.guild.id}", (err, rows) => {
+		con.query("SELECT *, FIND_IN_SET( `messages_deleted`, (SELECT GROUP_CONCAT( `messages_deleted` ORDER BY `messages_deleted` DESC ) FROM `guilds` )) AS `rank` FROM `guilds` WHERE `id` = '${message.guild.id}'", (err, rows) => {
 			if(err) console.log(err.stack)
 			if(!rows) return console.log(`ERROR: The database has no rows`)
 	
