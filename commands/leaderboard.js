@@ -12,33 +12,8 @@ module.exports.run = async (client, prefix, message, args, con, dbl) => {
 			str += `\n${ranks[index + 1]} - Guild \`${rows[index].name}\` with a total of \`${rows[index].messages_deleted}\` messages deleted.\n`
 		})
 		
-		message.author.send(`**--- CommandCleanup Leaderboard ---**\n${str}`)
+		message.author.send(`**--- CommandCleanup Leaderboard ---**\n${str}\nIf you're guild isn't listed here you can visit https://commandcleanup.com and use the global leaderboard to search for your guilds stats`)
 			.then(msg => msg.delete(30 * 1000))
 			.catch(err => console.log(err.stack))
 	})
-	
-	if (message.channel.type != 'dm') {
-		
-		//Display Guild Ranking
-		con.query(`SELECT *, FIND_IN_SET( \`messages_deleted\`, (SELECT GROUP_CONCAT( \`messages_deleted\` ORDER BY \`messages_deleted\` DESC ) FROM \`guilds\` )) AS \`rank\` FROM \`guilds\` WHERE \`id\` = '${message.guild.id}'`, (err, rows) => {
-			if(err) console.log(err.stack)
-			if(!rows) return console.log(`ERROR: The database has no rows`)
-	
-			let str = ''
-			
-			rows.forEach((row, index) => {
-				let rank_num = rows[index].rank > ranks.length ? `**${rows[index].rank}**` : ranks[ rows[index].rank ]
-				str += `**${rows[index].rank}** - Guild \`${rows[index].name}\` has a total of \`${rows[index].messages_deleted}\` messages deleted.\n`
-				
-			})
-			
-			message.author.send(`${str}`)
-				.then(msg => msg.delete(30 * 1000))
-				.catch(err => console.log(err.stack))
-		})
-		
-		if (message.channel.permissionsFor(message.guild.member(client.user)).has('MANAGE_MESSAGES')) {
-			message.delete(0).catch(err => console.log(err.stack))
-		}
-	}
 }
