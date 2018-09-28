@@ -26,11 +26,14 @@ module.exports.run = async (client, prefix, message, args, con, dbl) => {
 	
 			let str = `${rows.length} servers found with the id ${message.guild.id}`
 			
-			/* rows.forEach((row, index) => {
+			rows.forEach((row, index) => {
+				row.forEach((param, index) => {
+					str += `${param}, `
+				}
 				//let rank_num = row[index].rank > ranks.length ? `**${row[index].rank}**` : ranks[ row[index].rank ]
-				str += `**${row[index].rank}** - Guild \`${row[index].name}\` has a total of \`${row[index].messages_deleted}\` messages deleted.\n`
+				//str += `**${row[index].rank}** - Guild \`${row[index].name}\` has a total of \`${row[index].messages_deleted}\` messages deleted.\n`
 				
-			}) */
+			})
 			
 			message.author.send(`${str}`)
 				.then(msg => msg.delete(30 * 1000))
