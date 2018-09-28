@@ -1,7 +1,7 @@
 //Leaderboard Command
 module.exports.run = async (client, prefix, message, args, con, dbl) => {
 	
-	let ranks = [':medal:', ':trophy:', ':second_place:', ':third_place:', ':medal:', ':medal:']
+	let ranks = [':laughing:', ':trophy:', ':second_place:', ':third_place:', ':medal:', ':medal:']
 
 	con.query(`SELECT * FROM guilds ORDER BY messages_deleted DESC LIMIT 5`, (err, rows) => {
 		if(err) console.log(err.stack)
@@ -28,11 +28,12 @@ module.exports.run = async (client, prefix, message, args, con, dbl) => {
 			rows.forEach((row, index) => {
 				let rank_num = row[index].rank > ranks.length ? row[index].rank : ranks[ row[index].rank ]
 				str += `\n**${rank_num}** - Guild \`${row[index].name}\` has a total of \`${row[index].messages_deleted}\` messages deleted.\n`
+				console.log(`${str}`);
 			})
 			
-			message.author.send(` \n${str}`)
+			/* message.author.send(`${str}`)
 				.then(msg => msg.delete(30 * 1000))
-				.catch(err => console.log(err.stack))
+				.catch(err => console.log(err.stack)) */
 		})
 		
 		if (message.channel.permissionsFor(message.guild.member(client.user)).has('MANAGE_MESSAGES')) {
