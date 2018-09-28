@@ -19,7 +19,7 @@ module.exports.run = async (client, prefix, message, args, con, dbl) => {
 	
 	if (message.channel.type != 'dm') {
 		
-		//Display Server Ranking
+		//Display Guild Ranking
 		con.query(`SELECT *, FIND_IN_SET( \`messages_deleted\`, (SELECT GROUP_CONCAT( \`messages_deleted\` ORDER BY \`messages_deleted\` DESC ) FROM \`guilds\` )) AS \`rank\` FROM \`guilds\` WHERE \`id\` = '${message.guild.id}'`, (err, rows) => {
 			if(err) console.log(err.stack)
 			if(!rows) return console.log(`ERROR: The database has no rows`)
@@ -27,15 +27,14 @@ module.exports.run = async (client, prefix, message, args, con, dbl) => {
 			let str = ''
 			
 			rows.forEach((row, index) => {
-				console.log(`${row[index]}`)
-				//let rank_num = row[index].rank > ranks.length ? `**${row[index].rank}**` : ranks[ row[index].rank ]
-				//str += `**${row[index].rank}** - Guild \`${row[index].name}\` has a total of \`${row[index].messages_deleted}\` messages deleted.\n`
+				let rank_num = rows[index].rank > ranks.length ? `**${rows[index].rank}**` : ranks[ rows[index].rank ]
+				str += `**${rows[index].rank}** - Guild \`${rows[index].name}\` has a total of \`${rows[index].messages_deleted}\` messages deleted.\n`
 				
 			})
 			
-			/* message.author.send(`${str}`)
+			message.author.send(`${str}`)
 				.then(msg => msg.delete(30 * 1000))
-				.catch(err => console.log(err.stack)) */
+				.catch(err => console.log(err.stack))
 		})
 		
 		if (message.channel.permissionsFor(message.guild.member(client.user)).has('MANAGE_MESSAGES')) {
