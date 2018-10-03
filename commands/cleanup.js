@@ -197,7 +197,7 @@ module.exports.run = (client, prefix, message, args, con, dbl) => {
 			let sql
 				
 			if(rows.length < 1) {
-				sql = `INSERT INTO guilds (name, id, region, messages_deleted) VALUES ('${con.escape(guild.name)}', '${guild.id}', '${guild.region}', ${msgCount})`
+				sql = `INSERT INTO guilds (name, id, region, messages_deleted) VALUES ('${con.escapeId(guild.name)}', '${guild.id}', '${guild.region}', ${msgCount})`
 				console.log(`Database table for guild ${guild.name} created`)
 			} else {
 				let messages_deleted = rows[0].messages_deleted
