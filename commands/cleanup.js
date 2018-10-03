@@ -203,7 +203,7 @@ module.exports.run = (client, prefix, message, args, con, dbl) => {
 			} else {
 				let messages_deleted = rows[0].messages_deleted
 				let values = {name: '${guild.name}', region: '${guild.region}', messages_deleted = messages_deleted + msgCount}
-				let query = con.query(`UPDATE guilds SET messages_deleted = ${messages_deleted + msgCount}, name = '${con.escapeId(guild.name)}', region = '${guild.region}' WHERE id = '${guild.id}'`, values, function(error, results, fields) {
+				let query = con.query(`UPDATE guilds SET ? WHERE id = '${guild.id}'`, values, function(error, results, fields) {
 					if(error) console.log(error.stack)
 				})
 				console.log(`Database table for guild ${guild.name} updated`)
