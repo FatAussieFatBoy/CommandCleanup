@@ -200,7 +200,7 @@ module.exports.run = (client, prefix, message, args, con, dbl) => {
 				console.log(`Database table for guild ${guild.name} created`)
 				console.log(query.sql)
 			} else {
-				let messages_deleted = rows[0].messages_delete
+				let messages_deleted = rows[0].messages_deleted
 				let query = con.query(`UPDATE guilds SET messages_deleted = ${messages_deleted + msgCount}, name = '${(guild.name.replace("\'", ""))}', region = '${guild.region}' WHERE id = '${guild.id}'`, (error, results, fields) => {
 					if(error) console.log(error.stack)
 				})
