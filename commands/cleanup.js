@@ -194,16 +194,14 @@ module.exports.run = (client, prefix, message, args, con, dbl) => {
 
 		if(rows) {
 			if(rows.length < 1) {
-				let values = {name: '${guild.name}', id: '${guild.id}', region: '${guild.region}', messages_deleted: msgCount}
-				let query = con.query(`INSERT INTO guilds (name, id, region, messages_deleted) VALUES (?)`, values, function(error, results, fields) {
+				let query = con.query(`INSERT INTO guilds (name, id, region, messages_deleted) VALUES ('${guild.name.replace("\'", "")}', '${guild.id}', '${guild.region}', ${msgCount})`, (error, results, fields) => {
 					if(error) console.log(error.stack)
 				})
 				console.log(`Database table for guild ${guild.name} created`)
 				console.log(query.sql)
 			} else {
-				let messages_deleted = rows[0].messages_deleted
-				let values = {name: '${guild.name}', region: '${guild.region}', messages_deleted = messages_deleted + msgCount}
-				let query = con.query(`UPDATE guilds SET ? WHERE id = '${guild.id}'`, values, function(error, results, fields) {
+				let messages_deleted = rows[0].messages_delete
+				let query = con.query(`UPDATE guilds SET messages_deleted = ${messages_deleted + msgCount}, name = '${(guild.name.replace("\'", ""))}', region = '${guild.region}' WHERE id = '${guild.id}'`, (error, results, fields) => {
 					if(error) console.log(error.stack)
 				})
 				console.log(`Database table for guild ${guild.name} updated`)
