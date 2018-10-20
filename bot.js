@@ -25,6 +25,18 @@ client.on('ready', () => {
 	}, 1800 * 1000)
 })
 
+var options = {
+	proxy: process.env.QUOTAGUARDSTATIC_URL,
+	url: 'http://ip.jsontest.com/',
+	headers: {'User-Agent': 'node.js'},
+}
+
+request(options, (error, response, body) => {
+	if (!error && response.statusCode == 200) {
+		console.log(body)
+	}
+})
+
 var con = mysql.createConnection({
 	host: process.env.SQL_HOST,
 	user: process.env.SQL_USER,
