@@ -18,12 +18,12 @@ const mySqlServer = {
 	port: process.env.SQL_PORT
 }
 
-const fixieConnection = new SocksConnection(mySqlServer, {
+/* const fixieConnection = new SocksConnection(mySqlServer, {
 	user: fixieValues[0],
 	pass: fixieValues[1],
 	host: fixieValues[2],
 	port: fixieValues[3]
-})
+}) */
 
 //ready event
 client.on('ready', () => {
@@ -44,8 +44,8 @@ client.on('ready', () => {
 var con = mysql.createPool({
 	user: process.env.SQL_USER,
 	password: process.env.SQL_PASS,
-	database: process.env.SQL_DATABASE,
-	stream: fixieConnection
+	database: process.env.SQL_DATABASE
+	//stream: fixieConnection
 })
 
 con.connect(err => {
