@@ -1,7 +1,7 @@
 const discord = require('discord.js')
 const DBL = require('dblapi.js')
 const request = require('request')
-const mysql = require('mysql2')
+const mysql = require('mysql')
 const SocksConnection = require('sockjs')
 
 const client = new discord.Client({disableEveryone: true})
@@ -41,7 +41,7 @@ client.on('ready', () => {
 	}, 1800 * 1000)
 })
 
-var con = mysql.createPool({
+var con = mysql.createConnection({
 	user: process.env.SQL_USER,
 	password: process.env.SQL_PASS,
 	database: process.env.SQL_DATABASE
