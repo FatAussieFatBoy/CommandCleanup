@@ -2,7 +2,7 @@ const discord = require('discord.js')
 const DBL = require('dblapi.js')
 const request = require('request')
 const mysql = require('mysql2')
-const socks = require('sockjs')
+const SocksConnection = require('sockjs')
 
 const client = new discord.Client({disableEveryone: true})
 const dbl = new DBL(process.env.DBL_TOKEN)
@@ -18,7 +18,7 @@ const mySqlServer = {
 	port: process.env.SQL_PORT
 }
 
-const fixieConnection = new socks(mySqlServer, {
+const fixieConnection = new SocksConnection(mySqlServer, {
 	user: fixieValues[0],
 	pass: fixieValues[1],
 	host: fixieValues[2],
