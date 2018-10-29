@@ -12,7 +12,7 @@
     "dblapi.js": "^1.1.0",
     "discord.js": "^11.3.0",
     "mysql2": "^1.6.1",
-    "sockjs": "^0.3.19",
+    "socksjs": "^0.5.0",
     "request": "^2.83.0"
   }
 }
