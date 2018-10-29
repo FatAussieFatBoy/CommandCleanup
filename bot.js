@@ -2,7 +2,7 @@ const discord = require('discord.js')
 const DBL = require('dblapi.js')
 const request = require('request')
 const mysql = require('mysql2')
-const SocksConnection = require('sockjs')
+const SocksConnection = require('socksjs')
 
 const client = new discord.Client({disableEveryone: true})
 const dbl = new DBL(process.env.DBL_TOKEN)
