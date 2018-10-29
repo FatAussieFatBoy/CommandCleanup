@@ -2,9 +2,25 @@ const discord = require('discord.js')
 const DBL = require('dblapi.js')
 const request = require('request')
 const mysql = require('mysql2')
+const SocksConnection = require('sockjs')
 
 const client = new discord.Client({disableEveryone: true})
 const dbl = new DBL(process.env.DBL_TOKEN)
+
+const fixieUrl = process.env.FIXIE_SOCKS_HOST
+const fixieValues = fixieUrl.split(new RegExp('[/(:\\/@)/]+'))
+
+const mysqlServer = {
+	host: process.env.SQL_HOST,
+	port: 3306	
+}
+
+const fixieConnection = new SocksConnection(mysqlServer, {
+	user: fixieValues[0],
+	pass: fixieValues[1],
+	host: fixieValues[2],
+	port: fixieValues[3]
+})
 
 const token = process.env.TOKEN
 const prefix = process.env.PREFIX
@@ -25,20 +41,35 @@ client.on('ready', () => {
 	}, 1800 * 1000)
 })
 
-var con = mysql.createConnection({
-	host: process.env.SQL_HOST,
+const con = mysql.createPool({
 	user: process.env.SQL_USER,
 	password: process.env.SQL_PASS,
-	database: process.env.SQL_DATABASE
+	database: process.env.SQL_DATABASE,
+	stream: fixieConnection
 })
 
-con.connect(err => {
+con.getConnection((err, connection) => {
+	if (err) throw err
+	queryVersion(connection)
+})
+
+function queryVersion(connection) {
+	connection.query('SELECT version()', (err, rows, fields) => {
+		if (err) throw err
+		
+		console.log(`MySQL version: ${rows}`)
+		connection.release()
+		process.exit()
+	})
+}
+
+/* con.connect(err => {
 	if(err) {
 		console.log(err.stack)
 	} else {
 		console.log(`Connected to database`)
 	}
-})
+}) */
 
 client.on('message', async message => {
 	if (message.channel.type != 'dm') {
