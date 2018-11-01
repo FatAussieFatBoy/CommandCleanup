@@ -62,14 +62,6 @@ function queryVersion(connection) {
 	})
 }
 
-/* con.connect(err => {
-	if(err) {
-		console.log(err.stack)
-	} else {
-		console.log(`Connected to database`)
-	}
-}) */
-
 client.on('message', async message => {
 	if (message.channel.type != 'dm') {
 		if (message.guild.member(client.user)) {
