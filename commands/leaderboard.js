@@ -15,5 +15,7 @@ module.exports.run = async (client, prefix, message, args, con, dbl) => {
 		message.author.send(`**--- CommandCleanup Leaderboard ---**\n${str}\nIf you're guild isn't listed here you can visit https://commandcleanup.com and use the global leaderboard to search for your guilds stats`)
 			.then(msg => msg.delete(30 * 1000))
 			.catch(err => console.log(err.stack))
+		
+		con.release()
 	})
 }
