@@ -211,6 +211,8 @@ module.exports.run = (client, prefix, message, args, con, dbl) => {
 		} else {
 			console.log('Database error!')	
 		}
+		
+		con.release()
 	})
 }
 }
