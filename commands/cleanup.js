@@ -214,6 +214,5 @@ module.exports.run = (client, prefix, message, args, con, dbl) => {
 				connection.release()
 			})
 		})
-	})
-}
+	}
 }
