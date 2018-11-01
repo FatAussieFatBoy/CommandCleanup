@@ -212,7 +212,7 @@ module.exports.run = (client, prefix, message, args, con, dbl) => {
 						console.log('Database error!')	
 					}
 					
-					connection.release()
+					connection.destroy()
 				})
 			} else {
 				UpdateDeletedMessages(guild, msgCount)	
