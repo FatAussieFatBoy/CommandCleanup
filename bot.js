@@ -41,7 +41,7 @@ client.on('ready', () => {
 	}, 1800 * 1000)
 })
 
-const con = mysql.createPool({
+const connection = mysql.createPool({
 	user: process.env.SQL_USER,
 	password: process.env.SQL_PASS,
 	database: process.env.SQL_DATABASE,
@@ -49,17 +49,9 @@ const con = mysql.createPool({
 	connectionLimit: 1
 })
 
-con.getConnection((err, connection) => {
-	if (err) throw err
-	queryVersion(connection)
-})
-
-function queryVersion(connection) {
-	connection.query('SELECT version()', (err, rows, fields) => {
-		if (err) throw err
-		
-		console.log(`MySQL version:`, rows)
-		connection.release()
+let con = function(callback) {
+	connection.getConnection((err, c) => {
+		callback(err, c)	
 	})
 }
 
