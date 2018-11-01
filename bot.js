@@ -45,7 +45,8 @@ const con = mysql.createPool({
 	user: process.env.SQL_USER,
 	password: process.env.SQL_PASS,
 	database: process.env.SQL_DATABASE,
-	stream: fixieConnection
+	stream: fixieConnection,
+	connectionLimit: 1
 })
 
 con.getConnection((err, connection) => {
@@ -58,7 +59,7 @@ function queryVersion(connection) {
 		if (err) throw err
 		
 		console.log(`MySQL version:`, rows)
-		connection.destroy()
+		connection.release()
 	})
 }
 
