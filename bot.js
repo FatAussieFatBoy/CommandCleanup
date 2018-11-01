@@ -58,7 +58,7 @@ function queryVersion(connection) {
 		if (err) throw err
 		
 		console.log(`MySQL version:`, rows)
-		connection.release()
+		connection.destroy()
 	})
 }
 
