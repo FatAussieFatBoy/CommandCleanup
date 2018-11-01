@@ -41,11 +41,16 @@ client.on('ready', () => {
 	}, 1800 * 1000)
 })
 
-const con = mysql.createConnection({
+const connection = mysql.createPool({
 	user: process.env.SQL_USER,
 	password: process.env.SQL_PASS,
 	database: process.env.SQL_DATABASE,
-	stream: fixieConnection
+	stream: fixieConnection,
+	connectionLimit: 10
+})
+
+connection.getConnection((err, conn) => {
+	let con = conn	
 })
 
 client.on('message', async message => {
@@ -99,6 +104,8 @@ client.on('guildDelete', guild => {
 				con.query(sql)
 			}
 		}
+		
+		con.release()
 	})
 })
 
