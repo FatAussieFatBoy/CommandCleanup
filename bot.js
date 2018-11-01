@@ -49,11 +49,10 @@ const connection = mysql.createPool({
 	connectionLimit: 1
 })
 
-let con = function(callback) {
-	connection.getConnection((err, c) => {
-		callback(err, c)	
-	})
-}
+let con
+connection.getConnection((err, c) => {
+	con = c
+})
 
 client.on('message', async message => {
 	if (message.channel.type != 'dm') {
