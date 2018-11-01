@@ -49,8 +49,9 @@ const connection = mysql.createPool({
 	connectionLimit: 10
 })
 
+let con
 connection.getConnection((err, conn) => {
-	let con = conn	
+	con = conn	
 })
 
 client.on('message', async message => {
