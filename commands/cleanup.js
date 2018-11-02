@@ -1,5 +1,5 @@
 //Cleanup Command
-module.exports.run = (client, prefix, message, args, con, dbl) => {
+module.exports.run = (client, prefix, message, args, pool, dbl) => {
 
 	const symbols = new RegExp(/[-!$%^&()_+|~={}\[\]:;?,.\/]/)
 	const clientMember = message.guild.member(client.user)
@@ -189,7 +189,7 @@ module.exports.run = (client, prefix, message, args, con, dbl) => {
 	message.delete(0).catch(err => console.log(err.stack))
 
 	function UpdateDeletedMessages(guild, msgCount) {
-		con.query((err, conn) => {
+		pool.query((err, conn) => {
 			conn.query(`SELECT * FROM guilds WHERE id = '${guild.id}'`, (err, rows) => {
 				if(err) throw err
 	
@@ -197,21 +197,18 @@ module.exports.run = (client, prefix, message, args, con, dbl) => {
 					if(rows.length < 1) {
 						conn.query(`INSERT INTO guilds (name, id, region, messages_deleted) VALUES ('${guild.name.replace("\'", "")}', '${guild.id}', '${guild.region}', ${msgCount})`, (error, results, fields) => {
 							if(error) console.log(error.stack)
-							con.release()
 						})
 						console.log(`Database table for guild ${guild.name} created`)
 					} else {
 						let messages_deleted = rows[0].messages_deleted
 						conn.query(`UPDATE guilds SET messages_deleted = ${messages_deleted + msgCount}, name = '${(guild.name.replace("\'", ""))}', region = '${guild.region}' WHERE id = '${guild.id}'`, (error, results, fields) => {
 							if(error) console.log(error.stack)
-							con.release()
 						})
 						console.log(`Database table for guild ${guild.name} updated`)
 					}
 					
 				} else {
 					console.log('Database error!')
-					con.release()
 				}
 			})
 		})
