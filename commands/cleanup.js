@@ -189,28 +189,35 @@ module.exports.run = (client, prefix, message, args, con, dbl) => {
 	message.delete(0).catch(err => console.log(err.stack))
 
 	function UpdateDeletedMessages(guild, msgCount) {
-		con.query(`SELECT * FROM guilds WHERE id = '${guild.id}'`, (err, rows) => {
-			if(err) throw err
-
-			if(rows) {
-				if(rows.length < 1) {
-					con.query(`INSERT INTO guilds (name, id, region, messages_deleted) VALUES ('${guild.name.replace("\'", "")}', '${guild.id}', '${guild.region}', ${msgCount})`, (error, results, fields) => {
-						if(error) console.log(error.stack)
-					})
-					console.log(`Database table for guild ${guild.name} created`)
-				} else {
-					let messages_deleted = rows[0].messages_deleted
-					con.query(`UPDATE guilds SET messages_deleted = ${messages_deleted + msgCount}, name = '${(guild.name.replace("\'", ""))}', region = '${guild.region}' WHERE id = '${guild.id}'`, (error, results, fields) => {
-						if(error) console.log(error.stack)
-					})
-					console.log(`Database table for guild ${guild.name} updated`)
-				}
-				
-			} else {
-				console.log('Database error!')	
+		con.getConnection((err, connection) => {
+			if (err) throw err
+			if (!connection) {
+				console.log('Connection could not be found to contact MySQL')
+				return
 			}
+			connection.query(`SELECT * FROM guilds WHERE id = '${guild.id}'`, (err, rows) => {
+				if(err) throw err
+	
+				if(rows) {
+					if(rows.length < 1) {
+						connection.query(`INSERT INTO guilds (name, id, region, messages_deleted) VALUES ('${guild.name.replace("\'", "")}', '${guild.id}', '${guild.region}', ${msgCount})`, (error, results, fields) => {
+							if(error) console.log(error.stack)
+						})
+						console.log(`Database table for guild ${guild.name} created`)
+					} else {
+						let messages_deleted = rows[0].messages_deleted
+						connection.query(`UPDATE guilds SET messages_deleted = ${messages_deleted + msgCount}, name = '${(guild.name.replace("\'", ""))}', region = '${guild.region}' WHERE id = '${guild.id}'`, (error, results, fields) => {
+							if(error) console.log(error.stack)
+						})
+						console.log(`Database table for guild ${guild.name} updated`)
+					}
+					
+				} else {
+					console.log('Database error!')	
+				}
+			})
 			
-			con.release()
+			connection.release()
 		})
 	}
 }
