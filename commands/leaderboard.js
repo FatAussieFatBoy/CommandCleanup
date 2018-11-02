@@ -10,6 +10,8 @@ module.exports.run = async (client, prefix, message, args, con, dbl) => {
 		let str = ''
 		rows.forEach((row, index) => {
 			str += `\n${ranks[index + 1]} - Guild \`${rows[index].name}\` with a total of \`${rows[index].messages_deleted}\` messages deleted.\n`
+	
+		con.release()	
 	})
 	
 	message.author.send(`**--- CommandCleanup Leaderboard ---**\n${str}\nIf you're guild isn't listed here you can visit https://commandcleanup.com and use the global leaderboard to search for your guilds stats`)
