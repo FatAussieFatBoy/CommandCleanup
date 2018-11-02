@@ -46,9 +46,7 @@ const con = mysql.createPool({
 	password: process.env.SQL_PASS,
 	database: process.env.SQL_DATABASE,
 	stream: fixieConnection,
-	waitForConnections: true,
-	connectionLimit: 10,
-	queueLimit: 0
+	connectionLimit: 10
 })
 
 client.on('message', async message => {
