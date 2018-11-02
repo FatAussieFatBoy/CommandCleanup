@@ -4,7 +4,7 @@ module.exports.run = async (client, prefix, message, args, con, dbl) => {
 	let ranks = [':laughing:', ':trophy:', ':second_place:', ':third_place:', ':medal:', ':medal:']
 	let str = ''
 
-	con.query(`SELECT * FROM guilds ORDER BY messages_deleted DESC LIMIT 5`, (err, rows) => {
+	await con.query(`SELECT * FROM guilds ORDER BY messages_deleted DESC LIMIT 5`, (err, rows) => {
 		if(err) console.log(err.stack)
 		if(!rows) return console.log(`ERROR: The database has no rows`)
 
@@ -15,7 +15,7 @@ module.exports.run = async (client, prefix, message, args, con, dbl) => {
 		con.release()
 	})
 	
-	message.author.send(`**--- CommandCleanup Leaderboard ---**\n${str}\nIf you're guild isn't listed here you can visit https://commandcleanup.com and use the global leaderboard to search for your guilds stats`)
+	await message.author.send(`**--- CommandCleanup Leaderboard ---**\n${str}\nIf you're guild isn't listed here you can visit https://commandcleanup.com and use the global leaderboard to search for your guilds stats`)
 		.then(msg => msg.delete(30 * 1000))
 		.catch(err => console.log(err.stack))
 			
