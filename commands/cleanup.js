@@ -189,7 +189,7 @@ module.exports.run = (client, prefix, message, args, pool, dbl) => {
 	message.delete(0).catch(err => console.log(err.stack))
 
 	function UpdateDeletedMessages(guild, msgCount) {
-		pool.query((err, conn) => {
+		pool.getConnection((err, conn) => {
 			conn.query(`SELECT * FROM guilds WHERE id = '${guild.id}'`, (err, rows) => {
 				if(err) throw err
 	
@@ -211,6 +211,9 @@ module.exports.run = (client, prefix, message, args, pool, dbl) => {
 					console.log('Database error!')
 				}
 			})
+			
+			pool.releaseConnection(conn)
+			
 		})
 	}
 }
