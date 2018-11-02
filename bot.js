@@ -46,6 +46,7 @@ const pool = mysql.createPool({
 	password: process.env.SQL_PASS,
 	database: process.env.SQL_DATABASE,
 	stream: fixieConnection,
+	waitForConnection: true,
 	connectionLimit: 10
 })
 
