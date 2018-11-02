@@ -197,23 +197,23 @@ module.exports.run = (client, prefix, message, args, pool, dbl) => {
 					if(rows.length < 1) {
 						conn.query(`INSERT INTO guilds (name, id, region, messages_deleted) VALUES ('${guild.name.replace("\'", "")}', '${guild.id}', '${guild.region}', ${msgCount})`, (error, results, fields) => {
 							if(error) console.log(error.stack)
+							pool.releaseConnection(conn)
 						})
 						console.log(`Database table for guild ${guild.name} created`)
 					} else {
 						let messages_deleted = rows[0].messages_deleted
 						conn.query(`UPDATE guilds SET messages_deleted = ${messages_deleted + msgCount}, name = '${(guild.name.replace("\'", ""))}', region = '${guild.region}' WHERE id = '${guild.id}'`, (error, results, fields) => {
 							if(error) console.log(error.stack)
+							pool.releaseConnection(conn)
 						})
 						console.log(`Database table for guild ${guild.name} updated`)
 					}
 					
 				} else {
 					console.log('Database error!')
+					pool.releaseConnection(conn)
 				}
-			})
-			
-			pool.releaseConnection(conn)
-			
+			})			
 		})
 	}
 }
