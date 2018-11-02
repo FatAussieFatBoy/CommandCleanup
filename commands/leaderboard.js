@@ -4,8 +4,8 @@ module.exports.run = async (client, prefix, message, args, pool, dbl) => {
 	let ranks = [':laughing:', ':trophy:', ':second_place:', ':third_place:', ':medal:', ':medal:']
 	let str = ''
 
-	pool.query((err, conn) => {
-		conn.query(`SELECT * FROM guilds ORDER BY messages_deleted DESC LIMIT 5`, (err, rows) => {
+	pool.getConnection( async (err, conn) => {
+		await conn.query(`SELECT * FROM guilds ORDER BY messages_deleted DESC LIMIT 5`, (err, rows) => {
 			if(err) console.log(err.stack)
 			if(!rows) return console.log(`ERROR: The database has no rows`)
 	
@@ -17,5 +17,8 @@ module.exports.run = async (client, prefix, message, args, pool, dbl) => {
 				.then(msg => msg.delete(30 * 1000))
 				.catch(err => console.log(err.stack))
 		})
+		
+		pool.releaseConnection(conn)
+		
 	})
 }
