@@ -4,7 +4,8 @@ module.exports.run = async (client, prefix, message, args, con, dbl) => {
 	let ranks = [':laughing:', ':trophy:', ':second_place:', ':third_place:', ':medal:', ':medal:']
 
 	con.getConnection((err, connection) => {
-		if(err) throw err
+		if(err) console.log(err.stack)
+		
 		if(!connection) {
 			console.log('Connection could not be found to contact MySQL')
 		} else {
