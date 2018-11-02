@@ -4,8 +4,7 @@ module.exports.run = async (client, prefix, message, args, con, dbl) => {
 	let ranks = [':laughing:', ':trophy:', ':second_place:', ':third_place:', ':medal:', ':medal:']
 	let str = ''
 
-	con.getConnection((err, conn) => {
-		
+	con.query((err, conn) => {
 		conn.query(`SELECT * FROM guilds ORDER BY messages_deleted DESC LIMIT 5`, (err, rows) => {
 			if(err) console.log(err.stack)
 			if(!rows) return console.log(`ERROR: The database has no rows`)
