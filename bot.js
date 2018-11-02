@@ -41,7 +41,7 @@ client.on('ready', () => {
 	}, 1800 * 1000)
 })
 
-const con = mysql.createPool({
+const pool = mysql.createPool({
 	user: process.env.SQL_USER,
 	password: process.env.SQL_PASS,
 	database: process.env.SQL_DATABASE,
@@ -72,7 +72,7 @@ client.on('message', async message => {
 
 	try {
 		let cmdFile = require(`./commands/${command.toLowerCase()}.js`)
-		cmdFile.run(client, prefix, message, args, con, dbl)
+		cmdFile.run(client, prefix, message, args, pool, dbl)
 	} catch (err) {
 		//console.log(err.stack) when debugging
 	}
