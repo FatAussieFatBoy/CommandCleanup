@@ -41,12 +41,17 @@ client.on('ready', () => {
 	}, 1800 * 1000)
 })
 
-const con = mysql.createConnection({
-	host: process.env.SQL_HOST,
+const connection = mysql.createPool({
 	user: process.env.SQL_USER,
 	password: process.env.SQL_PASS,
 	database: process.env.SQL_DATABASE,
-	port: 3306
+	stream: fixieConnection,
+	connectionLimit: 1
+})
+
+let con
+connection.getConnection((err, conn) => {
+	con = conn	
 })
 
 client.on('message', async message => {
