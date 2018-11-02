@@ -1,10 +1,10 @@
 //Leaderboard Command
-module.exports.run = async (client, prefix, message, args, con, dbl) => {
+module.exports.run = async (client, prefix, message, args, pool, dbl) => {
 	
 	let ranks = [':laughing:', ':trophy:', ':second_place:', ':third_place:', ':medal:', ':medal:']
 	let str = ''
 
-	con.query((err, conn) => {
+	pool.query((err, conn) => {
 		conn.query(`SELECT * FROM guilds ORDER BY messages_deleted DESC LIMIT 5`, (err, rows) => {
 			if(err) console.log(err.stack)
 			if(!rows) return console.log(`ERROR: The database has no rows`)
@@ -17,8 +17,5 @@ module.exports.run = async (client, prefix, message, args, con, dbl) => {
 				.then(msg => msg.delete(30 * 1000))
 				.catch(err => console.log(err.stack))
 		})
-		
-		con.releaseConnection(conn)
-		
 	})
 }
