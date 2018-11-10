@@ -57,7 +57,7 @@ client.on('message', async message => {
 				if (/(?:https:?\/)?discord(?:app.com\/invite|.gg)/gi.test(message.content)) {
 					let msgUser = message.guild.member(message.author)
 					if (!msgUser.hasPermission('ADMINISTRATOR', false, true, true)) {
-					    	message.delete(0).catch(err => console.log(err.stack))
+					    	if (message.deletable) message.delete(0).catch(err => console.log(err.stack))
 					    	return
 					}
 				}
