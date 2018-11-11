@@ -2,25 +2,9 @@ const discord = require('discord.js')
 const DBL = require('dblapi.js')
 const request = require('request')
 const mysql = require('mysql2')
-const SocksConnection = require('socksjs')
 
 const client = new discord.Client({disableEveryone: true})
 const dbl = new DBL(process.env.DBL_TOKEN)
-
-const fixieUrl = process.env.FIXIE_SOCKS_HOST
-const fixieValues = fixieUrl.split(new RegExp('[/(:\\/@)/]+'))
-
-const mysqlServer = {
-	host: process.env.SQL_HOST,
-	port: 3306	
-}
-
-const fixieConnection = new SocksConnection(mysqlServer, {
-	user: fixieValues[0],
-	pass: fixieValues[1],
-	host: fixieValues[2],
-	port: fixieValues[3]
-})
 
 const token = process.env.TOKEN
 const prefix = process.env.PREFIX
@@ -43,10 +27,11 @@ client.on('ready', () => {
 })
 
 const pool = mysql.createPool({
+	host: process.env.SQL_HOST,
+	port: 3306,
 	user: process.env.SQL_USER,
 	password: process.env.SQL_PASS,
 	database: process.env.SQL_DATABASE,
-	stream: fixieConnection,
 	connectionLimit: 10
 })
 
