@@ -17,7 +17,14 @@ client.on('ready', () => {
 	client.user.setActivity(`${activities[Math.floor(activities.length * Math.random())]}`, {type: 'LISTENING'}) 
 	//client.user.setActivity(`for changes in code`, {type: 'WATCHING'}) // remove quote marks when updating bot
 	
-	console.log(`Logged in as ${client.user.username}!\nAttached to IP ${request.connection.remoteAccess}\nListening to ${client.guilds.size} servers`)
+	console.log(`Logged in as ${client.user.username}!`)
+	
+	let clientAddress = (req) => {
+		return (req.headers['x-forwarded-for'] || '').split(',')[0] || req.connection.remoteAccess
+	}
+	
+	if (clientAddress(request)) console.log(`Attached to IP ${clientAddress(request)}`)
+	console.log(`Listening to ${client.guilds.size} servers`)
 	
 	client.setInterval(() => {
 		dbl.postStats(client.guilds.size)
