@@ -17,14 +17,12 @@ client.on('ready', () => {
 	client.user.setActivity(`${activities[Math.floor(activities.length * Math.random())]}`, {type: 'LISTENING'}) 
 	//client.user.setActivity(`for changes in code`, {type: 'WATCHING'}) // remove quote marks when updating bot
 	
+	//log the client username and number of servers the client is listening to
 	console.log(`Logged in as ${client.user.username}!`)
-	
-	let clientAddress = (req) => {
-		return (req.headers['x-forwarded-for'] || '').split(',')[0] || req.connection.remoteAccess
-	}
-	
-	if (clientAddress(request)) console.log(`Attached to IP ${clientAddress(request)}`)
 	console.log(`Listening to ${client.guilds.size} servers`)
+	
+	//log client ip address
+	if (request.connection) console.log(`Attached to IP ${request.connection.remoteAccess}`)
 	
 	client.setInterval(() => {
 		dbl.postStats(client.guilds.size)
