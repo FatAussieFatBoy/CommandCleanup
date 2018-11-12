@@ -42,7 +42,7 @@ const pool = mysql.createPool({
 client.on('message', async message => {
 	if (message.channel.type != 'dm') {
 		if (/(?:https:?\/)?discord(?:app.com\/invite|.gg)/gi.test(message.content)) {
-			if (!message.channel.permissionsFor(message.guild.member(message.author)).has('ADMINISTRATOR')) {
+			if (!message.channel.permissionsFor(message.member).has('ADMINISTRATOR')) {
 			    	if (message.deletable) message.delete(0).catch(err => console.log(err.stack))
 			    	return
 			}
