@@ -153,7 +153,6 @@ module.exports.run = (client, prefix, message, args, pool, dbl) => {
 							let msgs = messages.filter(msg => !channel.members.find('id', msg.author.id) && msg.createdTimestamp >= date_limit && msg.deletable)
 							
 							if (msgs.size === 0) return
-							console.log(JSON.stringify(msgs))
 
 							channel.bulkDelete(msgs.first(num), true)
 								.then(deleted_msgs => UpdateDeletedMessages(message.guild, deleted_msgs.size))
@@ -221,54 +220,54 @@ module.exports.run = (client, prefix, message, args, pool, dbl) => {
 		message.author.send(`Command Usage: *\`${prefix}cleanup (commands/bots/all/links/attachments/text/@user/@role) <number of messages>\`* | \`(required)\` \`<optional>\``).then(msg => addDeleteReaction(msg)).catch(err => console.log(err.stack))
 	}
 	if (message.deletable) message.delete(0).catch(err => console.log(err.stack))
+}
 
-	function UpdateDeletedMessages(guild, msgCount) {
-		pool.getConnection((err, conn) => {
-			if(conn) {
-				conn.query(`SELECT * FROM guilds WHERE id = '${guild.id}'`, (err, rows) => {
-					if(err) throw err
-		
-					if(rows) {
-						if(rows.length < 1) {
-							conn.query(`INSERT INTO guilds (name, id, region, messages_deleted) VALUES ('${guild.name.replace("\'", "")}', '${guild.id}', '${guild.region}', ${msgCount})`, (error, results, fields) => {
-								if(error) console.log(error.stack)
-								pool.releaseConnection(conn)
-							})
-							console.log(`Database table for guild ${guild.name} created`)
-						} else {
-							let messages_deleted = rows[0].messages_deleted
-							conn.query(`UPDATE guilds SET messages_deleted = ${messages_deleted + msgCount}, name = '${(guild.name.replace("\'", ""))}', region = '${guild.region}' WHERE id = '${guild.id}'`, (error, results, fields) => {
-								if(error) console.log(error.stack)
-								pool.releaseConnection(conn)
-							})
-							console.log(`Database table for guild ${guild.name} updated`)
-						}
-						
+function UpdateDeletedMessages(guild, msgCount) {
+	pool.getConnection((err, conn) => {
+		if(conn) {
+			conn.query(`SELECT * FROM guilds WHERE id = '${guild.id}'`, (err, rows) => {
+				if(err) throw err
+	
+				if(rows) {
+					if(rows.length < 1) {
+						conn.query(`INSERT INTO guilds (name, id, region, messages_deleted) VALUES ('${guild.name.replace("\'", "")}', '${guild.id}', '${guild.region}', ${msgCount})`, (error, results, fields) => {
+							if(error) console.log(error.stack)
+							pool.releaseConnection(conn)
+						})
+						console.log(`Database table for guild ${guild.name} created`)
 					} else {
-						console.log('Database error!')
-						pool.releaseConnection(conn)
+						let messages_deleted = rows[0].messages_deleted
+						conn.query(`UPDATE guilds SET messages_deleted = ${messages_deleted + msgCount}, name = '${(guild.name.replace("\'", ""))}', region = '${guild.region}' WHERE id = '${guild.id}'`, (error, results, fields) => {
+							if(error) console.log(error.stack)
+							pool.releaseConnection(conn)
+						})
+						console.log(`Database table for guild ${guild.name} updated`)
 					}
-				})
-			}
-		})
-	}
-	
-	function addDeleteReaction(message) {
-		//add reaction to message so it can be deleted
-		message.react('❌').catch((err) => console.log(err.stack))
-	
-		//filter the collector and set the message to expire after 5 minutes.
-		const filter = (reaction, user) => user.id != message.author.id && reaction.emoji.name === '❌'
-		let collector = message.createReactionCollector(filter, {time: 300 * 1000})
-	
-		//when the reaction is collected by the collector stop the collector
-		collector.on('collect', (r) => {
-			collector.stop()
-		})
-	
-		//when the collector stops delete the message
-		collector.on('end', (collected) => {
-			if (message.deletable) message.delete(0)
-		})
-	}
+					
+				} else {
+					console.log('Database error!')
+					pool.releaseConnection(conn)
+				}
+			})
+		}
+	})
+}
+
+function addDeleteReaction(message) {
+	//add reaction to message so it can be deleted
+	message.react('❌').catch((err) => console.log(err.stack))
+
+	//filter the collector and set the message to expire after 5 minutes.
+	const filter = (reaction, user) => user.id != message.author.id && reaction.emoji.name === '❌'
+	let collector = message.createReactionCollector(filter, {time: 300 * 1000})
+
+	//when the reaction is collected by the collector stop the collector
+	collector.on('collect', (r) => {
+		collector.stop()
+	})
+
+	//when the collector stops delete the message
+	collector.on('end', (collected) => {
+		if (message.deletable) message.delete(0)
+	})
 }
