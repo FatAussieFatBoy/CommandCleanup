@@ -22,7 +22,7 @@ module.exports.run = (client, prefix, message, args, pool, dbl) => {
 					if(parseInt(args[1]) <= 100) {
 						num = parseInt(args[1])
 					} else {
-						message.author.send(`\`${args[1]}\` is too large, the bot can only delete a maximum of \`100\` messages at a time.`)
+						message.author.send(`\`${args[1]}\` is too large, the bot can delete a maximum of \`100\` messages at a time..`)
 							.then(msg => addDeleteReaction(msg)).catch(err => console.log(err.stack))
 					}
 				} else {
@@ -33,7 +33,7 @@ module.exports.run = (client, prefix, message, args, pool, dbl) => {
 			
 			switch(args[0]) {
 				case 'commands': //all messages that begin with the most common symbols used in commands
-					message.channel.fetchMessages({ limit: 100 })
+					message.channel.fetchMessages()
 					.then(messages => {
 						let msgs = messages.filter(msg => symbols.test(msg.content.substring(0, 2)) && msg.id != message.id && msg.createdTimestamp >= date_limit && msg.deletable)
 						
@@ -50,7 +50,7 @@ module.exports.run = (client, prefix, message, args, pool, dbl) => {
 					break
 		
 				case 'bots': //all messages that are posted by bots
-					message.channel.fetchMessages({ limit: 100 })
+					message.channel.fetchMessages()
 					.then(messages => {
 						let msgs = messages.filter(msg => msg.author.bot && msg.pinned == false && msg.id != message.id && msg.createdTimestamp >= date_limit && msg.deletable)
 						
@@ -84,7 +84,7 @@ module.exports.run = (client, prefix, message, args, pool, dbl) => {
 					break
 					
 				case 'links': //all messages that start with http or https
-					message.channel.fetchMessages({ limit: 100 })
+					message.channel.fetchMessages()
 					.then(messages => {
 						let msgs = messages.filter(msg => msg.content.includes('http://') || msg.content.includes('https://') && msg.pinned == false && msg.id != message.id && msg.createdTimestamp >= date_limit && msg.deletable)
 						
@@ -101,7 +101,7 @@ module.exports.run = (client, prefix, message, args, pool, dbl) => {
 					break
 	
 				case 'attachments': //all messages with attachments
-					message.channel.fetchMessages({ limit: 100 })
+					message.channel.fetchMessages()
 					.then(messages => {
 						let msgs = messages.filter(msg => msg.attachments.size > 0 && msg.pinned == false && msg.id != message.id && msg.createdTimestamp >= date_limit && msg.deletable)
 	
@@ -118,7 +118,7 @@ module.exports.run = (client, prefix, message, args, pool, dbl) => {
 					break
 					
 				case 'text': //all messages without attachments or links
-					message.channel.fetchMessages({ limit: 100 })
+					message.channel.fetchMessages()
 					.then(messages => {
 						let msgs = messages.filter(msg => msg.attachments.size === 0 && !msg.content.includes('https://') && msg.pinned == false && !msg.content.includes('http://') && msg.deletable && msg.id != message.id && msg.createdTimestamp >= date_limit)
 						
@@ -136,7 +136,7 @@ module.exports.run = (client, prefix, message, args, pool, dbl) => {
 					
 				case 'purge': //all messages of users that no longer in the guild
 					message.guild.channels.forEach((channel, index) => {
-						channel.fetchMessages({ limit: 100 })
+						channel.fetchMessages()
 							.then(messages => {
 								let msgs = messages.filter(msg => (!msg.member || !msg.guild.members.find('id', msg.member.id)) && msg.createdTimestamp >= date_limit && msg.deletable)
 								
@@ -160,7 +160,7 @@ module.exports.run = (client, prefix, message, args, pool, dbl) => {
 						
 						if(mentioned_users) {
 							mentioned_users.forEach((user, index) => {
-								message.channel.fetchMessages({ limit: 100 })
+								message.channel.fetchMessages()
 									.then(messages => {
 										let msgs = messages.filter(msg => msg.author.id === user.id && msg.pinned == false && msg.id != message.id && msg.createdTimestamp >= date_limit && msg.deletable)
 										
@@ -179,7 +179,7 @@ module.exports.run = (client, prefix, message, args, pool, dbl) => {
 						
 						if(mentioned_roles) {
 							mentioned_roles.forEach((role, index) => {
-								message.channel.fetchMessages({ limit: 100 })
+								message.channel.fetchMessages()
 									.then(messages => {
 										let msgs = messages.filter(msg => (!msg.member || msg.member.roles.find('id', role.id)) && msg.pinned == false && msg.id != message.id && msg.createdTimestamp >= date_limit && msg.deletable)
 										
