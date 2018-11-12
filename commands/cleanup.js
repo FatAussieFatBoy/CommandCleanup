@@ -152,6 +152,7 @@ module.exports.run = (client, prefix, message, args, pool, dbl) => {
 							if (!messages) return
 							let msgs = messages.filter(msg => channel.members.find('id', msg.author.id).length < 1 && msg.createdTimestamp >= date_limit && msg.deletable)
 							
+							if (msgs.size === 0) return
 							console.log(JSON.stringify(msgs))
 
 							message.channel.bulkDelete(msgs.first(num), true)
