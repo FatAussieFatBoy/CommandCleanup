@@ -138,7 +138,7 @@ module.exports.run = (client, prefix, message, args, pool, dbl) => {
 					message.guild.channels.forEach((channel, index) => {
 						channel.fetchMessages()
 						.then(messages => {
-							let msgs = messages.filter(msg => (!msg.member || msg.guild.members.find('id', msg.member.id).length < 1) && msg.createdTimestamp >= date_limit && msg.deletable)
+							let msgs = messages.filter(msg => !msg.member && msg.createdTimestamp >= date_limit && msg.deletable)
 							
 							if (msgs.size === 0) return message.author.send(`We could not find any message from members that no longer reside inside \`${message.guild.name}\`.\n***NOTE:*** *The bot cannot delete any messages posted more than 14 day old...*`)
 								.then(msg => addDeleteReaction(msg)).catch(err => console.log(err.stack))
