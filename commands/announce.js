@@ -14,7 +14,7 @@ module.exports.run = (client, prefix, message, args, pool, dbl) => {
 				already_sent_announcement.push(`${guild.owner.id}`)
         
 				//send the guild owner the announcement
-				guild.owner.send(`**CommandCleanup Announcement**\n${message}`).then(msg => addDeleteReaction(msg)).catch(err => console.log(err.stack))
+				guild.owner.send(`**CommandCleanup Announcement**\n${args}`).then(msg => addDeleteReaction(msg)).catch(err => console.log(err.stack))
 			}
 		})
 	}
