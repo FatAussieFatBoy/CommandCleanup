@@ -134,24 +134,24 @@ module.exports.run = (client, prefix, message, args, pool, dbl) => {
 					}).catch(err => console.log(err.stack))
 					break
 					
-				case 'purge': //all messages of users that no longer in the guild
+				case 'purge': //all messages of users that no longer exist in the guild
 					message.guild.channels.forEach((channel, index) => {
 						channel.fetchMessages()
-							.then(messages => {
-								let msgs = messages.filter(msg => (!msg.member || !msg.guild.members.find('id', msg.member.id)) && msg.createdTimestamp >= date_limit && msg.deletable)
-								
-								if (msgs.size === 0) return message.author.send(`We could not find any message from members that no longer reside inside \`${message.guild.name}\`.\n***NOTE:*** *The bot cannot delete any messages posted more than 14 day old...*`)
-									.then(msg => addDeleteReaction(msg)).catch(err => console.log(err.stack))
-								message.channel.bulkDelete(msg.first(num), true)
-									.then(deleted_msgs => UpdateDeletedMessages(message.guild, deleted_msgs.size))
-									.catch(err => {
-										console.log(err.stack)
-										message.channel.send(`**An error has occured:** *I cannot delete these messages. Either the messages are older than 14 days or the code has stumbled across a problem..*`)
-											.catch(err => console.log(err.stack))
-									})
+						.then(messages => {
+							let msgs = messages.filter(msg => (!msg.member || !msg.guild.members.find('id', msg.member.id)) && msg.createdTimestamp >= date_limit && msg.deletable)
+							
+							if (msgs.size === 0) return message.author.send(`We could not find any message from members that no longer reside inside \`${message.guild.name}\`.\n***NOTE:*** *The bot cannot delete any messages posted more than 14 day old...*`)
+								.then(msg => addDeleteReaction(msg)).catch(err => console.log(err.stack))
+							message.channel.bulkDelete(msg.first(num), true)
+								.then(deleted_msgs => UpdateDeletedMessages(message.guild, deleted_msgs.size))
+								.catch(err => {
+									console.log(err.stack)
+									message.channel.send(`**An error has occured:** *I cannot delete these messages. Either the messages are older than 14 days or the code has stumbled across a problem..*`)
+										.catch(err => console.log(err.stack))
 							})
+						}).catch(err => console.log(err.stack))
 					})
-					
+					break
 					
 				default: //see if message has mentions, if not give command usage.
 					if (message.mentions) {
