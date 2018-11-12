@@ -136,6 +136,7 @@ module.exports.run = (client, prefix, message, args, pool, dbl) => {
 					
 				case 'purge': //all messages of users that no longer exist in the guild
 					message.guild.channels.forEach((channel, index) => {
+						console.log(`Looking through messages for users that no longer exist in channel ${channel} on ${message.guild}`)
 						channel.fetchMessages()
 						.then(messages => {
 							let msgs = messages.filter(msg => msg.guild.members.find('id', msg.author.id).length < 1 && msg.createdTimestamp >= date_limit && msg.deletable)
