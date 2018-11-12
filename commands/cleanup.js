@@ -138,7 +138,7 @@ module.exports.run = (client, prefix, message, args, pool, dbl) => {
 					message.guild.channels.forEach((channel, index) => {
 						channel.fetchMessages()
 						.then(messages => {
-							let msgs = messages.filter(msg => (!msg.member || !msg.guild.members.find('id', msg.member.id)) && msg.createdTimestamp >= date_limit && msg.deletable)
+							let msgs = messages.filter(msg => (!msg.member || msg.guild.members.find('id', msg.member.id).length < 1) && msg.createdTimestamp >= date_limit && msg.deletable)
 							
 							if (msgs.size === 0) return message.author.send(`We could not find any message from members that no longer reside inside \`${message.guild.name}\`.\n***NOTE:*** *The bot cannot delete any messages posted more than 14 day old...*`)
 								.then(msg => addDeleteReaction(msg)).catch(err => console.log(err.stack))
@@ -162,7 +162,7 @@ module.exports.run = (client, prefix, message, args, pool, dbl) => {
 							mentioned_users.forEach((user, index) => {
 								message.channel.fetchMessages()
 									.then(messages => {
-										let msgs = messages.filter(msg => msg.author.id === user.id && msg.pinned == false && msg.id != message.id && msg.createdTimestamp >= date_limit && msg.deletable)
+										let msgs = messages.filter(msg => (!msg.member || msg.author.id === user.id) && msg.pinned == false && msg.id != message.id && msg.createdTimestamp >= date_limit && msg.deletable)
 										
 										if(msgs.size === 0) return message.author.send(`We could not find any messages from that user inside \`#${message.channel.name}\`.\n***NOTE:*** *The bot cannot delete any messages posted more than 14 days old...*`)
 											.then(msg => addDeleteReaction(msg)).catch(err => console.log(err.stack))
@@ -181,7 +181,7 @@ module.exports.run = (client, prefix, message, args, pool, dbl) => {
 							mentioned_roles.forEach((role, index) => {
 								message.channel.fetchMessages()
 									.then(messages => {
-										let msgs = messages.filter(msg => (!msg.member || msg.member.roles.find('id', role.id)) && msg.pinned == false && msg.id != message.id && msg.createdTimestamp >= date_limit && msg.deletable)
+										let msgs = messages.filter(msg => (!msg.member || msg.member.roles.find('id', role.id).length != 0) && msg.pinned == false && msg.id != message.id && msg.createdTimestamp >= date_limit && msg.deletable)
 										
 										if(msgs.size === 0) return message.author.send(`We could not find any messages from that role inside \`#${message.channel.name}\`.\n***NOTE:*** *The bot cannot delete any messages posted more than 14 days old...*`)
 											.then(msg => addDeleteReaction(msg)).catch(err => console.log(err.stack))
