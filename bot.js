@@ -3,11 +3,13 @@ const DBL = require('dblapi.js')
 const request = require('request')
 const mysql = require('mysql2')
 
-const client = new discord.Client({disableEveryone: true})
-const dbl = new DBL(process.env.DBL_TOKEN)
+const { TOKEN, PREFIX, DBL_TOKEN, SQL_PASSWORD } = require('./.hidden/config.js')
 
-const token = process.env.TOKEN
-const prefix = process.env.PREFIX
+const client = new discord.Client({disableEveryone: true})
+const dbl = new DBL(DBL_TOKEN)
+
+const token = TOKEN
+const prefix = PREFIX
 
 //ready event
 client.on('ready', () => {
@@ -31,12 +33,16 @@ client.on('ready', () => {
 })
 
 const pool = mysql.createPool({
-	host: process.env.SQL_HOST,
+	host: 'localhost',
 	port: 3306,
-	user: process.env.SQL_USER,
-	password: process.env.SQL_PASS,
-	database: process.env.SQL_DATABASE,
+	user: 'root',
+	password: SQL_PASSWORD,
+	database: 'guilds',
 	connectionLimit: 10
+})
+
+pool.query(`SHOW VARIABLES LIKE 'version'`, (err, rows) => {
+	console.log(rows)
 })
 
 client.on('message', async message => {
@@ -58,7 +64,7 @@ client.on('message', async message => {
 		let cmdFile = require(`./commands/${command.toLowerCase()}.js`)
 		cmdFile.run(client, prefix, message, args, pool, dbl)
 	} catch (err) {
-		//console.log(err.stack) when debugging
+		//console.log(err.stack) //when debugging
 	}
 
 })
