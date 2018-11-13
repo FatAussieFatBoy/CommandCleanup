@@ -6,4 +6,4 @@ CommandCleanup does as it sounds, it cleans up all messages that begin with the 
 This code uses a **MIT License**. All terms and conditions of this license can be found in `LICENESE.txt`
 
 ## Website
-This bot has a dedicated website https://commandcleanup.com
+This bot has a dedicated website http://commandcleanup.com
