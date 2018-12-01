@@ -3,7 +3,7 @@ const discord = require('discord.js')
 const mysql = require('mysql2')
 
 //config exports
-const { PREFIX, DBL_TOKEN, SQL_PASSWORD } = require('./.hidden/config.js')
+const { PREFIX } = require('./.hidden/config.js')
 
 //create client and define shard properties
 const client = new discord.Client({ disableEveryone: true, shardId: process.SHARD_ID, shardCount: process.SHARD_COUNT })
@@ -13,9 +13,9 @@ const tools = require('./commands/tools.js')
 const pool = mysql.createPool({
 	host: 'localhost',
 	port: 3306,
-	user: 'bot',
-	password: SQL_PASSWORD,
-	database: 'commandc_leaderboard'
+	user: 'root',
+	password: 'password',
+	database: 'database'
 })
 
 //login client
