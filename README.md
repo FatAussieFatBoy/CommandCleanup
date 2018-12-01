@@ -9,7 +9,5 @@ We've had countless feature requests such as automated discord link removal, del
 We're currently on more then 1900+ servers as of writing this and to everyone that has given this bot a chance, thanks!
 I never would of thought a simple bot like this would actually be so popular..
 
-***we also have a dedicated website for the bot with leaderboard and donation link http://commandcleanup.com***
-
 ## License
 This code uses a **MIT License**. All terms and conditions of this license can be found in `LICENESE.txt`
