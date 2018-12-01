@@ -1,0 +1,16 @@
+{
+	"1": {
+		"header": "Commands & Parmaeters",
+		"body": "You can find all sorts of information about the commands and parameters the bot accepts by visiting our [discordbots.org](https://discordbots.org/bot/420013638468894731) site."
+	},
+
+	"2": {
+		"header": "Bot Limitations",
+		"body": "This bot, like many others has it's own set of limitations.\nCurrently known limitations:\n```You cannot delete messages older than 14 days.\nYou can't delete more than 100 messages at a time.```Why these limitations may not be a problem for many users it's still worth mentioning for the small few it affects."
+	},
+
+	"3": {
+		"header": "Most Commonly Asked Questions",
+		"body": "**Q:** Why won't it delete older messages?\n**A:** *The DiscordAPI only allows for messages newer than 14 days to be bulk deleted, unfortunately this cannot be avoided but a work around is being looked into.*\n\n**Q:** I've added the bot to my server but it isn't working..\n**A:** *Make sure the bot has permissions to view and manage messages inside the channel.*\n\n**Q:** I want to see my servers number of deleted messages..\n**A:** *The `{PREFIX}leaderboard` command shows information about the guild stats when the command is used inside a guild. It also shows the top 5 server stats for comparison.\n\n**Q:** How do I get message id's to use with parameters?\n**A:** *You will need to enable developer mode, PC: `User Settings > Appearance > Developer Mode`, Mobile: `User Settings > Behaviour > Developer Mode` and then right-click/hold on the message and select `Copy ID`"
+	}
+}
