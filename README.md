@@ -6,7 +6,7 @@ We've had countless feature requests such as automated discord link removal, del
 
 ***a full list of feature can be found at https://discordbots.org/bot/420013638468894731***
 
-We're currently on more then 1900+ servers as of writing this and to everyone that has given this bot a chance, thanks!
+We're currently on more then 2000+ servers as of writing this and to everyone that has given this bot a chance, thanks!
 I never would of thought a simple bot like this would actually be so popular..
 
 ## License
