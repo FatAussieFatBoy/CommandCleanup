@@ -1,0 +1,29 @@
+{
+  "name": "commandcleanup-v12",
+  "version": "1.0.0",
+  "description": "CommandCleanup using Discord.js v12",
+  "main": "./bot/manager.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "discord.js",
+    "commandcleanup",
+    "fataussiefatboy"
+  ],
+  "author": "FatAussieFatBoy",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "btoa": "^1.2.1",
+    "cookie-parser": "^1.4.4",
+    "discord.js": "github:discordjs/discord.js",
+    "express": "^4.17.1",
+    "express-handlebars": "^3.1.0",
+    "moment": "^2.24.0",
+    "moment-duration-format": "^2.3.2",
+    "node-fetch": "^2.6.0",
+    "url": "^0.11.0",
+    "uuid": "^3.3.2"
+  }
+}
