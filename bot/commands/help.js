@@ -12,7 +12,7 @@ module.exports.run = async (client, message, args, level) => {
 		const commandNames = [...myCommands.values()]
 
 		let currentCategory = ''
-		embed = new discord.MessageEmbed({ description: `Here is a list of commands and their respective categories. If you'd like more details about a command you can use \`${client.prefix}help <command>\`.\n\nHere is a list of useful links that might also be of some assistance: • [Support Server](https://discord.gg/Gkdbyeh) • [DiscordBots Page](https://discordbots.org/bot/420013638468894731)` })
+		embed = new discord.MessageEmbed({ description: `Here is a list of commands and their respective categories. If you'd like more details about a command you can use \`${client.prefix}help <command>\`.` })
 		const sorted = myCommands.array().sort((p, c) => p.help.category > c.help.category ? 1 : p.help.name > c.help.name && p.help.category == c.help.category ? 1 : -1)
 		let json = new Map()
 
