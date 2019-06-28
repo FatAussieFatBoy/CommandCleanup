@@ -41,7 +41,7 @@ module.exports.run = async (client, message, args, level) => {
 			return message.author.send({
 				embed: {
 					color: 'ff0000',
-					title: `**Oops!** <a:deny_gif:567114319024619530>`,
+					title: `**Oops!**`,
 					description: `The command **\`${args[0]}\`** doesn't exist.\nTo display a list of all commands, use **\`${client.prefix}help\`**.`
 				}
 			}).then((m) => m.delete(20 * 1000))
@@ -50,9 +50,9 @@ module.exports.run = async (client, message, args, level) => {
 
 	client.emit('debug', `sending help documentation to user, ${message.author.id}`)
 	message.author.send(embed).then(() => {
-		if (message.channel.guild) message.channel.send({ embed: { color: '00ff00', title: `**Success!** <:approve:567107353028329472>`, description: `Sent help documentation to ${message.author}`} }).then((m) => m.delete({ timeout: 2000 }))
+		if (message.channel.guild) message.channel.send({ embed: { color: '00ff00', title: `**Success!**`, description: `Sent help documentation to ${message.author}`} }).then((m) => m.delete({ timeout: 2000 }))
 	}).catch(() => {
-		if (message.channel.guild) message.channel.send({ embed: { color: 'ff0000', title: `**Oops!** <a:deny_gif:567114319024619530>`, description: `Couldn't send help documentation to ${message.author}, please make sure they allow direct messages from server members.`} }).then((m) => m.delete({ timeout: 10000 }))
+		if (message.channel.guild) message.channel.send({ embed: { color: 'ff0000', title: `**Oops!**`, description: `Couldn't send help documentation to ${message.author}, please make sure they allow direct messages from server members.`} }).then((m) => m.delete({ timeout: 10000 }))
 	})
 }
 
