@@ -156,36 +156,6 @@ module.exports.run = (client, message, args, level) => {
 
 					break
 
-				/*
-				case 'channels':
-				case 'channel':
-				case 'chnls':
-				case 'chnl':
-					if (args[nextIndex] && args[nextIndex].match(/<#([0-9]+)>/g)) {
-						const possibleChnls = args.slice(parseInt(index) + 1)
-
-						possibleChnls.some((value, index) => {
-							if (!value.match(/<#([0-9]+)>/g)) {
-								return true
-							}
-
-							const id = value.replace(/\D+/g, '')
-							
-							if (!message.guild.channels.has(id)) errors.push(`channel <#**${id}**> doesn't exist.`) 
-							if (client.conflicts.has(id)) errors.push(`channel **#${client.channels.get(id).name}** is already being cleaned.`)
-							if (!properties.channels.includes(id)) properties.channels.push(id)
-							args.splice(nextIndex, 1)
-						})
-					} else {
-
-						let error = `Incorrect usage, please provide channel mention(s) after the \`channels\` parameter.`
-						errors.push(error)
-					
-					}
-
-					break
-				*/
-
 				case 'attachments':
 				case 'attachment':
 				case 'files':
@@ -387,8 +357,7 @@ module.exports.run = (client, message, args, level) => {
 exports.config = {
 	enabled: false,
 	guildOnly: true,
-	aliases: ['clean'],
-	permLevel: 2
+	aliases: ['clean']
 }
 
 exports.help = {
