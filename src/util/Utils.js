@@ -44,6 +44,7 @@ exports.paginate = function(items, page = 1, pageLength = 10) {
 
 exports.createTimestamp = (options) => {
     if (!options.duration || (Number.isNaN(options.duration) && !options.duration instanceof Date)) throw new TypeError('The "duration" option must be a number or date.');
+    if (!options.method || typeof options.method !== 'string') throw new TypeError('The "method" option cannot be undefined or null, and must be a string.');
     if (options.selector && typeof options.selector !== 'string') throw new TypeError('The "selector" option must be a string.');
     else if (!options.selector) options['selector'] = 'seconds';
 
@@ -53,7 +54,7 @@ exports.createTimestamp = (options) => {
         case 'd':
         case 'day':
         case 'days':
-            return accumulate(method, new Date().getTime(), (options.duration * 24 * 60 * 60 * 1000));
+            return accumulate(options.method, new Date().getTime(), (options.duration * 24 * 60 * 60 * 1000));
             // days * hours/day * minutes/hour * seconds/minute * milliseconds/second
 
         case 'h':
@@ -61,7 +62,7 @@ exports.createTimestamp = (options) => {
         case 'hrs':
         case 'hour':
         case 'hours':
-            return accumulate(method, new Date().getTime(), (options.duration * 60 * 60 * 1000));
+            return accumulate(options.method, new Date().getTime(), (options.duration * 60 * 60 * 1000));
             // hours * minutes/hour * seconds/minute * milliseconds/second
 
         case 'm':
@@ -69,7 +70,7 @@ exports.createTimestamp = (options) => {
         case 'mins':
         case 'minute':
         case 'minutes':
-            return accumulate(method, new Date().getTime(), (options.duration * 60 * 1000));
+            return accumulate(options.method, new Date().getTime(), (options.duration * 60 * 1000));
             // minutes * seconds/minute * milliseconds/second
 
         case 's':
@@ -77,7 +78,7 @@ exports.createTimestamp = (options) => {
         case 'secs':
         case 'second':
         case 'seconds':
-            return accumulate(method, new Date().getTime(), (options.duration * 1000));
+            return accumulate(options.method, new Date().getTime(), (options.duration * 1000));
             // seconds * milliseconds/second
 
         default: throw new TypeError(`"${options.selector}" is not a valid date selector.`);
