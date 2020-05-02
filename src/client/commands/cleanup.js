@@ -245,6 +245,10 @@ class CleanupCommand extends BaseCommand {
                                 filters.push('ALL');
                                 break;
 
+                            case 'pinned':
+                                filters.push('PINNED');
+                                break;
+
                             default:
 
                                 if (arg.match(/<@!?\d+>/g)) {

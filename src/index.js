@@ -11,5 +11,5 @@ module.exports = {
     Constants: require('./util/Constants'),
     Utils: require('./util/Utils'),
 
-    version: require('../../package.json').version
+    version: require('../package.json').version
 };
