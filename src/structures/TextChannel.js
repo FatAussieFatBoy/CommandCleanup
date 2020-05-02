@@ -120,7 +120,6 @@ module.exports = Structures.extend('TextChannel', TextChannel => {
                             const id = _filtering[i];
                             const msg = messages.get(id);
             
-                            if (msg.matches('PINNED') && !filters.has('PINNED')) continue;
                             if (options['command'] && (msg.id == (options.command.id || options.command))) continue;
 
                             if (msg.pinned && !filters.has('PINNED')) continue;

@@ -2,6 +2,7 @@ const BaseCommand = require('./base');
 const { Command } = require('discord.js-commando');
 const { RegularExpressions, ImageFormats } = require('../../util/Constants');
 const { createTimestamp } = require('../../util/Utils');
+const Filters = require('../../util/Filters');
 
 class CleanupCommand extends BaseCommand {
     constructor(client) {
@@ -242,7 +243,7 @@ class CleanupCommand extends BaseCommand {
                                 break;
 
                             case 'all':
-                                filters.push('ALL');
+                                filters = new Filters(Filters.ALL).freeze().bitfield;
                                 break;
 
                             case 'pinned':
