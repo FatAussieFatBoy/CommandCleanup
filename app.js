@@ -1,4 +1,4 @@
-const { admins, support, support_server, prefix } = require('./config');
+const { owner, admins, support, invite, prefix, errorLogChannel } = require('./config');
 const Filters = require('./src/util/Filters');
 
 /** Check node.js version is above 10 */
@@ -15,10 +15,10 @@ const client = new Client({
         intents: ['GUILDS', 'GUILD_MESSAGES', 'DIRECT_MESSAGES']
     },
     commandPrefix: prefix,
-    owner: '253006486349938688',
+    owner: owner,
     commandEditableDuration: 0,
-    invite: 'https://discord.gg/Gkdbyeh',
-    errorLogChannel: '532570490871611422'
+    invite: invite,
+    errorLogChannel: errorLogChannel
 });
 
 const init = async function() {
@@ -35,8 +35,10 @@ client.on('warn', function(e) {
 });
 
 client.on('error', function(e) {
-    let errorEmbed = client._constructErrorEmbed(e);
-    client.channels.fetch(client.options.errorLogChannel).then(channel => channel.send('', errorEmbed));
+    if (client.options.errorLogChannel) {
+        let errorEmbed = client._constructErrorEmbed(e);
+        client.channels.fetch(client.options.errorLogChannel).then(channel => { if(channel) channel.send('', errorEmbed) });
+    }
 
     client.shard.send({ type: 'error', message: e.stack });
 });
