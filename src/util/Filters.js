@@ -83,6 +83,6 @@ Filter.FLAGS = {
  * @type {Number}
  */
 
-Filter.FLAGS.ALL = Object.values(Filter.FLAGS).reduce((all, p) => all | p, 0);
+Filter.ALL = Object.values(Filter.FLAGS).reduce((all, p) => p !== Filter.FLAGS.PINNED ? all | p : all, 0);
 
 module.exports = Filter;
