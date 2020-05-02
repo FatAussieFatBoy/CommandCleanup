@@ -1,16 +1,22 @@
 module.exports = {
     /** Bot token */
-    token: 'token', 
+    token: 'token',
+
+    /** Bot owner(s)  */
+    owner: ['253006486349938688'],
 
     /** Bot admin user ids, can reboot the bot and inherits support permissions */
-    admins: ['253006486349938688'],
+    admins: ['user_ids'],
 
     /** Bot support user ids, can reload commands, display bot stats and inherits server owner permissions */
-    support: ['402348351888031753', '641814171146780742'],
+    support: ['user_ids'],
 
     /** Bot support server invite link */
-    invite: 'https://discord.gg/Gkdbyeh',
+    invite: 'invite_link',
 
     /** Bot command prefix */
-    prefix: '!'
+    prefix: '!',
+
+    /** Error logging channel */
+    errorLogChannel: 'channel_id'
 };
