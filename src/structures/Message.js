@@ -79,7 +79,6 @@ module.exports = Structures.extend('Message', Message => {
                     const files = options['attachments'].filter(ext => !images.includes(ext.replace('.', '')));
                     
                     if (this.has('IMAGE') && images.length > 0) {
-                        console.log()
                         return !!images.some(i => this.attachments.some(a => a.height && a.name && a.name.split('.').includes(i.replace('.', ''))));
                     }
 

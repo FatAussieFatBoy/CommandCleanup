@@ -35,6 +35,9 @@ client.on('warn', function(e) {
 });
 
 client.on('error', function(e) {
+    let errorEmbed = client._constructErrorEmbed(e);
+    client.channels.fetch(client.options.errorLogChannel).then(channel => channel.send('', errorEmbed));
+
     client.shard.send({ type: 'error', message: e.stack });
 });
 

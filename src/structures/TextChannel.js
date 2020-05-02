@@ -122,8 +122,11 @@ module.exports = Structures.extend('TextChannel', TextChannel => {
             
                             if (msg.matches('PINNED') && !filters.has('PINNED')) continue;
                             if (options['command'] && (msg.id == (options.command.id || options.command))) continue;
-                            if (filters.bitfield == filters.ALL) { _collected.push(id); continue; }
-                            if (msg.matches(filters, options)) _collected.push(id);
+
+                            if (msg.pinned && !filters.has('PINNED')) continue;
+                            else if (msg.matches(filters, options)) _collected.push(id);
+
+                            continue;
                         }
             
                         if (_collected.length > limit) resolve(_collected.splice(0, limit > 100 ? 100 : limit));
