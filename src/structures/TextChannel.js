@@ -123,7 +123,6 @@ module.exports = Structures.extend('TextChannel', TextChannel => {
                             if (options['command'] && (msg.id == (options.command.id || options.command))) continue;
 
                             if (msg.pinned && !filters.has('PINNED')) continue;
-                            else if (filters.bitfield == Filters.ALL) _collected.push(id);
                             else if (msg.matches(filters, options)) _collected.push(id);
 
                             continue;
