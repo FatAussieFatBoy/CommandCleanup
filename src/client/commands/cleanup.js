@@ -55,26 +55,60 @@ class CleanupCommand extends BaseCommand {
 
                         switch (arg) {
                             case 'before':
-                                if ((args[nextIndex] && args[nextIndex].match(/^[0-9]+$/g)) || RegularExpressions.message_links.test(args[nextIndex])) options['before'] = args[nextIndex];
-                                else if (args[nextIndex] && args[nextIndex].match(/^[0-9]*([dhms])+$/gi)) {
-                                    let duration = parseInt(args[nextIndex].replace(/\D+/g), '');
-                                    let selector = parseInt(args[nextIndex].replace(/\d+/g), '');
-                                    options['before'] = createTimestamp({ method: '-', duration, selector });
-                                } else errors.push(`Incorrect usage, please provide a valid message id, date string or message link following the \`${arg}\` parameter. Date strings consist of one number, followed by a letter. Example: \`1d = 1 day\``);
+                                const possibleBefore = [...args].slice(nextIndex);
+                                
+                                if (possibleBefore.length < 1) {
+                                    errors.push(`Incorrect usage, please provide a valid message id, date string or message link following the \`${arg}\` parameter.\n\n‣ Date strings consist of one number, followed by a letter or word representing the duration.. for example: \`1d\` equals \`1 day\`.`);
+                                    break;
+                                }
+
+                                const possibleBeforeDateStrings = possibleBefore.join(' ').trim().match(RegularExpressions.date_string);
+                                if (possibleBeforeDateStrings && possibleBeforeDateStrings.length > 0) {
+                                    let dates = [];
+                                    possibleBeforeDateStrings.some((value) => {
+                                        if (args.indexOf(value) == nextIndex) {
+                                            dates.push(value);
+                                            args.splice(nextIndex, 1);
+                                        } else return true;
+                                    });
+
+                                    if (dates.length > 0) options['before'] = createTimestamp(new Date().getTime(), dates).getTime();
+                                } else if ((/^\d+$/g).test(possibleBefore[0]) || RegularExpressions.message_links.test(possibleBefore[0])) {
+                                    options['before'] = possibleBefore[0];
+                                }
+
+                                if (!options.before) break;
 
                                 args.splice(nextIndex, 1);
                                 break;
 
                             case 'after':
-                                if ((args[nextIndex] && args[nextIndex].match(/^[0-9]+$/g)) || RegularExpressions.message_links.test(args[nextIndex])) options['after'] = args[nextIndex];
-                                else if (args[nextIndex] && args[nextIndex].match(/^[0-9]*([dhms])+$/gi)) {
-                                    let duration = parseInt(args[nextIndex].replace(/\D+/g), '');
-                                    let selector = parseInt(args[nextIndex].replace(/\d+/g), '');
-                                    options['after'] = createTimestamp({ method: '-', duration, selector });
-                                } else errors.push(`Incorrect usage, please provide a valid message id, date string or message link following the \`${arg}\` parameter. Date strings consist of one number, followed by a letter. Example: \`1d = 1 day\``);
+                                    const possibleAfter = [...args].slice(nextIndex);
+                                    
+                                    if (possibleAfter.length < 1) {
+                                        errors.push(`Incorrect usage, please provide a valid message id, date string or message link following the \`${arg}\` parameter.\n\n‣ Date strings consist of one number, followed by a letter or word representing the duration.. for example: \`1d\` equals \`1 day\`.`);
+                                        break;
+                                    }
     
-                                args.splice(nextIndex, 1);
-                                break;
+                                    const possibleAfterDateStrings = possibleAfter.join(' ').trim().match(RegularExpressions.date_string);
+                                    if (possibleAfterDateStrings && possibleAfterDateStrings.length > 0) {
+                                        let dates = [];
+                                        possibleAfterDateStrings.some((value) => {
+                                            if (args.indexOf(value) == nextIndex) {
+                                                dates.push(value);
+                                                args.splice(nextIndex, 1);
+                                            } else return true;
+                                        });
+    
+                                        if (dates.length > 0) options['after'] = createTimestamp(new Date().getTime(), dates).getTime();
+                                    } else if ((/^\d+$/g).test(possibleAfter[0]) || RegularExpressions.message_links.test(possibleAfter[0])) {
+                                        options['after'] = possibleAfter[0];
+                                    }
+    
+                                    if (!options.after) break;
+    
+                                    args.splice(nextIndex, 1);
+                                    break;
 
                             case 'attachments':
                             case 'attachment':
@@ -286,8 +320,9 @@ class CleanupCommand extends BaseCommand {
 
                                 /** error message handling */
                                 switch(args[prevIndex]) {
+                                    case 'before': case 'after': errors.push(`\`${arg}\` isn't a valid message id, message link or date string for the \`${args[prevIndex]}\` parameter.\n\n‣ Date strings consist of one number, followed by a letter or word representing the duration.. for example: \`1d\` equals \`1 day\`.`); break;
                                     case 'attachments': case 'attachement': case 'files': case 'file': errors.push(`\`${arg}\` isn't a valid file extension for the \`${args[prevIndex]}\` parameter`); break;
-                                    case 'images': case 'image': case 'imgs': case 'img': errors.push(`\`${arg}\` isn't a valid file extension for the \`${args[prevIndex]}\` parameter.\nValid extensions include, \`${ImageFormats.join('\`, \`')}\``); break;
+                                    case 'images': case 'image': case 'imgs': case 'img': errors.push(`\`${arg}\` isn't a valid file extension for the \`${args[prevIndex]}\` parameter.\n\n‣ Valid extensions include, \`${ImageFormats.join('\`, \`')}\``); break;
                                     case 'text': case 'txt': case 'contains': errors.push(`\`${arg}\` isn't a valid quote for the \`${args[prevIndex]}\` parameter.\nPlease make sure any words/sentences are surrounded in quotation marks and seperated by commas, or spaces.`); break;
                                     case 'commands': case 'commands': case 'cmds': case 'cmd': case 'startsWith': errors.push(`\`${arg}\` is not a valid prefix or quote for the \`${args[prevIndex]}\` parameter.\nPlease make sure any prefixes/words/sentences are surrounded in quotation marks and seperated by commas, or spaces.`); break;
                                     case 'links': case 'link': errors.push(`\`${arg}\` isn't a valid link for the \`${args[prevIndex]}\` parameter.`); break;
@@ -307,7 +342,7 @@ class CleanupCommand extends BaseCommand {
                             return messages;
                         }
 
-                        console.log(filters, options);
+                        console.log(options);
 
                         for (let i = 0; i < options.channels.length; i++) {
                             const channel = msg.guild.channels.cache.has(options.channels[i]) ? msg.guild.channels.cache.get(options.channels[i]) : null;

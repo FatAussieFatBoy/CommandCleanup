@@ -67,5 +67,12 @@ exports.RegularExpressions = {
      * @type {RegExp}
      */
 
-    invites: new RegExp(/(?:https:?\/)?discord(?:(app.com|.gg)\/invite)/gim)
+    invites: new RegExp(/(?:https:?\/)?discord(?:(app.com|.gg)\/invite)/gim),
+
+    /**
+     * Regular Expression that matches date string identifiers
+     * @type {RegExp}
+     */
+
+    date_string: new RegExp(/\d+\s{0,1}[dhms]{1}/gi)
 };

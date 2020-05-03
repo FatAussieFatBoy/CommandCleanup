@@ -1,4 +1,5 @@
 'use strict';
+const { RegularExpressions } = require('./Constants');
 
 exports.escapeRegex = function(str) {
 	return str.replace(/[|\\{}()[\]^$+*?.]/g, '\\$&');
@@ -19,68 +20,88 @@ exports.paginate = function(items, page = 1, pageLength = 10) {
     };
 }
 
+exports.resolveDateString = (string) => {
+    if (typeof string !== 'string') throw new TypeError('Invalid date "string" provided, must be of type string.');
+    if (!RegularExpressions.date_string.test(string)) throw new TypeError('The provided "string" doesn\'t match a date strings format. Must be a number followed by a duration identified like \'days\'.');
+
+    let duration_in_ms = 0;
+    let matches = string.match(RegularExpressions.date_string);
+    for (let m of matches) {
+        
+        let numerator = m.match(/\d+/g)[0];
+        let selector = m.match(/[a-z]+/gi)[0];
+        
+        switch(selector.toLowerCase().trim()) {
+            case 'd':
+            case 'day':
+            case 'days':
+                duration_in_ms += (numerator * 24 * 60 * 60 * 1000);
+                // days * hours/day * minutes/hour * seconds/minute * milliseconds/second   
+                break;
+
+            case 'h':
+            case 'hr':
+            case 'hrs':
+            case 'hour':
+            case 'hours':
+                duration_in_ms += (numerator * 60 * 60 * 1000);
+                // hours * minutes/hour * seconds/minute * milliseconds/second   
+                break;
+
+            case 'm':
+            case 'min':
+            case 'mins':
+            case 'minute':
+            case 'minutes':
+                duration_in_ms += (numerator * 60 * 1000);
+                // minutes * seconds/minute * milliseconds/second   
+                break;
+
+            case 's':
+            case 'sec':
+            case 'secs':
+            case 'second':
+            case 'seconds':
+                duration_in_ms += (numerator  * 1000);
+                // seconds * milliseconds/second   
+                break;
+
+            default: throw new TypeError(`${selector} is not a valid date identifier.`);
+        }
+    }
+    
+    return new Date(duration_in_ms);
+};
+
 /**
  * Construct a timestamp.
- * @typedef {Object} TimestampOptions
+ * @typedef {String} DateString
  * 
- * @property {Number|Date} duration
- * @property {String} method
- * 
- * @property {String} [selector]
- * 
- * valid selector options,
- * * Days: d, days, day
- * * Hours: h, hours, hour, hrs, hr
- * * Minutes: m, minutes, minute, mins, min
- * * Seconds: s, seconds, second, secs, sec
- * 
- * if no selector is provided, then the selector will default to seconds.
+ * Date strings consist of a numerical value, followed by a letter/work representing the duration.
+ * Example: `1d`, `1day`, `1 day` = 1 day;
  */
 
 /**
- * @param {TimestampOptions} options
- * @return {Number}
+ * Construct a timestamp from a date or dateString
+ * @param {String} method - The math method used to combine the durations.
+ * @param {Date|DateString|Array<Date|DateString|>} durations - The durations to combine, the first provided duration is the one combined into
+ * @return {Date}
  */
 
-exports.createTimestamp = (options) => {
-    if (!options.duration || (Number.isNaN(options.duration) && !options.duration instanceof Date)) throw new TypeError('The "duration" option must be a number or date.');
-    if (!options.method || typeof options.method !== 'string') throw new TypeError('The "method" option cannot be undefined or null, and must be a string.');
-    if (options.selector && typeof options.selector !== 'string') throw new TypeError('The "selector" option must be a string.');
-    else if (!options.selector) options['selector'] = 'seconds';
+exports.createTimestamp = (...durations) => {
+    let _duration = durations.reduce((duration, d) => {
+        if (Array.isArray(duration)) duration = duration.reduce((p, n) => this.createTimestamp(p, n), 0);
+        if (Array.isArray(d)) d = d.reduce((p, n) => this.createTimestamp(p, n), 0);
 
-    const accumulate = (operator, ...operands) => operands.reduce((p, n) => eval(`p ${operator} n`), 0);
+        if (typeof d == 'string') d = exports.resolveDateString(d);
+        if (typeof d === 'date' || d instanceof Date || !Number.isNaN(d)) {
+            if (new Date(duration) > new Date(d)) return new Date(duration).getTime() + new Date(d).getTime();
+            else return new Date(duration).getTime() - new Date(d).getTime();
+        } else {
+            return new Date(duration).getTime();
+        }
+    });
 
-    switch(options.selector) {
-        case 'd':
-        case 'day':
-        case 'days':
-            return accumulate(options.method, new Date().getTime(), (options.duration * 24 * 60 * 60 * 1000));
-            // days * hours/day * minutes/hour * seconds/minute * milliseconds/second
-
-        case 'h':
-        case 'hr':
-        case 'hrs':
-        case 'hour':
-        case 'hours':
-            return accumulate(options.method, new Date().getTime(), (options.duration * 60 * 60 * 1000));
-            // hours * minutes/hour * seconds/minute * milliseconds/second
-
-        case 'm':
-        case 'min':
-        case 'mins':
-        case 'minute':
-        case 'minutes':
-            return accumulate(options.method, new Date().getTime(), (options.duration * 60 * 1000));
-            // minutes * seconds/minute * milliseconds/second
-
-        case 's':
-        case 'sec':
-        case 'secs':
-        case 'second':
-        case 'seconds':
-            return accumulate(options.method, new Date().getTime(), (options.duration * 1000));
-            // seconds * milliseconds/second
-
-        default: throw new TypeError(`"${options.selector}" is not a valid date selector.`);
-    }
+    //console.log(_duration);
+    return new Date(_duration);
 };

@@ -6,17 +6,17 @@ module.exports = {
     owner: ['253006486349938688'],
 
     /** Bot admin user ids, can reboot the bot and inherits support permissions */
-    admins: ['user_ids'],
+    admins: [''],
 
     /** Bot support user ids, can reload commands, display bot stats and inherits server owner permissions */
-    support: ['user_ids'],
+    support: [''],
 
     /** Bot support server invite link */
-    invite: 'invite_link',
+    invite: 'link',
 
     /** Bot command prefix */
     prefix: '!',
 
     /** Error logging channel */
-    errorLogChannel: 'channel_id'
+    errorLogChannel: 'channel'
 };
