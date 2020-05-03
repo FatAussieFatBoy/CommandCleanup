@@ -1,6 +1,6 @@
 module.exports = {
     /** Bot token */
-    token: 'NTA4NDc3ODI2MzA3OTgxMzM0.Xq2wbw.CMYNWyYtn8cDvZN7Y2zwXKlsVBw',
+    token: 'token',
 
     /** Bot owner(s)  */
     owner: ['253006486349938688'],
@@ -12,11 +12,11 @@ module.exports = {
     support: [''],
 
     /** Bot support server invite link */
-    invite: 'discord',
+    invite: 'link',
 
     /** Bot command prefix */
     prefix: '!',
 
     /** Error logging channel */
-    errorLogChannel: '532570490871611422'
+    errorLogChannel: 'channel'
 };
