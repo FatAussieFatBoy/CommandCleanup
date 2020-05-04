@@ -25,7 +25,7 @@ Parameters allow for 100% control over the content deleted, giving you complete 
 
 Below is a list of all available parameters and what they do.. You can use **multiple parameters in a single command**, so mix and match to your liking.
 
-<pre>Parameter Legend: `(required) - <optional>`</pre>
+<pre>Parameter Legend: (required) - &#60;optional&#62;</pre>
 
 ###### before <code>([message id](#how-do-i-get-a-discord-id) | message link | [timeframe](#what-is-a-timeframe))</code>
 > Targets messages posted before the specified message id, message link or timeframe.
@@ -33,19 +33,19 @@ Below is a list of all available parameters and what they do.. You can use **mul
 ###### after <code>([message id](#how-do-i-get-a-discord-id) | message link | [timeframe](#what-is-a-timeframe))</code>
 > Targets messages posted after the specified message id, message link or timeframe.
 
-###### attachments `<extensions>` <samp>aliases: `files`</samp>
+###### attachments `<extensions>`&emsp;&emsp;<samp>aliases: `files`</samp>
 > Deletes messages with file attachments *(not images)*</br>
 > Valid extensions are a fullstop followed by the extension, example: `.mov`
 
-###### images `<extensions>`<samp>aliases: `imgs`</samp>
+###### images `<extensions>`&emsp;&emsp;<samp>aliases: `imgs`</samp>
 > Deletes messages with image attachments *(not files)*</br>
 > Valid image extensions are `webp`, `png`, `jpg`, `jpeg` & `gif`
 
-###### text `<quotes>` <samp>aliases: `txt`, `contains`</samp>
+###### text `<quotes>`&emsp;&emsp;<samp>aliases: `txt`, `contains`</samp>
 > Deletes messages with plain text *(no embed, no images, no files, etc..)*</br>
 > If quotes are provided, then only messages containing the quotes will be targeted*</br>Valid quotes are any word/sentence enclosed in quotation marks, example `"hello world"`
 
-###### commands `<prefixes>` <samp>aliases: `cmds`, `startsWith`</samp>
+###### commands `<prefixes>`&emsp;&emsp;<samp>aliases: `cmds`, `startsWith`</samp>
 > Deletes messages that begin with the most common command symbols *(-, !!, /bb, etc..)*</br>
 > If prefixes are provided, then only messages beginning with those prefixes will be targeted</br>Valid prefixes are any word/symbols enclosed in quotation marks, example `"!play"`
 
@@ -68,7 +68,7 @@ Below is a list of all available parameters and what they do.. You can use **mul
 ###### invites
 > Deletes discord invites
 
-###### limit `(number)` <samp>aliases: `amount`</samp>
+###### limit `(number)`&emsp;&emsp;<samp>aliases: `amount`</samp>
 > Sets the maximum number of messages to be deleted</br>
 > This parameter cannot be used by itself and must be paired with at least one other parameter from this list
 
