@@ -1,7 +1,4 @@
 module.exports = {
-    /** Bot token */
-    token: 'token',
-
     /** Bot owner(s)  */
     owner: ['253006486349938688'],
 
