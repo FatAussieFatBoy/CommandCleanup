@@ -1,5 +1,5 @@
 const { ShardingManager } = require('discord.js');
-const token = process.env.BOT_TOKEN || process.env.DISCORD_TOKEN;
+const token = process.env.DISCORD_TOKEN;
 const ConsoleHandler = require('./src/util/ConsoleHandler');
 
 const path = require('path');

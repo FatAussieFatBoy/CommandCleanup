@@ -24,7 +24,7 @@ class CleanupCommand extends BaseCommand {
     }
 
     hasPermission(msg) {
-        return Boolean(this.client.isOwner(msg.author)||msg.member.permissionsIn(msg.channel).has('MANAGE_MESSAGES'));
+        return Boolean(this.client.isOwner(msg.author) || msg.channel.permissionsFor(msg.guild.members.resolve(msg.author)).has('MANAGE_MESSAGES', true));
     } 
 
     async run(msg, args) {
@@ -332,7 +332,7 @@ class CleanupCommand extends BaseCommand {
                     }).then(() => {
                         if (filters.length == 0) {
                             if (options.before || options.after || options.mentions) filters = new Filters(Filters.ALL).freeze().bitfield;
-                            else if (options.limit && (!options.before && !options.after && !options.mentions)) errors.push('Not enough parameters, please provide more.');
+                            else if (options.limit && (!options.before && !options.after && !options.mentions)) errors.push('The \`limit\` parameter cannot be used by itself, please provide another parmameter to specify the content to delete. Example, ' + `\`.cleanup ${options.limit} all\``);
                             else errors.push('No parameters recognised, parameters are required.');
                         }
 
@@ -341,8 +341,6 @@ class CleanupCommand extends BaseCommand {
                             messages.push(msg.direct('', { embed: { title: 'Cleanup Parameter Errors', color: 'ff0000', description: `We've found a few errors with the parameters you've provided..\n\n${error}` } }).then(m => m.delete({ timeout: 30000, reason: 'Parameter errors' })))
                             return messages;
                         }
-
-                        console.log(options);
 
                         for (let i = 0; i < options.channels.length; i++) {
                             const channel = msg.guild.channels.cache.has(options.channels[i]) ? msg.guild.channels.cache.get(options.channels[i]) : null;
