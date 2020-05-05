@@ -1,5 +1,5 @@
 const { owner, admins, support, invite, prefix, errorLogChannel } = require('./config');
-const Filters = require('./src/util/Filters');
+const DBL = require('dblapi.js');
 
 /** Check node.js version is above 10 */
 if (Number(process.version.slice(1).split('.')[0]) < 12) throw new Error('Node 12.0.0 or higher is required. Update Node on your system.');
@@ -70,5 +70,17 @@ client.on('commandRun', (command, promise, message) => {
 client.on('commandBlock', (message, reason, data) => {
     console.log(message, reason);
 });
+
+if (process.env.DBL_TOKEN) {
+    const dbl = new DBL(process.env.DBL_TOKEN, client);
+
+    dbl.on('posted', () => {
+        client.emit('debug', `Server count posted to DBL`);
+    });
+
+    dbl.on('error', (e) => {
+        client.emit('error', e);
+    });
+}
 
 init();

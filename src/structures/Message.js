@@ -44,8 +44,12 @@ module.exports = Structures.extend('Message', Message => {
             if (Object.keys(options).length !== 0) {
                 if (options['mentions']) {
                     if (!Array.isArray(options.mentions)) options['mentions'] = [options.mentions];
-                    if (options.mentions.map((x) => x.toLowerCase()).includes('bots') && !(this.author.bot)) return false;
-                    if (options.mentions.map((x) => x.toLowerCase()).includes('purge') && (this.guild && this.guild.available && this.guild.members.cache.has(this.author.id))) return false;
+                    if (options.mentions.map((x) => x.toLowerCase()).includes('bots') && !this.author.bot) return false;
+                    if (options.mentions.map((x) => x.toLowerCase()).includes('purge')) {
+                        if (this.guild && this.guild.available) {
+                            if (this.guild.members.cache.has(this.author.id)) return false;
+                        } else return false;
+                    }
                     
                     const userMentions = options.mentions.filter(m => this.client.users.cache.has(m));
                     if (userMentions.length > 0 && !(userMentions.includes(this.author.id))) return false;

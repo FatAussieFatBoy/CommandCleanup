@@ -1,6 +1,4 @@
-[![Discord Shield](https://discordapp.com/api/guilds/417535126088450048/widget.png?style=shield)](https://discord.gg/Gkdbyeh) [![Discord Bots](https://top.gg/api/widget/status/420013638468894731.svg?noavatar=true)](https://top.gg/bot/420013638468894731) ![Discord Bots](https://top.gg/api/widget/servers/420013638468894731.svg?noavatar=true)
-
-# CommandCleanup
+# CommandCleanup • [![Discord Shield](https://discordapp.com/api/guilds/417535126088450048/widget.png?style=shield)](https://discord.gg/Gkdbyeh) [![Discord Bots](https://top.gg/api/widget/status/420013638468894731.svg?noavatar=true)](https://top.gg/bot/420013638468894731) ![Discord Bots](https://top.gg/api/widget/servers/420013638468894731.svg?noavatar=true)
 <p>CommandCleanup is a bot that can delete a variety of different messages, wether it be messages that begin with the most common command symbols, messages by a certain user or messages sent by bots, there is a command/parameter that'll help clean up your chats regardless of what's posted.</p>
 
 ---
