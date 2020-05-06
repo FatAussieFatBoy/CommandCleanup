@@ -1,5 +1,6 @@
 'use strict';
 const { RegularExpressions } = require('./Constants');
+const { MessageEmbed } = require('discord.js');
 
 exports.escapeRegex = function(str) {
 	return str.replace(/[|\\{}()[\]^$+*?.]/g, '\\$&');
@@ -104,4 +105,25 @@ exports.createTimestamp = (...durations) => {
 
     //console.log(_duration);
     return new Date(_duration);
+};
+
+/**
+ * Construct a error embed and return it
+ * @param {String|MessageEmbed|Object} [message] @default {}
+ */
+
+exports.errorEmbed = (message = {}) => {
+    if (typeof message == 'string') return new MessageEmbed({ color: 'ff0000', title: '**Oops!** <a:deny_gif:567114319024619530>', description: message });
+    else if (message instanceof MessageEmbed) {
+        message.setColor('ff0000');
+        if (!message.title) message.setTitle('**Oops!** <a:deny_gif:567114319024619530>');
+        return message;
+    }
+    else if (message instanceof Object) {
+        let embed = new MessageEmbed(message);
+        embed.setColor('ff0000');
+        if (!embed.title) embed.setTitle('**Oops!** <a:deny_gif:567114319024619530>');
+        return embed;
+    }
+    else throw new TypeError('Invalid embed data provided.');
 };

@@ -1,7 +1,7 @@
 const BaseCommand = require('./base');
 const { Command } = require('discord.js-commando');
 const { RegularExpressions, ImageFormats } = require('../../util/Constants');
-const { createTimestamp } = require('../../util/Utils');
+const { createTimestamp, errorEmbed } = require('../../util/Utils');
 const Filters = require('../../util/Filters');
 
 class CleanupCommand extends BaseCommand {
@@ -269,7 +269,7 @@ class CleanupCommand extends BaseCommand {
 
                             case 'limit':
                             case 'amount':
-                                if (args[nextIndex].match(/^\d+$/g)) {
+                                if (args[nextIndex] && args[nextIndex].match(/^\d+$/g)) {
                                     options.limit = parseInt(args[nextIndex]);
                                     args.splice(nextIndex, 1);
                                 } else errors.push(`Invalid usage, please provide a number following the \`${arg}\` parameter.`)
@@ -277,7 +277,7 @@ class CleanupCommand extends BaseCommand {
                                 break;
 
                             case 'all':
-                                filters = new Filters(Filters.ALL).freeze().bitfield;
+                                if (args.length == 1) filters = new Filters(Filters.ALL).freeze().bitfield;
                                 break;
 
                             case 'pinned':
@@ -338,7 +338,7 @@ class CleanupCommand extends BaseCommand {
 
                         if (errors.length > 0) {
                             let error = `• ${errors.join('\n\n• ')}\n\nfor further assistance use ${Command.usage('help', msg.guild.commandPrefix, null)},\nor for a list of available parameters visit our [DiscordBots Page](https://discordbots.org/bot/420013638468894731)`;
-                            messages.push(msg.direct('', { embed: { title: 'Cleanup Parameter Errors', color: 'ff0000', description: `We've found a few errors with the parameters you've provided..\n\n${error}` } }).then(m => m.delete({ timeout: 30000, reason: 'Parameter errors' })))
+                            messages.push(msg.direct('', errorEmbed({ title: 'Cleanup Parameter Errors', description: `We've found a few errors with the parameters you've provided..\n\n${error}` })).then(m => m.delete({ timeout: 30000, reason: 'Parameter errors' })))
                             return messages;
                         }
 
@@ -348,7 +348,7 @@ class CleanupCommand extends BaseCommand {
                                 let started = Date.now();
                                 channel.clean(filters, options).then(deleted => {
                                     if (deleted.size > 0) messages.push(msg.channel.send('', { embed: { color: '00ff00', description: `Successfully deleted **${deleted.size}** messages from <#${channel.id}>`, footer: { text: `Cleaning completed in ${new Date(Date.now() - started).getTime()}ms.` } } }).then(m => m.delete({ timeout: 3000, reason: 'Cleaning successful' })));
-                                    else messages.push(msg.channel.send('', { embed: { color: 'ff0000', description: `Couldn't delete any messages..` } }).then(m => m.delete({ timeout: 3000, reason: 'Cleaning unsuccessful' })));
+                                    else messages.push(msg.channel.send('', { embed: { color: 'ff0000', description: 'Couldn\'t delete any messages..' } }).then(m => m.delete({ timeout: 3000, reason: 'Cleaning unsuccessful' })));
                                     return messages;
                                 });
                             }
@@ -358,7 +358,7 @@ class CleanupCommand extends BaseCommand {
                         return null;
                     });
                 } else {
-                    messages.push(msg.direct('', { embed: { title: 'Cleanup Parameter Error', color: 'ff0000', description: `The cleanup command requires parameters to function, for a list of available parameters visit our [DiscordBots Page](https://discordbots.org/bot/420013638468894731)` } }).then(m => m.delete({ timeout: 30000, reason: 'Automated deletion.' })));
+                    messages.push(msg.direct('', errorEmbed({ title: 'Cleanup Parameter Error', description: `The cleanup command requires parameters to function, for a list of available parameters visit our [DiscordBots Page](https://discordbots.org/bot/420013638468894731)` })).then(m => m.delete({ timeout: 30000, reason: 'Automated deletion.' })));
                     return messages;
                 }
             } else {

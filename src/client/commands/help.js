@@ -1,5 +1,6 @@
 const BaseCommand = require('./base');
 const { MessageEmbed } = require('discord.js');
+const { errorEmbed } = require('../../util/Utils');
 
 class HelpCommand extends BaseCommand {
     constructor(client) {
@@ -41,7 +42,7 @@ class HelpCommand extends BaseCommand {
                     messages.push(await msg.direct('', embed)) //successfully sent help, notify them in the guild.
                 } catch (err) {
                     this.client.emit('error', err);
-                    messages.push(msg.channel.send(msg.channel.send('', { embed: { color: 'ff0000', title: `**Oops!** <a:deny_gif:567114319024619530>`, description: `The help documentation couldn\'t be sent to ${msg.author}, please make sure they allow "messages from server members" in the user privacy settings.` }}).then(m => m.delete({ timeout: 20000, reason: 'Automated deletion.' }))));
+                    messages.push(msg.channel.send(msg.channel.send('', errorEmbed(`The help documentation couldn\'t be sent to ${msg.author}, please make sure they allow "messages from server members" in the user privacy settings.`)).then(m => m.delete({ timeout: 20000, reason: 'Automated deletion.' }))));
                 }
 
                 return messages;
@@ -50,7 +51,7 @@ class HelpCommand extends BaseCommand {
             } else if (commands.length > 1) {
                 // list all available commands that match
             } else {
-                return await this.client.registry.unknownCommand.run(msg);
+                return await msg.direct('', errorEmbed(`Can't fetch help documentation for \`${args.command}\`, please double check the spelling.`)).then(m => m.delete({ timeout: 10000, reason: 'Automated deletion.' }));
             }
         } else {
             const messages = [];
@@ -65,7 +66,7 @@ class HelpCommand extends BaseCommand {
                 if (msg.channel.type !== 'dm') messages.push(msg.channel.send('', { embed: { color: '00ff00', title: `**Success!** <:approve:567107353028329472>`, description: `Sent help documentation to ${msg.author}`} }).then(m => m.delete({ timeout: 5000, reason: 'Automated deletion.' }))) //successfully sent help, notify them in the guild.
             } catch (err) {
                 this.client.emit('error', err);
-                messages.push(msg.channel.send('', { embed: { color: 'ff0000', title: `**Oops!** <a:deny_gif:567114319024619530>`, description: `The help documentation couldn\'t be sent to ${msg.author}, please make sure they allow "messages from server members" in the user privacy settings.` }}).then(m => m.delete({ timeout: 20000, reason: 'Automated deletion.' })));
+                messages.push(msg.channel.send('', errorEmbed(`The help documentation couldn\'t be sent to ${msg.author}, please make sure they allow "messages from server members" in the user privacy settings.`)).then(m => m.delete({ timeout: 20000, reason: 'Automated deletion.' })));
             }
 
             return messages;

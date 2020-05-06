@@ -62,7 +62,7 @@ module.exports = Structures.extend('Message', Message => {
                     const links = options['contains'].filter(str => RegularExpressions.links.test(str));
                     const quotes = options['contains'].filter(str => !links.includes(str));
                     
-                    if (this.has('TEXT') && quotes.length > 0) {
+                    if (quotes.length > 0) {
                         return !!quotes.some(q => typeof q == 'string' && this.cleanContent.includes(q));
                     }
 
@@ -73,7 +73,7 @@ module.exports = Structures.extend('Message', Message => {
 
                 if ((options['startsWith'] && options.startsWith.length > 0) && (this.cleanContent !== '' || this.cleanContent !== null)) {
                     const unrecognised = options['startsWith'].filter(str => !RegularExpressions.symbols.test(str));
-                    if ((this.has('COMMAND') || this.has('TEXT')) && unrecognised.length > 0) {
+                    if (unrecognised.length > 0) {
                         return !!unrecognised.some(u => typeof u == 'string' && this.cleanContent.startsWith(u));
                     }
                 }

@@ -67,10 +67,6 @@ client.on('commandRun', (command, promise, message) => {
     }
 });
 
-client.on('commandBlock', (message, reason, data) => {
-    console.log(message, reason);
-});
-
 if (process.env.DBL_TOKEN) {
     const dbl = new DBL(process.env.DBL_TOKEN, client);
 

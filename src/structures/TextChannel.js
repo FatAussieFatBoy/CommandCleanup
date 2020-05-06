@@ -68,7 +68,7 @@ module.exports = Structures.extend('TextChannel', TextChannel => {
                     this.messages.fetch({ limit: 100, before: lastFetchedMessage ? lastFetchedMessage : undefined }).then(messages => {
                         if (messages.size < 1) resolve([]);
         
-                        let reachedMaxAge = false;
+                        let continueFiltering = true;
                         let _filtering = [...messages.sort((a, b) => {
                             a = a.createdTimestamp;
                             b = b.createdTimestamp;
@@ -76,7 +76,12 @@ module.exports = Structures.extend('TextChannel', TextChannel => {
                             if (a > b) return -1;
                             if (a == b) return 0;
                             if (a < b) return 1;
-                        }).keys()].filter(id => {
+                        }).keys()];
+                        
+                        if (_filtering.length < 100) continueFiltering = false;
+
+                        let reachedMaxAge = false;
+                        _filtering = _filtering.filter(id => {
                             let isYoung = Boolean(Date.now() - SnowflakeUtil.deconstruct(id).date.getTime() < 1209600000);
                             if (!isYoung) reachedMaxAge = true;
                             return isYoung;
@@ -84,10 +89,13 @@ module.exports = Structures.extend('TextChannel', TextChannel => {
 
                         lastFetchedMessage = [..._filtering].pop();
                         
-                        if (options['before'] || options['after']) {
-                            let temp = [];
-                            for(let i = 0; i < _filtering.length; i++) {
-                                if (options['before']) {
+                        if (options.before || options.after) {
+                            let temp = [..._filtering],
+                                beforeIndex = undefined,
+                                afterIndex = temp.length;
+
+                            for(let i = 0; i < temp.length; i++) {
+                                if (options.before && beforeIndex == undefined) {
                                     if (typeof options.before == 'string') {
                                         if (RegularExpressions.message_links.test(options.before)) options['before'] = options.before.split('/').pop();
                                         if (options.before !== _filtering[i]) continue;
@@ -96,11 +104,11 @@ module.exports = Structures.extend('TextChannel', TextChannel => {
                                         if (SnowflakeUtil.deconstruct(_filtering[i]).date.getTime() > options.before) continue;
                                     }
             
-                                    temp = _filtering.slice(i);
-                                    if (!(options['after'])) break; //only end if we're not trying to find an 'after'
+                                    beforeIndex = i;
+                                    if (!options.after) break; //not looking for 'after', break the loop
                                 }
             
-                                if (options['after']) {
+                                if (options.after) {
                                     if (typeof options.after == 'string') {
                                         if (RegularExpressions.message_links.test(options.after)) options['after'] = options.after.split('/').pop();
                                         if (options.after !== _filtering[i]) continue;
@@ -108,12 +116,13 @@ module.exports = Structures.extend('TextChannel', TextChannel => {
                                         if (SnowflakeUtil.deconstruct(_filtering[i]).date.getTime() > options.after) continue;
                                     }
             
-                                    temp = _filtering.slice(0, i);
+                                    afterIndex = i;
+                                    continueFiltering = false;
                                     break; //'after' was found, this should end no matter what
                                 }
                             }
 
-                            _filtering = temp;
+                            _filtering = temp.slice(beforeIndex, afterIndex);
                         }
             
                         for (let i = 0; i < _filtering.length; i++) {
@@ -129,7 +138,7 @@ module.exports = Structures.extend('TextChannel', TextChannel => {
                         }
             
                         if (_collected.length > limit) resolve(_collected.splice(0, limit > 100 ? 100 : limit));
-                        else if (_collected.length > 0 && _collected.length < limit && !reachedMaxAge) {
+                        else if (_collected.length > 0 && _collected.length < limit && !reachedMaxAge && continueFiltering) {
                             options['limit'] = parseInt(limit - _collected.length);
                             this.client.setTimeout(() => {
                                 this._getFilteredMessages(filters, options, lastFetchedMessage).then(collected => {
