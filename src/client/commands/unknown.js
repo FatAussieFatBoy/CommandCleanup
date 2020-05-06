@@ -1,4 +1,5 @@
 const BaseCommand = require('./base');
+const { errorEmbed } = require('../../util/Utils');
 
 class UnknownCommand extends BaseCommand {
     constructor(client) {
@@ -14,7 +15,8 @@ class UnknownCommand extends BaseCommand {
     }
 
     async run(msg) {
-        return null;
+        if (msg.channel.type == 'dm') return msg.direct('', errorEmbed({ title: 'Unrecognised Command', description: `The command \`${msg.cleanContent}\` couldn't be recognised, please use ${msg.anyUsage('help', msg.guild ? msg.commandPrefix : this.client.commandPrefix, null)} for a list of available commands.` }));
+        else return null;
     }
 
 }

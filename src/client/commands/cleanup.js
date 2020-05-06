@@ -165,8 +165,6 @@ class CleanupCommand extends BaseCommand {
                                 const possibleQuotes = remainingArgString.match(RegularExpressions.quotes);
                                 filters.push('TEXT');
 
-                                
-
                                 if (!possibleQuotes || possibleQuotes.length < 1) break;
 
                                 let quotes = [];
@@ -277,7 +275,8 @@ class CleanupCommand extends BaseCommand {
                                 break;
 
                             case 'all':
-                                if (args.length == 1) filters = new Filters(Filters.ALL).freeze().bitfield;
+                                if (filters.length == 0) filters = new Filters(Filters.ALL).freeze().bitfield;
+                                else errors.push(`Invalid use case, the \`${arg}\` parameter should only be used when no other parameters *(excluding: limit)* are being defined.`);
                                 break;
 
                             case 'pinned':

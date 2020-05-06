@@ -51,7 +51,7 @@ class HelpCommand extends BaseCommand {
             } else if (commands.length > 1) {
                 // list all available commands that match
             } else {
-                return await msg.direct('', errorEmbed(`Can't fetch help documentation for \`${args.command}\`, please double check the spelling.`)).then(m => m.delete({ timeout: 10000, reason: 'Automated deletion.' }));
+                if (msg.channel.type == 'dm') return await msg.direct('', errorEmbed(`Can't fetch help documentation for \`${args.command}\`, please double check the spelling.`)).then(m => m.delete({ timeout: 10000, reason: 'Automated deletion.' }));
             }
         } else {
             const messages = [];
