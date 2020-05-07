@@ -310,7 +310,7 @@ class CleanupCommand extends BaseCommand {
                                     break;
                                 }
 
-                                if (arg.match(/^\d+$/g) && (parseInt(args[nextIndex]) <= 100 && parseInt(args[nextIndex]) > 0)) {
+                                if (arg.match(/^\d+$/g) && (parseInt(arg) <= 100 && parseInt(arg) > 0)) {
                                     options.limit = parseInt(arg);
                                     break;
                                 }
