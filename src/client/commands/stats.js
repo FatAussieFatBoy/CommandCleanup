@@ -1,6 +1,6 @@
 const BaseCommand = require('./base');
 const { version, MessageEmbed } = require('discord.js');
-const moment = require('moment');
+const prettyms = require('pretty-ms');
 
 class StatsCommand extends BaseCommand {
     constructor(client) {
@@ -43,8 +43,8 @@ class StatsCommand extends BaseCommand {
                     }
                 });
 
-                const botInfo = [`**Shard Count:** \`${this.client.shard.count}\``, `**Memory Usage:** \`${(usedHeapSize / 1024 / 1024).toFixed(2)}/${(totalHeapSize / 1024 / 1024).toFixed(2)} MB\``, `**Uptime:** \`${this.client.uptime}ms.\``, `**API Latency:**\n\`${Math.round(this.client.ws.ping)}ms.\``];
-                const countInfo = [`**Server Count:** \`${guilds.toLocaleString()}\``, `**User Count:** \`${users.toLocaleString()}\``, `**Channel Count:** \`${channels.toLocaleString()}\``];
+                const botInfo = [`**Shard Count:** \`${this.client.shard.count}\``, `**Memory Usage:** \`${(usedHeapSize / 1024 / 1024).toFixed(2)}/${(totalHeapSize / 1024 / 1024).toFixed(2)} MB\``, `**Uptime:** \`${prettyms(this.client.uptime)}\``, `**API Latency:**\n\`${Math.round(this.client.ws.ping)}ms.\``];
+                const countInfo = [`**Server Count:** \`${guilds.toLocaleString()}\``, `**Loaded User Count:** \`${users.toLocaleString()}\``, `**Channel Count:** \`${channels.toLocaleString()}\``];
                 const miscInfo = [`**Discord.js Version:** \`v${version}\``, `**Node Version:** \`${process.version}\``, `**Bot Version:** \`v${this.client.version}\``];
             
                 const embed = new MessageEmbed()

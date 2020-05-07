@@ -1,5 +1,7 @@
-const { Command, util } = require('discord.js-commando');
+const { Command, util, CommandoMessage } = require('discord.js-commando');
 const { errorEmbed } = require('../../util/Utils');
+
+const { Guild, GuildMember, Role, User } = require('discord.js');
 
 class CleanupCommand extends Command {
     constructor(...args) {
@@ -23,14 +25,12 @@ class CleanupCommand extends Command {
                 response = message.direct('', errorEmbed(`The \`${this.name}\` command can only be used in NSFW channels.`));
                 break;
             case 'permission': {
-                response = message.direct('', data.response ? errorEmbed(data.response) : errorEmbed(`You do not have permissions to use \`${this.name}\` ${message.guild ? `inside \`${message.guild.name}\`` : 'inside DM\'s'}`));
+                response = message.direct('', data.response ? errorEmbed(data.response) : errorEmbed(`You do not have permissions to use \`${this.name}\` ${message.guild ? `inside **${message.guild}**\n\nIf you believe this is wrong, contact **${this.constructor._higherRole(message.guild, message.author).size > 0 ? `@${this.constructor._higherRole(message.guild, message.author).first().name}` : message.guild.owner ? message.guild.owner : `<@${message.guild.ownerID}>`}` : 'inside **DM\'s**'}`));
                 break;
             }
             case 'clientPermissions': {
                 let clientsRole = message.guild ? message.guild.me.roles.cache.filter(cr => cr.managed && cr.name == this.client.user.username).first() : null;
-                let higherRole = message.guild ? message.guild.roles.cache.filter(r => r.permissions.has('MANAGE_ROLES') && !r.managed).sort((p, n) => p.rawPosition > n.rawPosition).filter(r => r.rawPosition > clientsRole.rawPosition).first() : null;
-                console.log(higherRole, clientsRole);
-                response = message.reply('', errorEmbed(`I require the following permissions \`${data.missing.map(perm => util.permissions[perm]).join('\`, \`')}\` to run \`${this.name}\` ${message.guild ? `inside ${message.guild.name}\nIf you believe this is wrong, contact ${higherRole ? higherRole : message.guild.owner ? message.guild.owner : `<@${message.guild.ownerID}>`} to double check the permissions.` : 'inside DM\'s'}`));
+                response = message.reply('', errorEmbed(`I require the following permissions \`${data.missing.map(perm => util.permissions[perm]).join('\`, \`')}\` to run \`${this.name}\` ${message.guild ? `inside **${message.guild}**\n\nIf you believe this is wrong, contact **${this.constructor._higherRole(message.guild, clientsRole).size > 0 ? this.constructor._higherRole(message.guild, clientsRole).first() : message.guild.owner ? message.guild.owner : `<@${message.guild.ownerID}>`}** to double check the permissions.` : 'inside **DM\'s**'}`));
                 break;
             }
             case 'throttling': {
@@ -66,6 +66,29 @@ class CleanupCommand extends Command {
                 text: new Date(Date.now()).toLocaleString()
             }
         } }).then(m => m.delete({ timeout: 60000, reason: 'Automated Deletion.' }));
+    }
+
+    /**
+     * Returns the next highest role that can affect this role
+     * @param {Guild|CommandoMessage|Snowflake} guild 
+     * @param {Role|GuildMember|User|Snowflake} role 
+     * @param 
+     */
+
+    static _higherRole(guild, role) {
+        if (typeof guild == 'string') guild = this.client.guilds.resolve(guild);
+        else if (guild instanceof CommandoMessage) guild = guild.guild;
+
+        // verify that a guild was resolved, or provided.
+        if (!guild instanceof Guild) throw new TypeError('Invalid "guild", the guild must be a Snowflake, Message instance, or Guild instance.');
+
+        if (typeof role == 'string') role = guild.roles.resolve(role);
+        else if (role instanceof GuildMember) role = role.roles.highest;
+        else if (role instanceof User) role = guild.members.resolve(role).roles.highest;
+
+        if (!role instanceof Role) throw new TypeError('Invalid "role", the role must be a Snowflake, GuildMember instance, or Role instance.');
+
+        return guild.roles.cache.filter(r => r.permissions.has('MANAGE_ROLES') && !r.managed).sort((p, n) => p.rawPosition > n.rawPosition).filter(r => r.rawPosition > role.rawPosition);
     }
 
 }

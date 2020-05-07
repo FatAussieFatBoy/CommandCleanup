@@ -75,7 +75,9 @@ Filter.FLAGS = {
 	LINK: 1 << 8,
 	COMMAND: 1 << 9,
 	FILE: 1 << 10,
-	IMAGE: 1 << 11
+	IMAGE: 1 << 11,
+
+	DISCORD: 1 << 12
 };
 
 /**

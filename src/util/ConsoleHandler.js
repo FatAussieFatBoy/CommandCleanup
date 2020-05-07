@@ -1,6 +1,4 @@
-const moment = require('moment');
 const chalk = require('chalk');
-
 const util = require('util');
 
 module.exports = {
@@ -9,7 +7,23 @@ module.exports = {
      * @type {String}
      */
 
-    date: moment().format('ddd, MMM Do Y, H:mm:ss.S'),
+    date: () => { 
+        let formatter = new Intl.DateTimeFormat('default', {
+            year: 'numeric',
+            month: 'numeric',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric',
+            hour12: false
+        });
+
+        let date = new Date();
+        let parts = formatter.formatToParts(date);
+        parts.push({ type: 'literal', value: '.' }, { type: 'milliseconds', value: date.getMilliseconds().toString().slice(0,2) });
+        let formatted = parts.map(({ type, value }) => { return value; }).reduce((string, part) => string + part);
+        return formatted;
+    },
 
     /**
      * Log a console message as the shard
@@ -75,22 +89,22 @@ function _send(data) {
     if (data['type'] && typeof data.type !== 'string') throw new TypeError('The "type" of data must be a string.');
     switch(data.type) {
         case 'log':
-            console.log('[%s] %s : %s', chalk.bold(data.shard.id||data.shard), chalk.inverse(module.exports.date), data.message);
+            console.log('[%s] %s : %s', chalk.bold(data.shard.id||data.shard), chalk.inverse(module.exports.date()), data.message);
             break;
 
         case 'debug':
-            console.debug('[%s] %s : %s', chalk.bold(data.shard.id||data.shard), chalk.black.bgGreen(module.exports.date), chalk.green(data.message));
+            console.debug('[%s] %s : %s', chalk.bold(data.shard.id||data.shard), chalk.black.bgGreen(module.exports.date()), chalk.green(data.message));
             break;
 
         case 'warn':
-            console.warn('[%s] %s : %s', chalk.bold(data.shard.id||data.shard), chalk.black.bgYellow(module.exports.date), chalk.yellow(data.message));
+            console.warn('[%s] %s : %s', chalk.bold(data.shard.id||data.shard), chalk.black.bgYellow(module.exports.date()), chalk.yellow(data.message));
             break;
 
         case 'error':
-            console.error('[%s] %s : %s', chalk.bold(data.shard.id||data.shard), chalk.black.bgRed(module.exports.date), chalk.red(data.message));
+            console.error('[%s] %s : %s', chalk.bold(data.shard.id||data.shard), chalk.black.bgRed(module.exports.date()), chalk.red(data.message));
             break;
 
         default:
-            console.log('[%s] %s : %s', chalk.bold(data.shard.id||data.shard), chalk.inverse(module.exports.date), chalk.grey(data.message));
+            console.log('[%s] %s : %s', chalk.bold(data.shard.id||data.shard), chalk.inverse(module.exports.date()), chalk.grey(data.message));
     }
 }

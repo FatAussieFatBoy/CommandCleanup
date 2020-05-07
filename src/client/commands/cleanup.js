@@ -16,7 +16,7 @@ class CleanupCommand extends BaseCommand {
             
             guildOnly: true,
             clientPermissions: ['MANAGE_MESSAGES', 'VIEW_CHANNEL'],
-            throttling: { usages: 1, duration: 2 },
+            throttling: { usages: 1, duration: 5 },
             guarded: true,
 
             argsType: 'multiple'
@@ -75,11 +75,10 @@ class CleanupCommand extends BaseCommand {
                                     if (dates.length > 0) options['before'] = createTimestamp(new Date().getTime(), dates).getTime();
                                 } else if ((/^\d+$/g).test(possibleBefore[0]) || RegularExpressions.message_links.test(possibleBefore[0])) {
                                     options['before'] = possibleBefore[0];
+                                    args.splice(nextIndex, 1);
                                 }
 
                                 if (!options.before) break;
-
-                                args.splice(nextIndex, 1);
                                 break;
 
                             case 'after':
@@ -103,11 +102,10 @@ class CleanupCommand extends BaseCommand {
                                         if (dates.length > 0) options['after'] = createTimestamp(new Date().getTime(), dates).getTime();
                                     } else if ((/^\d+$/g).test(possibleAfter[0]) || RegularExpressions.message_links.test(possibleAfter[0])) {
                                         options['after'] = possibleAfter[0];
+                                        args.splice(nextIndex, 1);
                                     }
     
                                     if (!options.after) break;
-    
-                                    args.splice(nextIndex, 1);
                                     break;
 
                             case 'attachments':
@@ -267,10 +265,10 @@ class CleanupCommand extends BaseCommand {
 
                             case 'limit':
                             case 'amount':
-                                if (args[nextIndex] && args[nextIndex].match(/^\d+$/g)) {
+                                if (args[nextIndex] && args[nextIndex].match(/^\d+$/g) && (parseInt(args[nextIndex]) <= 100 && parseInt(args[nextIndex]) > 0)) {
                                     options.limit = parseInt(args[nextIndex]);
                                     args.splice(nextIndex, 1);
-                                } else errors.push(`Invalid usage, please provide a number following the \`${arg}\` parameter.`)
+                                } else errors.push(`Invalid usage, please provide a number between 1 and 100 following the \`${arg}\` parameter.`)
 
                                 break;
 
@@ -312,7 +310,7 @@ class CleanupCommand extends BaseCommand {
                                     break;
                                 }
 
-                                if (arg.match(/^\d+$/g)) {
+                                if (arg.match(/^\d+$/g) && (parseInt(args[nextIndex]) <= 100 && parseInt(args[nextIndex]) > 0)) {
                                     options.limit = parseInt(arg);
                                     break;
                                 }
@@ -331,12 +329,12 @@ class CleanupCommand extends BaseCommand {
                     }).then(() => {
                         if (filters.length == 0) {
                             if (options.before || options.after || options.mentions) filters = new Filters(Filters.ALL).freeze().bitfield;
-                            else if (options.limit && (!options.before && !options.after && !options.mentions)) errors.push('The \`limit\` parameter cannot be used by itself, please provide another parmameter to specify the content to delete. Example, ' + `\`.cleanup ${options.limit} all\``);
+                            else if (options.limit && (!options.before && !options.after && !options.mentions && filters !== Filters.ALL)) errors.push('Providing a limit by itself no longer works, please provide another parmameter to specify the content to delete. Example, ' + `\`.cleanup ${options.limit} all\``);
                             else errors.push('No parameters recognised, parameters are required.');
                         }
 
                         if (errors.length > 0) {
-                            let error = `• ${errors.join('\n\n• ')}\n\nfor further assistance use ${Command.usage('help', msg.guild.commandPrefix, null)},\nor for a list of available parameters visit our [DiscordBots Page](https://discordbots.org/bot/420013638468894731)`;
+                            let error = `• ${errors.join('\n\n• ')}\n\nfor further assistance use ${Command.usage('help', msg.guild.commandPrefix, null)},\nor visit  our [GitHub](https://github.com/FatAussieFatBoy/CommandCleanup) for a [list of parameters](https://github.com/FatAussieFatBoy/CommandCleanup#parameters)`;
                             messages.push(msg.direct('', errorEmbed({ title: 'Cleanup Parameter Errors', description: `We've found a few errors with the parameters you've provided..\n\n${error}` })).then(m => m.delete({ timeout: 30000, reason: 'Parameter errors' })))
                             return messages;
                         }

@@ -58,7 +58,7 @@ module.exports = Structures.extend('Message', Message => {
                     if (roleMentions.length > 0 && (this.member && !(this.member.roles.cache.keyArray().some(r => roleMentions.includes(r))))) return false;
                 }
 
-                if ((options['contains'] && options.contains.length > 0) && (this.content !== '' || this.content !== null)) {
+                if ((options['contains'] && options.contains.length > 0) && (this.cleanContent !== null)) {
                     const links = options['contains'].filter(str => RegularExpressions.links.test(str));
                     const quotes = options['contains'].filter(str => !links.includes(str));
                     
@@ -71,11 +71,10 @@ module.exports = Structures.extend('Message', Message => {
                     }
                 }
 
-                if ((options['startsWith'] && options.startsWith.length > 0) && (this.cleanContent !== '' || this.cleanContent !== null)) {
-                    const unrecognised = options['startsWith'].filter(str => !RegularExpressions.symbols.test(str));
-                    if (unrecognised.length > 0) {
-                        return !!unrecognised.some(u => typeof u == 'string' && this.cleanContent.startsWith(u));
-                    }
+                if ((options['startsWith'] && options.startsWith.length > 0) && this.cleanContent !== null) {
+                    const symbols = options.startsWith.filter(str => RegularExpressions.symbols.test(str));
+                    const unrecognised = options.startsWith.filter(str => !symbols.includes(str));
+                    return !!unrecognised.some(u => typeof u == 'string' && this.cleanContent.startsWith(u)) || !!symbols.some(s => typeof s == 'string' && this.cleanContent.startsWith(s));
                 }
 
                 if ((options['attachments'] && options.attachments.length > 0) && this.attachments.size > 0) {

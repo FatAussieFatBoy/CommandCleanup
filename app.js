@@ -45,11 +45,11 @@ client.on('error', function(e) {
 
 client.on('ready', function() {
     client.user.setActivity(`${client.commandPrefix}help & ${client.commandPrefix}invite`, { type: 'LISTENING' });
-    client.emit('debug', `client ready and listening to; ${client.guilds.cache.size} guilds, ${client.channels.cache.filter(c => c.type === 'text').size} channels & ${client.users.cache.size} users.`);
+    client.emit('debug', `client ready and listening to; ${client.guilds.cache.size} guilds and ${client.channels.cache.filter(c => c.type === 'text').size} channels.`);
 });
 
 client.on('guildCreate', function(guild) {
-    client.emit('debug', `CommandCleanup successfully added to guild ${guild.id}`);
+    client.emit('debug', `${client.user.username} successfully added to guild ${guild.name}(${guild.id})`);
 });
 
 client.on('rateLimit', function(info) {

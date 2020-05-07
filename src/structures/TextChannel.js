@@ -18,9 +18,7 @@ module.exports = Structures.extend('TextChannel', TextChannel => {
          */
 
         async clean(filters = 0, options = DefaultFilterOptions) {
-            if (!(options instanceof Object)) throw new TypeError('Invalid "options" provided. Must be an object of FilterOptions.');
-            this.client.emit('debug', `Cleaning ${this.id} of all ${filters}`);
-            
+            if (!(options instanceof Object)) throw new TypeError('Invalid "options" provided. Must be an object of FilterOptions.');           
             const _collected = await this._getFilteredMessages(filters, options);
 
             if (_collected.length == 0) return new Collection();
