@@ -11,6 +11,40 @@ module.exports = Structures.extend('TextChannel', TextChannel => {
         }
 
         /**
+         * Safer alternative to the default send method.
+         * This method will check if the client has permission to send embeds,
+         * if not than the embeds data will be converted into a message.
+         * 
+         * @param {StringResolvable|APIMessage} [content] @default ""
+         * @param {MessageOptions|MessageAdditions} [options] @default {}
+         * @returns {Promise<Message|Message[]>}
+         */
+
+        send(content, options) {
+            // no embed provided, or the user cannot send embeds
+            if (!options.embed || options.embed && this.permissionsFor(this.client.user).has('EMBED_LINKS')) return super.send(content, options);
+            else {
+                // deconstruct the embed and convert it to the messages content.
+                if (content.length > 0) content += '\n\n';
+                if (options.embed.title) content += `${options.embed.title}\n`;
+                if (options.embed.description) content += `${options.embed.description}\n`;
+                if (options.embed.fields) {
+                    for (let field of options.embed.fields) {
+                        content += `\n${field.name}`
+                        content += `\n${field.value}\n\n`
+                    }
+                }
+
+                if (options.embed.footer && options.embed.footer.text) {
+                    content += `${options.embed.footer.text}`;
+                }
+
+                delete options.embed;
+                return super.send(content, options);
+            }
+        }
+
+        /**
          * Clean the channel using filters and filter options.
          * @param {FilterResolveable} [filters] @default 0
          * @param {FilterOptions} [options] @default DefaultFilterOptions
@@ -18,7 +52,7 @@ module.exports = Structures.extend('TextChannel', TextChannel => {
          */
 
         async clean(filters = 0, options = DefaultFilterOptions) {
-            if (!(options instanceof Object)) throw new TypeError('Invalid "options" provided. Must be an object of FilterOptions.');           
+            if (!(options instanceof Object)) throw new TypeError('Invalid "options" provided. Must be an object of FilterOptions.');
             const _collected = await this._getFilteredMessages(filters, options);
 
             if (_collected.length == 0) return new Collection();
@@ -30,18 +64,6 @@ module.exports = Structures.extend('TextChannel', TextChannel => {
 
             await this.client.api.channels[this.id].messages['bulk-delete'].post({ data: { messages: _collected } });
             return _collected.reduce((col, id) => col.set(id, this.client.actions.MessageDeleteBulk.getMessage({ message_id: id }, this)), new Collection());
-        }
-
-        /**
-         * Check if a user can clean this channel
-         * @param {UserResolvable|GuildMember} user
-         * @return {Boolean}
-         */
-
-        canClean(user) {
-            user = this.guild.members.resolve(user);
-            if (user) return user.permissionsIn(this).has(9216, true);
-            else return false
         }
 
         /**
@@ -127,7 +149,7 @@ module.exports = Structures.extend('TextChannel', TextChannel => {
                             const id = _filtering[i];
                             const msg = messages.get(id);
             
-                            if (options['command'] && (msg.id == (options.command.id || options.command))) continue;
+                            if (options['ignore'] && (options.ignore.includes(msg.id))) continue;
 
                             if (msg.pinned && !filters.has('PINNED')) continue;
                             else if (msg.matches(filters, options)) _collected.push(id);
@@ -136,7 +158,7 @@ module.exports = Structures.extend('TextChannel', TextChannel => {
                         }
             
                         if (_collected.length > limit) resolve(_collected.splice(0, limit > 100 ? 100 : limit));
-                        else if (_collected.length > 0 && _collected.length < limit && !reachedMaxAge && continueFiltering) {
+                        else if (_collected.length >= 0 && _collected.length < limit && !reachedMaxAge && continueFiltering) {
                             options['limit'] = parseInt(limit - _collected.length);
                             this.client.setTimeout(() => {
                                 this._getFilteredMessages(filters, options, lastFetchedMessage).then(collected => {

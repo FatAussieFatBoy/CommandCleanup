@@ -79,4 +79,9 @@ if (process.env.DBL_TOKEN) {
     });
 }
 
+// handle all unhandled promise rejections and print the stack trace
+process.on('unhandledRejection', error => {
+    console.error(error);
+});
+
 init();

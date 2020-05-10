@@ -1,5 +1,5 @@
 const BaseCommand = require('./base');
-const { Command } = require('discord.js-commando');
+const { Command, CommandoMessage } = require('discord.js-commando');
 const { RegularExpressions, ImageFormats } = require('../../util/Constants');
 const { createTimestamp, errorEmbed } = require('../../util/Utils');
 const Filters = require('../../util/Filters');
@@ -35,7 +35,7 @@ class CleanupCommand extends BaseCommand {
                 let filters = [];
                 let options = {
                     /* set the default options */
-                    command: msg,
+                    ignore: [msg.id],
                     channels: [msg.channel.id],
                     limit: 100
                 };
@@ -46,7 +46,7 @@ class CleanupCommand extends BaseCommand {
                         return Promise.all(array.map((v, i) => callback(v, i, array)));
                     };
 
-                    promise(args, (arg, index, args) => {
+                    promise(args, async (arg, index, args) => {
                         arg = arg.startsWith('-') ? arg.toLowerCase().slice(1).trim() : arg.toLowerCase();
                         const nextIndex = parseInt(index + 1);
                         const prevIndex = parseInt(index - 1);
@@ -282,24 +282,25 @@ class CleanupCommand extends BaseCommand {
                                 break;
 
                             default:
-
                                 if (arg.match(/<@!?\d+>/g)) {
-                                    this.client.users.fetch(arg.replace(/\D+/g, '')).then(user => {
+                                    await this.client.users.fetch(arg.replace(/\D+/g, '')).then(user => {
+                                        if (!user) errors.push(`User \`<@!${arg.replace(/\D+/g, '')}>\` couldn't be found.`);
                                         if (!options.mentions) options['mentions'] = [];
                                         if (!options.mentions.includes(user.id)) options.mentions.push(user.id);
-                                    }).catch(() => {
-                                        errors.push(`User \`${arg.replace(/\D+/g, '')}\` couldn't be found.`);
+                                    }).catch((e) => {
+                                        this.client.emit('error', e);
                                     });
 
                                     break;
                                 }
 
                                 if (arg.match(/<@&\d+>/g)) {
-                                    msg.guild.roles.fetch(arg.replace(/\D+/g, '')).then(role => {
+                                    await msg.guild.roles.fetch(arg.replace(/\D+/g, '')).then(role => {
+                                        if (!role) errors.push(`Role \`<@&${arg.replace(/\D+/g, '')}>\` couldn't be found.`);
                                         if (!options.mentions) options['mentions'] = [];
                                         if (!options.mentions.includes(role.id)) options.mentions.push(role.id);
-                                    }).catch(() => {
-                                        errors.push(`User \`${arg.replace(/\D+/g, '')}\` couldn't be found.`);
+                                    }).catch((e) => {
+                                        this.client.emit('error', e);
                                     });
 
                                     break;
@@ -326,7 +327,7 @@ class CleanupCommand extends BaseCommand {
                                     default: errors.push(`\`${arg}\` is not a valid parameter.`); break;
                                 }
                         }
-                    }).then(() => {
+                    }).then(async () => {
                         if (filters.length == 0) {
                             if (options.before || options.after || options.mentions) filters = new Filters(Filters.ALL).freeze().bitfield;
                             else if (options.limit && (!options.before && !options.after && !options.mentions && filters !== Filters.ALL)) errors.push('Providing a limit by itself no longer works, please provide another parmameter to specify the content to delete. Example, ' + `\`.cleanup ${options.limit} all\``);
@@ -341,29 +342,35 @@ class CleanupCommand extends BaseCommand {
 
                         for (let i = 0; i < options.channels.length; i++) {
                             const channel = msg.guild.channels.cache.has(options.channels[i]) ? msg.guild.channels.cache.get(options.channels[i]) : null;
-                            if (channel) {
+                            if (channel && channel.permissionsFor(this.client.user).has(['VIEW_CHANNEL', 'MANAGE_MESSAGES'])) {
                                 let started = Date.now();
-                                channel.clean(filters, options).then(deleted => {
-                                    if (deleted.size > 0) messages.push(msg.channel.send('', { embed: { color: '00ff00', description: `Successfully deleted **${deleted.size}** messages from <#${channel.id}>`, footer: { text: `Cleaning completed in ${new Date(Date.now() - started).getTime()}ms.` } } }).then(m => m.delete({ timeout: 3000, reason: 'Cleaning successful' })));
-                                    else messages.push(msg.channel.send('', { embed: { color: 'ff0000', description: 'Couldn\'t delete any messages..' } }).then(m => m.delete({ timeout: 3000, reason: 'Cleaning unsuccessful' })));
-                                    return messages;
+                                let progress_message = msg.channel.permissionsFor(this.client.user).has('SEND_MESSAGES') ? await msg.channel.send('', { embed: { description: `Cleaning of channel <#${channel.id}> in progress..` } }) : null;
+                                if (progress_message !== null) options.ignore.push(progress_message.id);
+                                
+                                await channel.clean(filters, options).then(deleted => {
+                                    if (progress_message !== null && progress_message.deletable) progress_message.delete({ reason: 'Cleaning completed' });
+                                    if (msg.channel.permissionsFor(this.client.user).has('SEND_MESSAGES')) {
+                                        if (deleted.size > 0) messages.push(msg.channel.send('', { embed: { color: '00ff00', description: `Successfully deleted **${deleted.size}** messages from <#${channel.id}>`, footer: { text: `Cleaning completed in ${new Date(Date.now() - started).getTime()}ms.` } } }).then(m => m.delete({ timeout: 3000, reason: 'Cleaning successful' })));
+                                        else messages.push(msg.channel.send('', { embed: { color: 'ff0000', description: 'Couldn\'t delete any messages..' } }).then(m => m.delete({ timeout: 3000, reason: 'Cleaning unsuccessful' })));
+                                    }
+                                }).catch(e => {
+                                    if (progress_message !== null && progress_message.deletable) progress_message.delete({ reason: 'Cleaning failed' });
+                                    this.client.emit('error', e)
                                 });
                             }
                         }
+
+                        return messages;
                     }).catch((e) => {
                         this.client.emit('error', e);
-                        return null;
                     });
                 } else {
                     messages.push(msg.direct('', errorEmbed({ title: 'Cleanup Parameter Error', description: `The cleanup command requires parameters to function, for a list of available parameters visit our [DiscordBots Page](https://discordbots.org/bot/420013638468894731)` })).then(m => m.delete({ timeout: 30000, reason: 'Automated deletion.' })));
                     return messages;
                 }
-            } else {
-                return null;
             }
         } catch (e) {
             this.client.emit('error', e);
-            return null;
         }
     }
 }

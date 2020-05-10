@@ -14,7 +14,7 @@ class InviteCommand extends BaseCommand {
     }
 
     run(msg) {
-        this.client.generateInvite(['SEND_MESSAGES', 'MANAGE_MESSAGES', 'READ_MESSAGE_HISTORY', 'VIEW_AUDIT_LOG']).then((link) => {
+        this.client.generateInvite(['SEND_MESSAGES', 'EMBED_LINKS', 'MANAGE_MESSAGES', 'READ_MESSAGE_HISTORY', 'VIEW_AUDIT_LOG']).then((link) => {
             return msg.direct(`Hi there, thanks for considering to add **${this.client.user.username}** to your discord server!\nHere is an invite link, ${link}`);
         });
     }
