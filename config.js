@@ -12,7 +12,7 @@ module.exports = {
     invite: 'link',
 
     /** Bot command prefix */
-    prefix: '!',
+    prefix: '-',
 
     /** Error logging channel */
     errorLogChannel: 'channel'
