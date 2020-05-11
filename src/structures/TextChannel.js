@@ -21,6 +21,12 @@ module.exports = Structures.extend('TextChannel', TextChannel => {
          */
 
         send(content = '', options = {}) {
+
+            if (content instanceof Obejct) {
+                options = content;
+                content = '';
+            }
+
             // no embed provided, or the user cannot send embeds
             if (!options.embed || options.embed && this.permissionsFor(this.client.user).has('EMBED_LINKS')) return super.send(content, options);
             else {
