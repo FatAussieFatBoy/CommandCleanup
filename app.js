@@ -27,20 +27,32 @@ const init = async function() {
 }
 
 client.on('debug', function(d) {
-    client.shard.send({ type: 'debug', message: d });
+    try {
+        client.shard.send({ type: 'debug', message: d });
+    } catch (e) {
+        console.error(e);
+    }
 });
 
 client.on('warn', function(e) {
-    client.shard.send({ type: 'warn', message: e });
+    try {
+        client.shard.send({ type: 'warn', message: e });
+    } catch (e) {
+        console.error(e);
+    }
 });
 
 client.on('error', function(e) {
-    if (client.options.errorLogChannel) {
-        let errorEmbed = client._constructErrorEmbed(e);
-        client.channels.fetch(client.options.errorLogChannel).then(channel => { if(channel) channel.send('', errorEmbed) });
-    }
+    try {
+        if (client.options.errorLogChannel) {
+            let errorEmbed = client._constructErrorEmbed(e);
+            client.channels.fetch(client.options.errorLogChannel).then(channel => { if(channel) channel.send('', errorEmbed) });
+        }
 
-    client.shard.send({ type: 'error', message: e.stack });
+        client.shard.send({ type: 'error', message: e.stack || e });
+    } catch (e) {
+        console.error(e);
+    }
 });
 
 client.on('ready', function() {

@@ -59,6 +59,8 @@ class Filter extends BitField {
  * * `COMMAND` (the message matches the command regex)
  * * `FILE` (the message contains an attachment other than an image)
  * * `IMAGE` (the message contains an image)
+ * * `EMOJI` (the message contains at least one emoji)
+ * * `DISCORD` (the message is a discord system message)
  * @type {Object}
  */
 
@@ -76,8 +78,9 @@ Filter.FLAGS = {
 	COMMAND: 1 << 9,
 	FILE: 1 << 10,
 	IMAGE: 1 << 11,
+	EMOJI: 1 << 12,
 
-	DISCORD: 1 << 12
+	DISCORD: 1 << 13,
 };
 
 /**

@@ -42,6 +42,13 @@ exports.RegularExpressions = {
     symbols_and_quotes: new RegExp(/([^\w\s"',-]+(\w)*|"((?=[^"])[^"]+)"|'((?=[^'])[^']+)')+?(?=,|$|\s*)/gm),
 
     /**
+     * Regular Expression that matches emojis
+     * @type {RegExp}
+     */
+
+    emojis: new RegExp(/(<(a)?:[^:<>]+:([0-9]+)>)/gm),
+
+    /**
      * Regular Expression that matches links
      * @type {RegExp}
      */
