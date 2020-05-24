@@ -12,33 +12,41 @@ module.exports = Structures.extend('TextChannel', TextChannel => {
 
         /**
          * Safer alternative to the default send method.
-         * This method will check if the client has permission to send embeds,
-         * if not than the embeds data will be converted into a message.
+         * This method will attempt to send messages regardless of content,
+         * if it fails than the embeds data will be converted into a message and attempted to be resent.
          * 
          * @param {StringResolvable|APIMessage} [content] @default ""
          * @param {MessageOptions|MessageAdditions} [options] @default {}
          * @returns {Promise<Message|Message[]>}
          */
 
-        send(content = '', options = {}) {
-
-            if (content instanceof Obejct) {
-                options = content;
-                content = '';
+        send(content, options) {
+            if(!options && typeof content === 'object' && !(content instanceof Array)) {
+				options = content;
+                content = options.content || '';
+                delete options.content;
             }
 
-            // no embed provided, or the user cannot send embeds
-            if (!options.embed || options.embed && this.permissionsFor(this.client.user).has('EMBED_LINKS')) return super.send(content, options);
-            else {
-                // deconstruct the embed and convert it to the messages content.
+            if (this.permissionsFor(this.guild.me).missing(this.guild.me.permissions).includes('EMBED_LINKS')) {
+                // sending message failed, try deconstructing embed into message content and send again..
                 if (content.length > 0) content += '\n\n';
                 if (options.embed.title) content += `${options.embed.title}\n`;
                 if (options.embed.description) content += `${options.embed.description}\n`;
                 if (options.embed.fields) {
                     for (let field of options.embed.fields) {
-                        content += `\n${field.name}`
-                        content += `\n${field.value}\n\n`
+                        content += `\n${field.name}`;
+                        content += `\n${field.value}\n\n`;
                     }
+                }
+
+                if (options.embed.image) {
+                    if (!options.files) options['files'] = [];
+                    options.files.push(options.embed.image);
+                }
+
+                if (options.embed.files) {
+                    if (!options.files) options['files'] = [];
+                    options.files.push(...options.files);
                 }
 
                 if (options.embed.footer && options.embed.footer.text) {
@@ -47,7 +55,7 @@ module.exports = Structures.extend('TextChannel', TextChannel => {
 
                 delete options.embed;
                 return super.send(content, options);
-            }
+            } else return super.send(content, options);
         }
 
         /**

@@ -40,7 +40,7 @@ Below is a list of all available parameters and what they do.. You can use **mul
 > Valid image extensions are `webp`, `png`, `jpg`, `jpeg` & `gif`
 
 ###### text `<quotes>`&emsp;&emsp;<samp>aliases: `txt`, `contains`</samp>
-> Deletes messages with plain text *(no embed, no images, no files, etc..)*</br>
+> Deletes messages with plain text, commands and emojis *(no embeds, no images, no files, etc..)*</br>
 > If quotes are provided, then only messages containing the quotes will be targeted*</br>Valid quotes are any word/sentence enclosed in quotation marks, example `"hello world"`
 
 ###### commands `<prefixes>`&emsp;&emsp;<samp>aliases: `cmds`, `startsWith`</samp>

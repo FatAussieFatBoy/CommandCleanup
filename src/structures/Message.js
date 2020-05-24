@@ -102,8 +102,11 @@ module.exports = Structures.extend('Message', Message => {
 
         static resolveFilters(message) {
             try {
+                // get the first word of the message content for isCommand checking
+                const firstWord = message.cleanContent.split(/[\s\t\n]/g, 1)[0];
+
                 const containLinks = Boolean(RegularExpressions.links.test(message.cleanContent) || (message.embeds && message.embeds.length > 0 && message.embeds.some(e => e.type == 'link')));
-                const isCommand = Boolean(message.isCommand || RegularExpressions.symbols.test(message.cleanContent));
+                const isCommand = Boolean(message.isCommand || (RegularExpressions.symbols.test(firstWord) && !RegularExpressions.emojis.test(firstWord)));
                 const containFiles = Boolean(message.attachments && message.attachments.size > 0 && message.attachments.some(a => !a.height || a.height && !(ImageFormats.includes(a.name.split('.')[a.name.split('.').length - 1]))));
                 const containImages = Boolean((message.attachments && message.attachments.size > 0 && !containFiles) || RegularExpressions.image_links.test(message.cleanContent) || (message.embeds && message.embeds.length > 0 && message.embeds.some(e => e.type == 'image' || e.type == 'gifv')));
                 const containEmbeds = Boolean(message.embeds && message.embeds.length > 0);
@@ -116,18 +119,35 @@ module.exports = Structures.extend('Message', Message => {
                 if (message.tts) filters.push('TTS');
                 if (message.webhookID) filters.push('WEBHOOK');
 
-                if (!containLinks && !isCommand && !containFiles && !containImages && !containEmbeds) filters.push('TEXT');
+                if (!containLinks && !containFiles && !containImages && !containEmbeds) filters.push('TEXT');
+                if (message.cleanContent.match(RegularExpressions.emojis)) filters.push('EMOJI');
                 if (message.cleanContent.match(RegularExpressions.invites)) filters.push('INVITE');
                 if (containLinks) filters.push('LINK');
                 if (isCommand) filters.push('COMMAND');
                 if (containFiles) filters.push('FILE');
                 if (containImages) filters.push('IMAGE');
                 if (containEmbeds) filters.push('EMBED');
-
+                
                 return filters;
             } catch (e) {
                 throw new Error(e);
             }
+        }
+
+        /**
+         * Attempt to send a message to the messages author directly
+         * If failed it will attempt to send the messages to the channel the message was posted in.
+         * @param {StringResolvable|APIMessage} [content] @default ""
+         * @param {MessageOptions|MessageAdditions} [options] @default {}
+         * @returns {Promise<Message|Message[]>}
+         */
+
+        direct(content, options) {
+            return super.direct(content, options).catch((e) => {
+                return super.reply(content, options).catch((e) => {
+                    this.client.emit('error', e);
+                });
+            });
         }
     }
 

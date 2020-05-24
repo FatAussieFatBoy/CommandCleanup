@@ -1,11 +1,8 @@
 {
   "name": "commandcleanup",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "Discord.js CommandCleanup bot",
   "main": "./index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "keywords": [
     "discord.js",
     "commandcleanup",

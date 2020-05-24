@@ -331,7 +331,7 @@ class CleanupCommand extends BaseCommand {
                         if (filters.length == 0) {
                             if (options.before || options.after || options.mentions) filters = new Filters(Filters.ALL).freeze().bitfield;
                             else if (options.limit && (!options.before && !options.after && !options.mentions && filters !== Filters.ALL)) errors.push('Providing a limit by itself no longer works, please provide another parmameter to specify the content to delete. Example, ' + `\`.cleanup ${options.limit} all\``);
-                            else errors.push('No parameters recognised, parameters are required.');
+                            else errors.push(`No parameters recognised, parameters are required.\nFor a list of parameters check out our [GitHub Page](https://github.com/FatAussieFatBoy/CommandCleanup#parameters)`);
                         }
 
                         if (errors.length > 0) {
@@ -365,7 +365,7 @@ class CleanupCommand extends BaseCommand {
                         this.client.emit('error', e);
                     });
                 } else {
-                    messages.push(msg.direct('', errorEmbed({ title: 'Cleanup Parameter Error', description: `The cleanup command requires parameters to function, for a list of available parameters visit our [DiscordBots Page](https://discordbots.org/bot/420013638468894731)` })).then(m => m.delete({ timeout: 30000, reason: 'Automated deletion.' })));
+                    messages.push(msg.direct('', errorEmbed({ title: 'Cleanup Parameter Error', description: `The cleanup command requires parameters to function, for a list of available parameters visit our [GitHub Page](https://github.com/FatAussieFatBoy/CommandCleanup#parameters)` })).then(m => m.delete({ timeout: 30000, reason: 'Automated deletion.' })));
                     return messages;
                 }
             }
