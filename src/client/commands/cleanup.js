@@ -113,7 +113,7 @@ class CleanupCommand extends BaseCommand {
                             case 'files':
                             case 'file':
                                 const possibleFileExtentions = [...args].slice(nextIndex);
-                                filters.push('FILE');
+                                if (!filters.includes('FILE')) filters.push('FILE');
 
                                 if (possibleFileExtentions.length < 1) break;
 
@@ -137,7 +137,7 @@ class CleanupCommand extends BaseCommand {
                             case 'imgs':
                             case 'img':
                                 const possibleImageExtentions = [...args].slice(nextIndex);
-                                filters.push('IMAGE');
+                                if (!filters.includes('IMAGE')) filters.push('IMAGE');
 
                                 if (possibleImageExtentions.length < 1) break;
 
@@ -161,7 +161,7 @@ class CleanupCommand extends BaseCommand {
                             case 'text':
                             case 'txt':
                                 const possibleQuotes = remainingArgString.match(RegularExpressions.quotes);
-                                filters.push('TEXT');
+                                if (!filters.includes('TEXT')) filters.push('TEXT');
 
                                 if (!possibleQuotes || possibleQuotes.length < 1) break;
 
@@ -190,7 +190,7 @@ class CleanupCommand extends BaseCommand {
                             case 'cmds':
                             case 'cmd':
                                 const possibleCmds = remainingArgString.match(RegularExpressions.symbols_and_quotes);
-                                filters.push('COMMAND');
+                                if (!filters.includes('COMMAND')) filters.push('COMMAND');
 
                                 if (!possibleCmds || possibleCmds.length < 1) break;
 
@@ -215,7 +215,7 @@ class CleanupCommand extends BaseCommand {
                             case 'links':
                             case 'link':
                                 const possibleLinks = [...args].slice(nextIndex);
-                                filters.push('LINK');
+                                if (!filters.includes('LINK')) filters.push('LINK');
 
                                 if (possibleLinks.length < 1) break;
 
@@ -238,7 +238,7 @@ class CleanupCommand extends BaseCommand {
 
                             case 'embeds':
                             case 'embed':
-                                filters.push('EMBED');
+                                if (!filters.includes('EMBED')) filters.push('EMBED');
                                 break;
 
                             case 'bots':
@@ -253,14 +253,14 @@ class CleanupCommand extends BaseCommand {
                                 break;
 
                             case 'discord':
-                                filters.push('DISCORD');
+                                if (!filters.includes('DISCORD')) filters.push('DISCORD');
                                 break;
 
                             case 'invites':
                             case 'invite':
                             case 'invs':
                             case 'inv':
-                                filters.push('INVITE');
+                                if (!filters.includes('INVITE')) filters.push('INVITE');
                                 break;
 
                             case 'limit':
@@ -273,12 +273,12 @@ class CleanupCommand extends BaseCommand {
                                 break;
 
                             case 'all':
-                                if (filters.length == 0) filters = new Filters(Filters.ALL).freeze().bitfield;
+                                if (filters.length == 0) filters = new Filters(Filters.ALL).freeze().toArray();
                                 else errors.push(`Invalid use case, the \`${arg}\` parameter should only be used when no other parameters *(excluding: limit)* are being defined.`);
                                 break;
 
                             case 'pinned':
-                                filters.push('PINNED');
+                                if (!filters.includes('PINNED')) filters.push('PINNED');
                                 break;
 
                             default:
